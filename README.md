@@ -1,2 +1,2 @@
 # pren_stair_climb
-Software for TinyK22 and the PREN stairclimbing robot.
+Software for a stariclimbing robot on the TinyK22 and Raspberry Pi platform.
