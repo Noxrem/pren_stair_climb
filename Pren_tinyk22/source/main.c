@@ -27,23 +27,20 @@
 #include "util.h"
 #include "eeprom.h"
 
-
-// calulate nr of TOF count for a given number of milliseconds
-#define TOFS_MS(x)   ((uint16_t)(((FTM3_CLOCK / 1000) * x) / (FTM3_MODULO + 1)))
-
-
-
-void CheckAdc(void)
+/**
+ * Lets the blue Led on the TinyK22 blink in a specified amount of ms.
+ *
+ * @param[in]
+ *   toggle the Led every "ms" milliseconds
+ */
+void BlinkBlueLedEveryMS(uint16_t timeMS)
 {
   static uint16_t j;
 
-  if (j++ == TOFS_MS(250)) {            // toogle rear leds every 250ms
-    j=0;
-    if (adcGet16BitValue(18) > 65000)
-    {
-      GPIOA->PTOR = (1<<17);
-      if (adcGetVoltage(18) > 1190000) GPIOA->PTOR = (1<<15);
-    }
+  if (j++ == FTM3_TOFS_MS(timeMS)) 		// toogle blue led every timeMS milliseconds
+  {
+	  j=0;
+      GPIOC->PTOR = (1<<2);
   }
 }
 
@@ -73,9 +70,9 @@ void main(void)
 
   soundBeep(4000, 100);
 
-  // configure read red leds on PTA15 and PTA17
-  PORTA->PCR[15] = PORTA->PCR[17] = PORT_PCR_MUX(1);
-  GPIOA->PDDR |= (1<<15) | (1<<17);
+  // configure blue led on PTC2
+  PORTC->PCR[2] = PORT_PCR_MUX(1);
+  GPIOC->PDDR |= (1<<2);
 
   while(TRUE)
   {
@@ -87,7 +84,7 @@ void main(void)
     if (FTM3->SC & FTM_SC_TOF_MASK)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
-      CheckAdc();
+      BlinkBlueLedEveryMS(100);
     }
   }
 }
