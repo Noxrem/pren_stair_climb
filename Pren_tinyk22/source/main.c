@@ -13,19 +13,20 @@
 #include "platform.h"
 #include "ftm0.h"
 #include "ftm3.h"
-#include "motor.h"
-#include "quad.h"
+//#include "motor.h"
+//#include "quad.h"
 #include "term.h"
-#include "sound.h"
-#include "soundPlayer.h"
-#include "drive.h"
-#include "pwrSwitch.h"
-#include "i2c.h"
-#include "led.h"
-#include "color.h"
-#include "adc.h"
-#include "util.h"
-#include "eeprom.h"
+//#include "sound.h"
+//#include "soundPlayer.h"
+//#include "drive.h"
+//#include "pwrSwitch.h"
+//#include "i2c.h"
+//#include "led.h"
+//#include "color.h"
+//#include "adc.h"
+//#include "util.h"
+//#include "eeprom.h"
+#include "servo/servo.h"
 
 /**
  * Lets the blue Led on the TinyK22 blink in a specified amount of ms.
@@ -41,6 +42,10 @@ void BlinkBlueLedEveryMS(uint16_t timeMS)
   {
 	  j=0;
       GPIOC->PTOR = (1<<2);
+//      if(FTM0->CONTROLS[1].CnV == 250)
+//    	  FTM0->CONTROLS[1].CnV = 500;
+//      else
+//    	  FTM0->CONTROLS[1].CnV = 250;
   }
 }
 
@@ -56,19 +61,19 @@ void main(void)
   ftm0Init();
   ftm3Init();
   termInit(57600);
-  soundInit();
-  soundPlayerInit();
-  motorInit();
-  quadInit();
-  driveInit();
-  pwrSwitchInit();
-  EnableDebugLeds();
-  ledInit();
-  i2cInit();
-  eepromInit();
-  adcInit();
+//  soundInit();
+//  soundPlayerInit();
+//  motorInit();
+//  quadInit();
+//  driveInit();
+//  pwrSwitchInit();
+//  EnableDebugLeds();
+//  ledInit();
+//  i2cInit();
+//  eepromInit();
+//  adcInit();
+  servoInit();
 
-  soundBeep(4000, 100);
 
   // configure blue led on PTC2
   PORTC->PCR[2] = PORT_PCR_MUX(1);
@@ -84,7 +89,7 @@ void main(void)
     if (FTM3->SC & FTM_SC_TOF_MASK)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
-      BlinkBlueLedEveryMS(100);
+      BlinkBlueLedEveryMS(1000);
     }
   }
 }
