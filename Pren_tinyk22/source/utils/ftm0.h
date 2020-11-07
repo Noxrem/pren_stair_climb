@@ -15,6 +15,7 @@
 #define SOURCES_FTM0_H_
 
 #define FTM0_CLOCK              250000  // 250 kHz
+#define FTM0_MODULO				2500	// for a frequency of 100 Hz (250kHz / 1) / 100Hz = 2500
 
 void ftm0Init(void);
 

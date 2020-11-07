@@ -61,6 +61,9 @@ void ftm0Init(void)
   // set clockgating for FTM0
   SIM->SCGC6 |= SIM_SCGC6_FTM0(1);
 
+  // set the modulo value for a frequency of 100Hz
+  FTM0->MOD = FTM0_MODULO;
+
   // configure the timer with "Fixed frequency clock" as clocksource and with a "Prescaler" of 1 => 250 kHz
   FTM0->SC = FTM_SC_CLKS(2) |  FTM_SC_PS(0);
 
