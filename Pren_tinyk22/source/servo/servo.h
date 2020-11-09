@@ -20,8 +20,8 @@
 #define SERVO_PTA2_ENABLE			0	// not implemented
 #define SERVO_PTA5_ENABLE			0	// not implemented
 
-#define SERVO_CnV_MAX				500		// Max. value of the FTM0 Channel equivalent to a PWM pulse width of 2ms
-#define SERVO_CnV_MIN				250		// Min. value of the FTM0 Channel equivalent to a PWM pulse width of 1ms
+#define SERVO_CnV_MAX				500		// Max. value of the FTM0 Channel equivalent to a PWM pulse width of 2ms (2ms / (1/fclk))
+#define SERVO_CnV_MIN				250		// Min. value of the FTM0 Channel equivalent to a PWM pulse width of 1ms (1ms / (1/fclk))
 
 tError servoParseCommand(const char *cmd);
 void servoInit(void);
