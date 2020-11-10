@@ -31,6 +31,7 @@ void termWriteNum32s(int32_t value);
 void termWriteNum16s(int16_t value);
 
 void termWriteLine(const char *str);
+void termWriteSubString(char *str, uint8_t start, uint8_t length);
 void termDoWork(void);
 void termInit(uint16_t baudrate);
 
