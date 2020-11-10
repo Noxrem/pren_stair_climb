@@ -22,6 +22,25 @@
 static tCommandLineHandler clh;       // terminal command line handler
 
 /**
+ * Prints the current degree value of the servo at the Pin (servo).
+ *
+ * @param[in] servo
+ * 	string that takes the servo pin number e.g. "pta4" and prints it
+ *
+ * @param[in] value
+ * 	value to print
+ */
+void servoPrintValue(char *servo, uint16_t value)
+{
+	char str[4];
+	utilNum16uToStr(str, sizeof(str), value);		// converts the value to string
+	termWrite("Servo ");
+	termWrite(servo);
+	termWrite(": ");
+	termWrite(str);									// Prints the given servo value
+	termWriteLine(" degrees");
+}
+/**
  * Command line parser for this file.
  * This code is complete and works.
  *
@@ -41,25 +60,25 @@ tError servoParseCommand(const char *cmd)
   }
   else if (strncmp(cmd, "pta4", sizeof("pta4")-1) == 0)
   {
-	  cmd += sizeof("pta4");											// adds chars to the command char[] the amount of "pta4\0"
+	  cmd += sizeof("pta4");											// cuts off the "pta4" from the string, now the value afterwards is in cmd
 	  uint16_t v;
 	  result = utilScanDecimal16u(&cmd, &v);							// test if it is a decimal
 	  if (result != EC_SUCCESS) return result;
+	  FTM0->CONTROLS[1].CnV = v;
+
 	  if (v < 0 || v > 180) return EC_INVALID_ARG;						// if the value is out of bound (0...180) throw error
-	  {
-		  uint16_t ch_value = mapRangeToAnother(v, 0, 180, SERVO_CnV_MIN, SERVO_CnV_MAX);	// Map the value from (0...180) to the range of the Servo pulse width
-	  	  FTM0->CONTROLS[1].CnV = ch_value;								// Set PWM pulse width
-	  }
+
+	  uint16_t ch_value = mapRangeToAnother(v, 0, 180, SERVO_CnV_MIN, SERVO_CnV_MAX);	// Map the value from (0...180) to the range of the Servo pulse width
+	  FTM0->CONTROLS[1].CnV = ch_value;								// Set PWM pulse width
+
+	  servoPrintValue("pta4", v);										// Print current degree of servo
 	  result = EC_SUCCESS;
   }
   else if (strncmp(cmd, "status", sizeof("status")-1) == 0)
   {
-	  char degree[8];
-	  // TODO implement conversion from FTM0 channel value to range of degree (0...180)
-	  utilNum16uToStr(degree, sizeof(degree), FTM0->CONTROLS[1].CnV);	// converts the channel 1 pwm value to string
-	  termWrite("Servo PTA4 at: ");
-	  termWrite(degree);
-	  termWriteLine(" degrees");
+	  // TODO there is a small conversion error
+	  uint16_t degPTA4 = mapRangeToAnother(FTM0->CONTROLS[1].CnV, SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel value to degrees (0..180)
+	  servoPrintValue("pta4", degPTA4);									// Print current degree of servo
 	  result = EC_SUCCESS;
   }
   return result;
@@ -75,8 +94,8 @@ void servoInit(void)
 	// PTA4 Muxing for FTM0_CH1
 	PORTA->PCR[4] = PORT_PCR_MUX(3);
 
-	// initialy set servo PWM to a 1ms pulse
-	FTM0->CONTROLS[1].CnV = 250;
+	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
+	FTM0->CONTROLS[1].CnV = SERVO_CnV_MIN;
 
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
