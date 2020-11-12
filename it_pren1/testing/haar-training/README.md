@@ -15,7 +15,7 @@ Negative Samples sind beliebige Bilder, welche das Objekt nicht enthalten dürfe
 ## Positive Samples
 1. Piktogramm mit verschiedenen Kontrast- und Helligkeitsstufen anlegen. Für das Training habe ich 31 verschiedene Bilder vom gleichen Piktogramm erzeugt.
 1. versch. Ansichten erstellen
-    1. `create_positive_variants.sh` ![Skript](create_positive_variants.sh) in cli aufrufen. Vorher Parameter anpassen
+    1. `create_positive_variants.sh` Skript in cli aufrufen. Vorher Variablen `ITERATIONS`, `IMG_IN_PATH`, `IMG_OUT_PATH` anpassen
 
 1. Postive Samples erstellen: Dazu `create_samples.sh n` Parameter n durch Anzahl gewünschten Samples pro Variante anpassen. Das Skript legt jeweils n-Bilder an, worauf das Piktogramm in verschiedener Ausrichtung und x/y/z veränderungen positioniert wurde. Pro Bild wird ein TXT mit Positionsangaben zum Piktogramm zum jeweiligen Bild angelegt.
 1. Alle TXT in einem Dokument zusammenlegen: `cat FILENAME*.txt > positives.txt``
