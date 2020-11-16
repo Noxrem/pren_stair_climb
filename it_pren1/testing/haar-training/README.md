@@ -1,5 +1,5 @@
 # HaarCascade Training
-Bis ich mit dem Training effektiv beginnen konnte brauchte ich einige Stunden und viele Nerven. 
+Bis ich mit dem Training effektiv beginnen konnte brauchte ich einige Stunden und viele Nerven.
 
 ## Prerequisits
 * openCV: https://docs.opencv.org/master/d0/db2/tutorial_macos_install.html
@@ -29,3 +29,12 @@ Negative Samples sind beliebige Bilder, welche das Objekt nicht enthalten dürfe
 ## Learnings/Probleme
 * Versionen von openCV > 3.4 unterstützten die Utilities die im Tutotrial (für V4.4.1) https://docs.opencv.org/4.1.0/dc/d88/tutorial_traincascade.html beschrieben sind nicht. Um die benötigten Tools `opencv_createsamples`, `opencv_annotations` und `opencv_traincascade` zu kompilieren musste ich auf Version 3.4 zurück.
 * 20 Stages für das erste Training war wohl ein wenig viel :D
+* Objekte müssen vielfältiger rotiert werden. -> evtl. schon Rohbilder entsprechend aufbereiten
+* Winkel verändern
+* Fehler von immer gleichen Bilder, beim generieren der Background-Images
+* Training auf Server machen nicht Laptop
+* Erkennung auf Raspi versuchen, draussen
+* Anzahl der Erkennung merken und Threshold festlegen für Ausgabe Signal
+* Strategy Pattern
+* Im Training einzelner Piktogramme die anderen als Fehler einbauen
+* Nicht zu helle Positives verwenden, da Licht sonst als solches erkannt wird
