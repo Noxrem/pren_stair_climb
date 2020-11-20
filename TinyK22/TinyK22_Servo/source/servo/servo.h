@@ -18,7 +18,7 @@
 // TODO implement alternative Servo motors on other pins
 #define SERVO_PTA1_ENABLE			0	// not implemented
 #define SERVO_PTA2_ENABLE			0	// not implemented
-#define SERVO_PTA5_ENABLE			0	// not implemented
+#define SERVO_PTA5_ENABLE			1	// not implemented
 
 											// Values for TGY-50090M
 #define SERVO_CnV_MAX				570		// Max. value of the FTM0 Channel equivalent to a PWM pulse width of 2ms (2ms / (1/fclk))
