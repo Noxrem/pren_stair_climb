@@ -67,8 +67,6 @@ tError servoParseCommand(const char *cmd)
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
-//		FTM0->CONTROLS[1].CnV = v;
-//		FTM0->CONTROLS[2].CnV = v;
 
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
@@ -86,7 +84,6 @@ tError servoParseCommand(const char *cmd)
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
-		//FTM0->CONTROLS[1].CnV = v;
 
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
@@ -103,7 +100,6 @@ tError servoParseCommand(const char *cmd)
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
-		//FTM0->CONTROLS[2].CnV = v;
 
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
@@ -116,10 +112,12 @@ tError servoParseCommand(const char *cmd)
 	}
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
 	{
-		// TODO there is a small conversion error
 		uint16_t degPTA4 = mapRangeToAnother(FTM0->CONTROLS[1].CnV,
-				SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel value to degrees (0..180)
+				SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel 1 value to degrees (0..180)
+		uint16_t degPTA5 = mapRangeToAnother(FTM0->CONTROLS[2].CnV,
+						SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel 2 value to degrees (0..180)
 		servoPrintValue("pta4", degPTA4);				// Print current degree of servo
+		servoPrintValue("pta5", degPTA5);
 		result = EC_SUCCESS;
 	}
   return result;
@@ -135,22 +133,22 @@ void servoInit(void)
 	// PTA4 Muxing for FTM0_CH1
 	PORTA->PCR[4] = PORT_PCR_MUX(3);
 
-	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
-	FTM0->CONTROLS[1].CnV = SERVO_CnV_MIN;
-
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
+
+	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
+	FTM0->CONTROLS[1].CnV = SERVO_CnV_MIN;
 	#endif
 
 	#if SERVO_PTA5_ENABLE
 	// PTA5 Muxing for FTM0_CH2
 	PORTA->PCR[4] = PORT_PCR_MUX(3);
 
-	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
-	FTM0->CONTROLS[2].CnV = SERVO_CnV_MIN;
-
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[2].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
+
+	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
+	FTM0->CONTROLS[2].CnV = SERVO_CnV_MIN;
 	#endif
 
   // register terminal command line handler
