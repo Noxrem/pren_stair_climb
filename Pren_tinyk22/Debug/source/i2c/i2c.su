@@ -1,0 +1,10 @@
+i2c.c:39:8:i2cStart	16	static
+i2c.c:72:8:i2cRepeatedStart	16	static
+i2c.c:99:9:i2cReceiveLastByte	16	static
+i2c.c:127:8:i2cSendData	24	static
+i2c.c:154:6:i2cReceiveData	24	static
+i2c.c:193:6:i2cStop	4	static
+i2c.c:216:8:i2cTest	24	static
+i2c.c:245:8:i2cReadCmdData	24	static
+i2c.c:278:8:i2cWriteCmdData	24	static
+i2c.c:298:6:i2cInit	4	static

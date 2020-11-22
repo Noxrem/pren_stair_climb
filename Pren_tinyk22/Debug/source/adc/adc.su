@@ -1,0 +1,6 @@
+adc.c:36:10:adcGet16BitValue	16	static
+adc.c:57:10:adcGetVoltage	40	static
+adc.c:78:10:adcGetCurrent	16	static
+adc.c:92:9:adcGetTemperature	16	static
+adc.c:109:10:adcGetBatVoltage	16	static
+adc.c:122:6:adcInit	16	static

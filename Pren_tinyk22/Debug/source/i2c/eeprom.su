@@ -1,0 +1,3 @@
+eeprom.c:24:6:eepromLoad	8	static
+eeprom.c:30:6:eepromSave	16	static
+eeprom.c:52:6:eepromInit	8	static

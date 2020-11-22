@@ -1,0 +1,14 @@
+core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+core_cm4.h:1715:22:__NVIC_DisableIRQ	16	static
+core_cm4.h:1807:22:__NVIC_SetPriority	16	static
+platform.h:70:22:NVIC_DisableIRQEx	16	static
+uart0.c:44:6:UART0_RX_TX_IRQHandler	16	static
+uart0.c:81:6:UART0_ERR_IRQHandler	4	static
+uart0.c:98:6:uart0WriteChar	16	static
+uart0.c:116:6:uart0Write	16	static
+uart0.c:129:6:uart0WriteLine	16	static
+uart0.c:143:6:uart0ReadChar	16	static
+uart0.c:171:10:uart0ReadLine	24	static
+uart0.c:194:6:uart0HasLineReceived	16	static
+uart0.c:213:10:uart0RxBufCount	4	static
+uart0.c:279:6:uart0Init	24	static

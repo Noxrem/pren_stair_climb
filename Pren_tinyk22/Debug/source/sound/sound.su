@@ -1,0 +1,5 @@
+sound.c:34:6:soundSetCallbackHandler	16	static
+sound.c:50:6:FTM0CH0_IRQHandler	8	static
+sound.c:91:6:soundBeep	16	static
+sound.c:127:8:soundParseCommand	24	static
+sound.c:160:6:soundInit	8	static

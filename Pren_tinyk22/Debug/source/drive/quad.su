@@ -1,0 +1,10 @@
+core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+core_cm4.h:1807:22:__NVIC_SetPriority	16	static
+quad.c:88:6:FTM1_IRQHandler	16	static
+quad.c:164:6:FTM2_IRQHandler	16	static
+quad.c:242:9:quadGetSpeedLeft	4	static
+quad.c:253:9:quadGetSpeedRight	4	static
+quad.c:264:9:quadGetDistanceLeft	16	static
+quad.c:274:9:quadGetDistanceRight	16	static
+quad.c:287:8:quadParseCommand	24	static
+quad.c:339:6:quadInit	8	static

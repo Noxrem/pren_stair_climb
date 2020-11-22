@@ -1,0 +1,4 @@
+drive.c:47:6:driveSetSpeed	16	static
+drive.c:67:6:driveSetParameters	16	static
+drive.c:79:6:driveToWork	16	static
+drive.c:190:6:driveInit	4	static
