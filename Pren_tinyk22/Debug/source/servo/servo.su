@@ -1,0 +1,2 @@
+servo.c:31:8:servoParseCommand	40	static
+servo.c:72:6:servoInit	8	static

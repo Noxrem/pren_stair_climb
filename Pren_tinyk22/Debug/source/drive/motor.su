@@ -1,0 +1,6 @@
+motor.c:45:6:motorIncrementPwmRight	24	static
+motor.c:59:6:motorIncrementPwmLeft	24	static
+motor.c:75:6:motorSetPwmRight	24	static
+motor.c:112:6:motorSetPwmLeft	24	static
+motor.c:146:8:motorParseCommand	24	static
+motor.c:186:6:motorInit	8	static

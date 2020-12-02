@@ -1,0 +1,5 @@
+system.c:27:6:SystemInitHook	4	static
+system.c:53:12:utilCheckStackSize	24	static
+system.c:73:6:systemPostInit	8	static
+system.c:83:6:McuHardFault_HandlerC	16	static
+system.c:153:29:HardFault_Handler	0	static

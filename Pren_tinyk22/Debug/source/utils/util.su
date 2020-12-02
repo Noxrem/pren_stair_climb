@@ -1,0 +1,13 @@
+util.c:64:6:utilStrcpy	24	static
+util.c:88:6:utilStrcat	24	static
+util.c:115:6:utilNum16uToStr	32	static
+util.c:147:6:utilNum16sToStr	40	static
+util.c:194:6:utilNum32uToStr	40	static
+util.c:226:6:utilNum32sToStr	40	static
+util.c:275:6:utilStrcatNum16u	32	static
+util.c:296:6:utilStrcatNum16s	32	static
+util.c:314:6:utilStrcatNum32u	40	static
+util.c:331:6:utilStrcatNum32s	40	static
+util.c:353:8:utilScanDecimal16u	24	static
+util.c:386:8:utilScanDecimal16s	32	static
+util.c:424:6:utilWaitUs	24	static

@@ -1,0 +1,2 @@
+color.c:33:6:colorRGBtoHSV	32	static
+color.c:71:6:colorHueToRGB	16	static

@@ -1,0 +1,10 @@
+term.c:31:6:termRegisterCommandLineHandler	24	static
+term.c:49:6:termWriteChar	16	static
+term.c:80:6:termWrite	16	static
+term.c:86:6:termWriteNum32s	32	static
+term.c:93:6:termWriteNum16s	24	static
+term.c:107:6:termWriteLine	16	static
+term.c:123:6:termWriteSubString	16	static
+term.c:135:6:termParseCommand	48	static
+term.c:192:6:termDoWork	520	static
+term.c:235:6:termInit	16	static

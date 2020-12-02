@@ -1,0 +1,9 @@
+soundPlayer.c:52:6:soundFinishedCallback	8	static
+soundPlayer.c:78:6:soundStart	8	static
+soundPlayer.c:90:6:soundStop	4	static
+soundPlayer.c:106:6:soundIsPlaying	4	static
+soundPlayer.c:115:6:soundTooglePlayPause	8	static
+soundPlayer.c:129:6:soundLoad	24	static
+soundPlayer.c:258:6:soundPlay	16	static
+soundPlayer.c:274:8:soundPlayerParseCommand	24	static
+soundPlayer.c:315:6:soundPlayerInit	8	static
