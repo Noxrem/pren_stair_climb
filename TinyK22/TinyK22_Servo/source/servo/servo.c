@@ -142,7 +142,7 @@ void servoInit(void)
 
 	#if SERVO_PTA5_ENABLE
 	// PTA5 Muxing for FTM0_CH2
-	PORTA->PCR[4] = PORT_PCR_MUX(3);
+	PORTA->PCR[5] = PORT_PCR_MUX(3);
 
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[2].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
