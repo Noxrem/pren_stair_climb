@@ -38,6 +38,7 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MK22F51212.h"
+#include "Application.h"
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
@@ -53,6 +54,7 @@ int main(void) {
 
     printf("Hello World\n");
 
+    APP_RUN();
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
