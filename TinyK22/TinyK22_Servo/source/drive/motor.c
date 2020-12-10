@@ -182,9 +182,28 @@ tError motorParseCommand(const char *cmd)
  * - Motor R B: PTE5, FTM3_CH0, Mux:6
  * - Motor L A: PTD1, FTM3_CH1, Mux:4
  * - motor L B: PTE6, FTM3_CH1, Mux:6
+ *
+ * Initializes the motor driver:
+ * - Motor R FLT: PTB2, GPIO, Mux:1
+ * - Motor L FLT: PTB3, GPIO, Mux:1
+ * - Motor R PWM: PTD0, FTM3_CH0, Mux:4
+ * - Motor L PWM: PTD1, FTM3_CH1, Mux:4
+ * - Motor R DIR: PTC8, GPIO, Mux:1
+ * - Motor L DIR: PTC9, GPIO, Mux:1
+ * - Motor R SLP: PTC10, GPIO, Mux:1
+ * - Motor L SLP: PTC11, GPIO, Mux:1
  */
 void motorInit(void)
 {
+	// Motor Fault Pin Inputs
+	GPIOB->PDDR &= ~(1<<2 | 1<<3);	// configure PTB2 & PTB3 as input
+
+	// Output Pin
+	GPIOD->PDDR |= 1<<0 | 1<<1;					// configure PTD0 & PTD1 as output
+	GPIOC->PDDR |= 1<<8 | 1<<9 | 1<<10 | 1<<11;	// configure PTC8, PTC9, PTC10 & PTC11 as output
+
+	PORTB->PCR[2] |= PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);
+	PORTB->
   // Configure the pin direction of the 4 pins as output.
   GPIOD->PDDR = 1<<0 | 1<<1;               // configure PTD0 & PTD1 as output
   GPIOE->PDDR = 1<<5 | 1<<6;               // configure PTE5 & PTE6 as output
