@@ -13,7 +13,7 @@
 
 #ifndef SOURCES_DRIVE_MOTOR_H_
 #define SOURCES_DRIVE_MOTOR_H_
-
+#define Hallo 12
 #define MOTOR_MAX_VALUE               127
 
 void motorIncrementPwmRight(int8_t value);
