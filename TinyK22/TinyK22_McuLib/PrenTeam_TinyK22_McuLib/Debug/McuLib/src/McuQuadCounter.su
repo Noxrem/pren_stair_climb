@@ -1,0 +1,7 @@
+McuQuadCounter.c:130:6:McuQuadCounter_SetPos	16	static
+McuQuadCounter.c:146:29:McuQuadCounter_GetPos	4	static
+McuQuadCounter.c:162:9:McuQuadCounter_GetVal	16	static
+McuQuadCounter.c:185:6:McuQuadCounter_Sample	16	static
+McuQuadCounter.c:209:6:McuQuadCounter_Deinit	4	static
+McuQuadCounter.c:224:6:McuQuadCounter_Init	16	static
+McuQuadCounter.c:257:9:McuQuadCounter_ParseCommand	32	static

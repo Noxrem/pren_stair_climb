@@ -254,32 +254,54 @@ void setMotorSLP(char side, bool value)
 void motorInit(void)
 {
 	// GPIO Direction
-	GPIOB->PDDR &= ~(1<<2 | 1<<3);	// configure PTB2 & PTB3 as input
+	GPIOB->PDDR &= ~(1<<2 | 1<<3);	// configure PTB2 & PTB3 (FLT) as input
 
-	GPIOD->PDDR |= 1<<0 | 1<<1;					// configure PTD0 & PTD1 as output
+	GPIOD->PDDR |= 1<<0 | 1<<1;					// configure PTD0 & PTD1 (PWM) as output
 	GPIOC->PDDR |= 1<<8 | 1<<9 | 1<<10 | 1<<11;	// configure PTC8, PTC9, PTC10 & PTC11 as output
 
-	// PORT as GPIO with pull-up
+	// PORT as GPIO with pull-up (FLT)
 	PORTB->PCR[2] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB2 as GPIO with pull-up
 	PORTB->PCR[3] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB3 as GPIO with pull-up
-  // Configure the pin direction of the 4 pins as output.
-  GPIOD->PDDR = 1<<0 | 1<<1;               // configure PTD0 & PTD1 as output
-  GPIOE->PDDR = 1<<5 | 1<<6;               // configure PTE5 & PTE6 as output
 
-  // set the pin value of all of the 4 pins to '1'
-  GPIOD->PSOR = 1<<0 | 1<<1;               // set PTD0 & PTD1 = 1
-  GPIOE->PSOR = 1<<5 | 1<<6;               // set PTE5 & PTE6 = 1
+	// Motor Sleep Pin (high to enable motor)
+	setMotorSLP('R', true);
+	setMotorSLP('L', true);
 
-  // configures the pin muxing of all of the 4 pins as GPIO-Pin.
-  // the output level will be '1' because of the configuration above.
-  MOTOR_LEFT_A_GPIO();
-  MOTOR_LEFT_B_GPIO();
-  MOTOR_RIGHT_A_GPIO();
-  MOTOR_RIGHT_B_GPIO();
+	// Motor Direction Pin (low: current from A to B)
+	setMotorDir('R', false);
+	setMotorDir('L', false);
 
-  // configure both channels as edge aligned PWM with low-true pulses
-  FTM3->CONTROLS[0].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(3);
-  FTM3->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(3);
+	// GPIO Clear Bits on PTD0 & PTD1
+	GPIOD->PCOR |= 1<<0 | 1<<1;
+
+	// configures the pin muxing of the 2 pins as GPIO-Pin.
+	// the output level will be '0' because of the configuration above.
+	MOTOR_RIGHT_GPIO();
+	MOTOR_LEFT_GPIO();
+
+
+//  // Configure the pin direction of the 4 pins as output.
+//  GPIOD->PDDR = 1<<0 | 1<<1;               // configure PTD0 & PTD1 as output
+//  GPIOE->PDDR = 1<<5 | 1<<6;               // configure PTE5 & PTE6 as output
+//
+//  // set the pin value of all of the 4 pins to '1'
+//  GPIOD->PSOR = 1<<0 | 1<<1;               // set PTD0 & PTD1 = 1
+//  GPIOE->PSOR = 1<<5 | 1<<6;               // set PTE5 & PTE6 = 1
+//
+//  // configures the pin muxing of all of the 4 pins as GPIO-Pin.
+//  // the output level will be '1' because of the configuration above.
+//  MOTOR_LEFT_A_GPIO();
+//  MOTOR_LEFT_B_GPIO();
+//  MOTOR_RIGHT_A_GPIO();
+//  MOTOR_RIGHT_B_GPIO();
+
+	// set PWM value to 0
+	FTM3->CONTROLS[0].CnV = 0;
+	FTM3->CONTROLS[1].CnV = 0;
+
+	// configure both channels as edge aligned PWM with high-true pulses
+	FTM3->CONTROLS[0].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
+	FTM3->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
 
   // register terminal command line handler
   termRegisterCommandLineHandler(&clh, "mot", "(motor)", motorParseCommand);

@@ -1,0 +1,17 @@
+McuLib/src/McuUtility.o McuLib/src/McuUtility.d: \
+ C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/McuLib/src/McuUtility.c \
+ C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/PrenTeam_TinyK22_McuLib/source/IncludeMcuLibConfig.h \
+ C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/McuLib/src/McuUtility.h \
+ C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/McuLib/src/McuLib.h \
+ ../../McuLib/config/McuLibconfig.h \
+ ../../McuLib/config/McuUtilityconfig.h
+
+C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/PrenTeam_TinyK22_McuLib/source/IncludeMcuLibConfig.h:
+
+C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/McuLib/src/McuUtility.h:
+
+C:/Users/Noxrem/Documents/GitHub/pren_stair_climb/TinyK22_McuLib/McuLib/src/McuLib.h:
+
+../../McuLib/config/McuLibconfig.h:
+
+../../McuLib/config/McuUtilityconfig.h:

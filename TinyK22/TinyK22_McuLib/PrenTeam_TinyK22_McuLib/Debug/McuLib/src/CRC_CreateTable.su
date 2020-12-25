@@ -1,0 +1,2 @@
+CRC_CreateTable.c:19:30:CRC_GenerateLookUpTable	64	static
+CRC_CreateTable.c:144:10:CRC_CalculateTableEntry	32	static

@@ -33,7 +33,7 @@ void motorInit(void);
 #define MOTOR_LEFT_PWM()        (PORTD->PCR[1] = PORT_PCR_MUX(4))  // PTD1: FTM3_CH1	Motor 2
 #define MOTOR_LEFT_GPIO()       (PORTD->PCR[1] = PORT_PCR_MUX(1))  // PTD1: GPIO		Motor 2
 
-// GPIO PDIR (port direction input register), GPIO PDOR (port direction output register macros
+// GPIO PDIR (port direction input register), GPIO PDOR (port direction output register) macros
 #define MOTOR_R_FLT_PDIR		GPIOB->PDIR
 #define MOTOR_R_FLT_PIN			2
 #define MOTOR_L_FLT_PDIR		GPIOB->PDIR
