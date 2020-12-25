@@ -13,7 +13,7 @@
 #include "platform.h"
 #include "ftm0.h"
 #include "ftm3.h"
-//#include "motor.h"
+#include "motor.h"
 //#include "quad.h"
 #include "term.h"
 //#include "sound.h"
@@ -63,7 +63,7 @@ void main(void)
   termInit(57600);
 //  soundInit();
 //  soundPlayerInit();
-//  motorInit();
+  motorInit();
 //  quadInit();
 //  driveInit();
 //  pwrSwitchInit();
@@ -78,6 +78,10 @@ void main(void)
   // configure blue led on PTC2
   PORTC->PCR[2] = PORT_PCR_MUX(1);
   GPIOC->PDDR |= (1<<2);
+
+  // Set the motor PWM to a test value
+  motorSetPwmLeft(127);
+  motorSetPwmRight(59);
 
   while(TRUE)
   {

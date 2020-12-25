@@ -70,22 +70,21 @@ void motorSetPwmRight(int8_t value)
 
   if (value < 0)
   {
-    // drive backward
-    value = -value;             // value has to be a positive channel value!
-    MOTOR_RIGHT_A_GPIO();       // set motor right A as GPIO Pin (high-level)
-    MOTOR_RIGHT_B_PWM();        // set motor right B as timer Pin (pwm signal)
+	  // drive backward
+	  value = -value;             	// value has to be a positive channel value!
+	  setMotorDIR('R', true);
+	  MOTOR_RIGHT_PWM();			// set motor right as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
-    // drive forward
-    MOTOR_RIGHT_B_GPIO();
-    MOTOR_RIGHT_A_PWM();
+	  // drive forward
+	  setMotorDIR('R', false);
+	  MOTOR_RIGHT_PWM();		// set motor right as timer Pin (pwm signal)
   }
   else
   {
-    // stop
-    MOTOR_RIGHT_A_GPIO();
-    MOTOR_RIGHT_B_GPIO();
+	  // stop
+	  MOTOR_RIGHT_GPIO();			// set motor right as GPIO Pin (low-level)
   }
   int16_t v = (uint16_t)(((FTM3_MODULO + 1) * ((uint32_t)value)) / MOTOR_MAX_VALUE);
   FTM3->CONTROLS[0].CnV = v;
@@ -107,19 +106,21 @@ void motorSetPwmLeft(int8_t value)
 
   if (value < 0)
   {
-    value = -value;
-    MOTOR_LEFT_B_GPIO();
-    MOTOR_LEFT_A_PWM();
+	  // drive backwards
+	  value = -value;
+	  setMotorDIR('L', true);
+	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
-    MOTOR_LEFT_A_GPIO();
-    MOTOR_LEFT_B_PWM();
+	  // drive forward
+	  setMotorDIR('L', false);
+	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else
   {
-    MOTOR_LEFT_A_GPIO();
-    MOTOR_LEFT_B_GPIO();
+	  // stop
+	  MOTOR_LEFT_GPIO();			// set motor left as GPIO Pin (low-level)
   }
   int16_t v = (uint16_t)(((FTM3_MODULO + 1) * ((uint32_t)value)) / MOTOR_MAX_VALUE);
   FTM3->CONTROLS[1].CnV = v;
@@ -263,19 +264,25 @@ void motorInit(void)
 	PORTB->PCR[2] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB2 as GPIO with pull-up
 	PORTB->PCR[3] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB3 as GPIO with pull-up
 
+	// PORTC as GPIO
+	PORTC->PCR[8] = PORT_PCR_MUX(1);
+	PORTC->PCR[9] = PORT_PCR_MUX(1);
+	PORTC->PCR[10] = PORT_PCR_MUX(1);
+	PORTC->PCR[11] = PORT_PCR_MUX(1);
+
 	// Motor Sleep Pin (high to enable motor)
 	setMotorSLP('R', true);
 	setMotorSLP('L', true);
 
 	// Motor Direction Pin (low: current from A to B)
-	setMotorDir('R', false);
-	setMotorDir('L', false);
+	setMotorDIR('R', false);
+	setMotorDIR('L', false);
 
 	// GPIO Clear Bits on PTD0 & PTD1
 	GPIOD->PCOR |= 1<<0 | 1<<1;
 
 	// configures the pin muxing of the 2 pins as GPIO-Pin.
-	// the output level will be '0' because of the configuration above.
+	// the output level will be '0' (break operation) because of the configuration above.
 	MOTOR_RIGHT_GPIO();
 	MOTOR_LEFT_GPIO();
 
