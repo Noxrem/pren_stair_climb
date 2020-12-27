@@ -22,8 +22,8 @@
 // https://ebldc.com/?p=86
 
 static tCommandLineHandler clh;       // terminal command line handler
-static int8_t valueRight;
-static int8_t valueLeft;
+static int8_t motorValueRight;
+static int8_t motorValueLeft;
 
 
 
@@ -34,7 +34,7 @@ static int8_t valueLeft;
  */
 void motorIncrementPwmRight(int8_t value)
 {
-  int32_t v = valueRight + value;
+  int32_t v = motorValueRight + value;
   if (v > MOTOR_MAX_VALUE) v = MOTOR_MAX_VALUE;
   if (v < -MOTOR_MAX_VALUE) v = -MOTOR_MAX_VALUE;
   motorSetPwmRight((int8_t)v);
@@ -48,7 +48,7 @@ void motorIncrementPwmRight(int8_t value)
  */
 void motorIncrementPwmLeft(int8_t value)
 {
-  int32_t v = valueLeft + value;
+  int32_t v = motorValueLeft + value;
   if (v > MOTOR_MAX_VALUE) v = MOTOR_MAX_VALUE;
   if (v < -MOTOR_MAX_VALUE) v = -MOTOR_MAX_VALUE;
   motorSetPwmLeft((int8_t)v);
@@ -66,7 +66,7 @@ void motorSetPwmRight(int8_t value)
 {
   if (value > MOTOR_MAX_VALUE) value = MOTOR_MAX_VALUE;
   if (value < -MOTOR_MAX_VALUE) value = -MOTOR_MAX_VALUE;
-  valueRight = value;
+  motorValueRight = value;
 
   if (value < 0)
   {
@@ -102,7 +102,7 @@ void motorSetPwmLeft(int8_t value)
 {
   if (value > MOTOR_MAX_VALUE) value = MOTOR_MAX_VALUE;
   if (value < -MOTOR_MAX_VALUE) value = -MOTOR_MAX_VALUE;
-  valueLeft = value;
+  motorValueLeft = value;
 
   if (value < 0)
   {
@@ -141,8 +141,12 @@ tError motorParseCommand(const char *cmd)
   {
     termWriteLine("mot (motor) commands:");
     termWriteLine("  help");
+    termWriteLine("  enable");
+    termWriteLine("  disable");
     termWriteLine("  setL [-100..100]");
     termWriteLine("  setR [-100..100]");
+    termWriteLine("  getFltR");
+    termWriteLine("  getFltL");
     termWriteLine("  status");
     result = EC_SUCCESS;
   }
@@ -178,6 +182,47 @@ tError motorParseCommand(const char *cmd)
 	  termWriteLine("Motors disabled");
   	  result = EC_SUCCESS;
   }
+  else if (strncmp(cmd, "getFltR", sizeof("getFltR")-1) == 0)
+  {
+	  cmd += sizeof("getFltR");
+	  if( motorGetFLT('R') == true)		// if motor R driver detected fault, return 1
+	  {
+		  termWriteLine("Motor R fault: 1");
+	  }
+	  else
+	  {
+		  termWriteLine("Motor R fault: 0");
+	  }
+	  result = EC_SUCCESS;
+  }
+  else if (strncmp(cmd, "getFltL", sizeof("getFltL")-1) == 0)
+  {
+	  cmd += sizeof("getFltL");
+	  if( motorGetFLT('L') == true)		// if motor L driver detected fault, return 1
+	  {
+		  termWriteLine("Motor L fault: 1");
+	  }
+	  else
+	  {
+		  termWriteLine("Motor L fault: 0");
+	  }
+	  result = EC_SUCCESS;
+  }
+  else if (strcmp(cmd, "status") == 0)	// returns state of the motor values
+  {
+	  int16_t motorRPercent = (motorValueRight * 100) / MOTOR_MAX_VALUE;	// convert the motor value R into percent
+	  int16_t motorLPercent = (motorValueLeft * 100) / MOTOR_MAX_VALUE;		// convert the motor value L into percent
+	  char strRPercent[5];
+	  char strLPercent[5];
+	  utilNum16sToStr(strRPercent, sizeof(strRPercent), motorRPercent);
+	  utilNum16sToStr(strLPercent, sizeof(strLPercent), motorLPercent);
+	  termWrite("Motor R: ");
+	  termWrite(strRPercent);
+	  termWrite(" ");
+	  termWrite("Motor L: ");
+	  termWriteLine(strLPercent);
+	  result = EC_SUCCESS;
+  }
   return result;
 }
 
@@ -194,11 +239,11 @@ bool motorGetFLT(char side)
 {
 	if(side == 'R')
 	{
-		return (MOTOR_R_FLT_PDIR & (uint32_t)(1 << MOTOR_R_FLT_PIN));	// return motor R fault pin value
+		return !(MOTOR_R_FLT_PDIR & (uint32_t)(1 << MOTOR_R_FLT_PIN));	// return motor R fault pin value (invert fault pin because it is low-active)
 	}
 	else if(side == 'L')
 	{
-		return (MOTOR_L_FLT_PDIR & (uint32_t)(1 << MOTOR_L_FLT_PIN));	// return motor L fault pin value
+		return !(MOTOR_L_FLT_PDIR & (uint32_t)(1 << MOTOR_L_FLT_PIN));	// return motor L fault pin value (invert fault pin because it is low-active)
 	}
 	else { return false; }	// error: invalid argument
 }
@@ -242,12 +287,20 @@ void motorSetSLP(char side, bool value)
 	if(side == 'R')
 	{
 		if(value) { MOTOR_R_SLP_PDOR |= (uint32_t)(1 << MOTOR_R_SLP_PIN); }	// set motor R sleep pin
-		else { MOTOR_R_SLP_PDOR &= ~(uint32_t)(1 << MOTOR_R_SLP_PIN); }
+		else
+		{
+			MOTOR_R_SLP_PDOR &= ~(uint32_t)(1 << MOTOR_R_SLP_PIN); 			// clear motor sleep pin
+			motorSetPwmRight(0);											// disable PWM
+		}
 	}
 	else if(side == 'L')
 	{
 		if(value) { MOTOR_L_SLP_PDOR |= (uint32_t)(1 << MOTOR_L_SLP_PIN); }	// set motor L sleep pin
-		else { MOTOR_L_SLP_PDOR &= ~(uint32_t)(1 << MOTOR_L_SLP_PIN); }
+		else
+		{
+			MOTOR_L_SLP_PDOR &= ~(uint32_t)(1 << MOTOR_L_SLP_PIN); 			// clear motor sleep pin
+			motorSetPwmLeft(0);												// disable PWM
+		}
 	}
 	else { }	// error: invalid argument
 }
