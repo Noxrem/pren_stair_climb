@@ -22,9 +22,9 @@ void motorIncrementPwmLeft(int8_t value);
 void motorSetPwmRight(int8_t value);
 void motorSetPwmLeft(int8_t value);
 
-bool getMotorFLT(char side);
-void setMotorDIR(char side, bool value);
-void setMotorSLP(char side, bool value);
+bool motorGetFLT(char side);
+void motorSetDIR(char side, bool value);
+void motorSetSLP(char side, bool value);
 void motorInit(void);
 
 // macros to switch a pin configuration from GPIO to FTM-Mode and vice versa

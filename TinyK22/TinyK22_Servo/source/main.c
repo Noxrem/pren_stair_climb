@@ -79,9 +79,9 @@ void main(void)
   PORTC->PCR[2] = PORT_PCR_MUX(1);
   GPIOC->PDDR |= (1<<2);
 
-  // Set the motor PWM to a test value
-  motorSetPwmLeft(127);
-  motorSetPwmRight(59);
+//  // Set the motor PWM to a test value
+//  motorSetPwmLeft(127);
+//  motorSetPwmRight(59);
 
   while(TRUE)
   {

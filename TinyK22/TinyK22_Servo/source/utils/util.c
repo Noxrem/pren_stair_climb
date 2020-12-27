@@ -336,6 +336,44 @@ void utilStrcatNum32s(char *dst, size_t dstSize, int32_t val)
   utilStrcat(dst, dstSize, buf);
 }
 
+/**
+ * Scans a decimal 8bit unsigned number, and stops at any non-number.
+ * Number can have any preceding zeros or spaces.
+ *
+ * @param[inout] str
+ *   the string to parse
+ * @param[in] value
+ *   pointer to a variable to store the value
+ * @returns
+ *   EC_SUCCESS: parsing succeeded
+ *   EC_OVERFLOW: to many digits
+ *   EC_INVALID_ARG: string doesn't starts with a digit or spaces
+ */
+tError utilScanDecimal8u(const char **str, uint8_t *value)
+{
+  /* scans a decimal number, and stops at any non-number. Number can have any preceding zeros or spaces. */
+  #define _8_NOF_DIGITS  (3+1)
+  uint8_t nofDigits = _8_NOF_DIGITS; /* maximum number of digits to avoid overflow */
+  const char *p = *str;
+
+  while(*p==' ') { /* skip leading spaces */
+    p++;
+  }
+  *value = 0;
+  while(*p>='0' && *p<='9' && nofDigits > 0) {
+    *value = (uint8_t)((*value)*10 + *p-'0');
+    nofDigits--;
+    p++;
+  } /* while */
+  if (nofDigits==0) {
+    return EC_OVERFLOW;
+  }
+  if (nofDigits==_8_NOF_DIGITS) { /* no digits at all? */
+    return EC_INVALID_ARG;
+  }
+  *str = p;
+  return EC_SUCCESS;
+}
 
 /**
  * Scans a decimal number, and stops at any non-number.

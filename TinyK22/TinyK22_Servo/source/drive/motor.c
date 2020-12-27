@@ -72,13 +72,13 @@ void motorSetPwmRight(int8_t value)
   {
 	  // drive backward
 	  value = -value;             	// value has to be a positive channel value!
-	  setMotorDIR('R', true);
+	  motorSetDIR('R', true);
 	  MOTOR_RIGHT_PWM();			// set motor right as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
 	  // drive forward
-	  setMotorDIR('R', false);
+	  motorSetDIR('R', false);
 	  MOTOR_RIGHT_PWM();		// set motor right as timer Pin (pwm signal)
   }
   else
@@ -108,13 +108,13 @@ void motorSetPwmLeft(int8_t value)
   {
 	  // drive backwards
 	  value = -value;
-	  setMotorDIR('L', true);
+	  motorSetDIR('L', true);
 	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
 	  // drive forward
-	  setMotorDIR('L', false);
+	  motorSetDIR('L', false);
 	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else
@@ -162,6 +162,22 @@ tError motorParseCommand(const char *cmd)
     if (result != EC_SUCCESS) return result;
     motorSetPwmRight((int16_t)((MOTOR_MAX_VALUE * v) / 100));
   }
+  else if (strncmp(cmd, "enable", sizeof("enable")-1) == 0)
+  {
+	  // enable motors
+	  motorSetSLP('R', true);	// set the SLP Pins of the motor driver
+	  motorSetSLP('L', true);
+	  termWriteLine("Motors enabled");
+	  result = EC_SUCCESS;
+  }
+  else if (strncmp(cmd, "disable", sizeof("disable")-1) == 0)
+  {
+	  // disable motors
+	  motorSetSLP('R', false);	// clear the SLP Pins of the motor driver
+	  motorSetSLP('L', false);
+	  termWriteLine("Motors disabled");
+  	  result = EC_SUCCESS;
+  }
   return result;
 }
 
@@ -174,7 +190,7 @@ tError motorParseCommand(const char *cmd)
  * @return
  * 	 value of the pin
  */
-bool getMotorFLT(char side)
+bool motorGetFLT(char side)
 {
 	if(side == 'R')
 	{
@@ -196,7 +212,7 @@ bool getMotorFLT(char side)
  * @param[in] value
  * 	 value to set the pin to
  */
-void setMotorDIR(char side, bool value)
+void motorSetDIR(char side, bool value)
 {
 	if(side == 'R')
 	{
@@ -212,6 +228,7 @@ void setMotorDIR(char side, bool value)
 }
 
 /**
+ * Activates or deactivates the motor driver
  * Sets the GPIO PDOR value of the motor driver board SLP Pin
  *
  * @param[in] side
@@ -220,7 +237,7 @@ void setMotorDIR(char side, bool value)
  * @param[in] value
  * 	 value to set the pin to
  */
-void setMotorSLP(char side, bool value)
+void motorSetSLP(char side, bool value)
 {
 	if(side == 'R')
 	{
@@ -236,12 +253,6 @@ void setMotorSLP(char side, bool value)
 }
 
 /**
- * Initializes the motor driver:
- * - Motor R A: PTD0, FTM3_CH0, Mux:4
- * - Motor R B: PTE5, FTM3_CH0, Mux:6
- * - Motor L A: PTD1, FTM3_CH1, Mux:4
- * - motor L B: PTE6, FTM3_CH1, Mux:6
- *
  * Initializes the motor driver:
  * - Motor R FLT: PTB2, GPIO, Mux:1
  * - Motor L FLT: PTB3, GPIO, Mux:1
@@ -270,13 +281,13 @@ void motorInit(void)
 	PORTC->PCR[10] = PORT_PCR_MUX(1);
 	PORTC->PCR[11] = PORT_PCR_MUX(1);
 
-	// Motor Sleep Pin (high to enable motor)
-	setMotorSLP('R', true);
-	setMotorSLP('L', true);
+	// Motor Sleep Pin (high to disable motor)
+	motorSetSLP('R', false);
+	motorSetSLP('L', false);
 
 	// Motor Direction Pin (low: current from A to B)
-	setMotorDIR('R', false);
-	setMotorDIR('L', false);
+	motorSetDIR('R', false);
+	motorSetDIR('L', false);
 
 	// GPIO Clear Bits on PTD0 & PTD1
 	GPIOD->PCOR |= 1<<0 | 1<<1;
