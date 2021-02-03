@@ -21,15 +21,16 @@
 
 #define FTM_CLOCK                 250000    // 250 kHz
 #define FTM_PRESCALE              1         // div 1
-#define WHEEL_DIAMETER            19.2      // 19.2 mm
-#define TICKS_PER_REVOLUTION      142       // 142 ticks per wheel revolution
+#define WHEEL_DIAMETER            6      	// 6 mm (old 19.2 mm)
+#define TICKS_PER_REVOLUTION      5756      // 5756 (old 142) ticks (counts) per wheel revolution (same as CPR "counts per revolution")
 
-#define PERIODS_PER_REVOLUTION    (TICKS_PER_REVOLUTION / 4.0)                                      // 35.50 periods/revolution
-#define WHEEL_CIRCUMFERENCE       (WHEEL_DIAMETER * 3.141593)                                       // 60.32 mm
-#define UM_PER_TICK               (((10000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)   // 424.788 => 425 Micrometer/Ticks
+#define PULSES_PER_REVOLUTION 	  (TICKS_PER_REVOLUTION / 4.0)                                     	// 1439 pulses/revolution (old 35.50 pulses/revolution) PPR
+#define WHEEL_CIRCUMFERENCE       (WHEEL_DIAMETER * 3.141593)                                       // 18.85 mm (old 60.32 mm)
+#define NM_PER_TICK               (((10000000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)  // 1'042 Nanometer/Tick (old 424.788 => 425 Micrometer/Tick) (+5/10 is for rounding)
 
-// velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
-#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PERIODS_PER_REVOLUTION * FTM_PRESCALE)+5)/10) // =424779 430847
+// old velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
+// velocity = (6mm * PI * 250'00 * 4) / (5756 * Ticks) = (6mm * PI * 250'000) / (1439 * Ticks) = 3'275/Ticks
+#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PULSES_PER_REVOLUTION * FTM_PRESCALE)+5)/10) // 3'275
 
 #define QuadLeftA                 ((GPIOA->PDIR & (1<<13)) != 0) // FTM1_CH1
 #define QuadLeftB                 ((GPIOA->PDIR & (1<<12)) != 0) // FTM1_CH0
