@@ -24,13 +24,13 @@
 #define WHEEL_DIAMETER            6      	// 6 mm (old 19.2 mm)
 #define TICKS_PER_REVOLUTION      5756      // 5756 (old 142) ticks (counts) per wheel revolution (same as CPR "counts per revolution")
 
-#define PULSES_PER_REVOLUTION 	  (TICKS_PER_REVOLUTION / 4.0)                                     	// 1439 pulses/revolution (old 35.50 pulses/revolution) PPR
+#define PERIODS_PER_REVOLUTION 	  (TICKS_PER_REVOLUTION / 4.0)                                     	// 1439 periods/revolution (old 35.50 periods/revolution) (same as PPR "pulses/periods per revolution")
 #define WHEEL_CIRCUMFERENCE       (WHEEL_DIAMETER * 3.141593)                                       // 18.85 mm (old 60.32 mm)
 #define NM_PER_TICK               (((10000000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)  // 1'042 Nanometer/Tick (old 424.788 => 425 Micrometer/Tick) (+5/10 is for rounding)
 
 // old velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
 // velocity = (6mm * PI * 250'00 * 4) / (5756 * Ticks) = (6mm * PI * 250'000) / (1439 * Ticks) = 3'275/Ticks
-#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PULSES_PER_REVOLUTION * FTM_PRESCALE)+5)/10) // 3'275
+#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PERIODS_PER_REVOLUTION * FTM_PRESCALE)+5)/10) // 3'275
 
 #define QuadLeftA                 ((GPIOA->PDIR & (1<<13)) != 0) // FTM1_CH1
 #define QuadLeftB                 ((GPIOA->PDIR & (1<<12)) != 0) // FTM1_CH0
@@ -238,7 +238,7 @@ void FTM2_IRQHandler(void)
 /**
  * Returns the velocity of the left wheel
  * @return
- *   the distance in mm
+ *   the velocity in m/s
  */
 int16_t quadGetSpeedLeft(void)
 {
@@ -249,7 +249,7 @@ int16_t quadGetSpeedLeft(void)
 /**
  * Returns the velocity of the right wheel
  * @return
- *   the distance in mm
+ *   the the velocity in m/s
  */
 int16_t quadGetSpeedRight(void)
 {
@@ -264,7 +264,7 @@ int16_t quadGetSpeedRight(void)
  */
 int16_t quadGetDistanceLeft(void)
 {
-   return (int16_t)((ticksLeft * UM_PER_TICK) / 1000);
+   return (int16_t)((ticksLeft * NM_PER_TICK) / 1000000);
 }
 
 /**
@@ -274,7 +274,7 @@ int16_t quadGetDistanceLeft(void)
  */
 int16_t quadGetDistanceRight(void)
 {
-   return (int16_t)((ticksRight * UM_PER_TICK) / 1000);
+   return (int16_t)((ticksRight * NM_PER_TICK) / 1000000);
 }
 
 

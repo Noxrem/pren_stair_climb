@@ -14,7 +14,7 @@
 #include "ftm0.h"
 #include "ftm3.h"
 #include "motor.h"
-//#include "quad.h"
+#include "quad.h"
 #include "term.h"
 //#include "sound.h"
 //#include "soundPlayer.h"
@@ -64,7 +64,7 @@ void main(void)
 //  soundInit();
 //  soundPlayerInit();
   motorInit();
-//  quadInit();
+  quadInit();
 //  driveInit();
 //  pwrSwitchInit();
 //  EnableDebugLeds();
