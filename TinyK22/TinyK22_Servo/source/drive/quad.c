@@ -349,7 +349,7 @@ void quadInit(void)
   // set clockgating for FTM1 & FTM2
   SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK | SIM_SCGC6_FTM2_MASK;
 
-  // configure the timer with "Fixed frequency clock" as clocksource and with a "Prescaler" of 0 => 250'000 kHz
+  // configure the timer with "Fixed frequency clock" as clocksource and with a "Prescaler" of 0 => 250'000 Hz
   FTM1->SC = FTM_SC_CLKS(2) |  FTM_SC_PS(0) | FTM_SC_TOIE(1);
   FTM2->SC = FTM_SC_CLKS(2) |  FTM_SC_PS(0) | FTM_SC_TOIE(1);
 
