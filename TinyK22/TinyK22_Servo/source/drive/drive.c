@@ -16,6 +16,8 @@
 #include "quad.h"
 #include "motor.h"
 
+static tCommandLineHandler clh;       // terminal command line handler
+
 static int16_t setValueLeft;
 static int16_t setValueRight;
 static uint8_t kpL, kiL, kdL;
@@ -185,7 +187,38 @@ void driveToWork(void)
   motorSetPwmRight((int8_t)valR);
 }
 
-
+/**
+ * Command line parser for the drive PID controller.
+ *
+ * @param[in] cmd
+ *   the command to parse
+ */
+tError driveParseCommand(const char *cmd)
+{
+  tError result = EC_INVALID_ARG;
+  if (strcmp(cmd, "help") == 0)
+  {
+    termWriteLine("drv (drive) commands:");
+    termWriteLine("  help");
+    termWriteLine("  setPIParam");
+    termWriteLine("  status");
+    result = EC_SUCCESS;
+  }
+  else if (strncmp(cmd, "setPIParam", sizeof("setPIParam")-1) == 0)
+  {
+    cmd += sizeof("setPIParam");
+    int16_t v;
+    result = utilScanDecimal16s(&cmd, &v);
+    if (result != EC_SUCCESS) return result;
+    // TODO implement command parsing
+  }
+  else if (strcmp(cmd, "status") == 0)	// returns state of the motor values
+  {
+	  // TODO implement PID status output
+	  result = EC_SUCCESS;
+  }
+  return result;
+}
 
 void driveInit(void)
 {
@@ -193,4 +226,7 @@ void driveInit(void)
   kiL = kiR = 20;//30;
   kdL = kdR = 0;
   setValueLeft = setValueRight = 00;  //30... 7sec 30m = 4cm/sec
+
+  // register terminal command line handler
+  termRegisterCommandLineHandler(&clh, "drv", "(drive)", driveParseCommand);
 }
