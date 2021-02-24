@@ -31,7 +31,7 @@
 #define NM_PER_TICK               (((10000000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)  // 1'042 Nanometer/Tick (+5/10 is for rounding)
 
 // old velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
-// velocity = (6mm * PI * 250'00 * 4) / (5756 * Ticks) = (6mm * PI * 250'000) / (1439 * Ticks * External_Gear_Ratio) = 3'275/Ticks
+// velocity = (6mm * PI * 250'000 * 4) / (5756 * Ticks) = (6mm * PI * 250'000) / (1439 * Ticks * External_Gear_Ratio) = 3'275/Ticks
 #define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PERIODS_PER_REVOLUTION * FTM_PRESCALE * EXT_GEAR_RATIO)+5)/10) // 3'275
 
 #define QuadLeftA                 ((GPIOA->PDIR & (1<<13)) != 0) // FTM1_CH1
@@ -235,7 +235,29 @@ void FTM2_IRQHandler(void)
   OnExitQuadRightISR();
 }
 
+/**
+ * Returns the rpm of the left wheel
+ * @return
+ * 	the rpm in revolutions per minute
+ */
+int16_t quadGetRPMLeft(void)
+{
+	// rpm = 60 * (250'000 / timeLeft) / 1439	( factor 1000 to avoid float, add 500 to round)
+	if (timeLeft) return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	else return 0;
+}
 
+/**
+ * Returns the rpm of the right wheel
+ * @return
+ * 	the rpm in revolutions per minute
+ */
+int16_t quadGetRPMRight(void)
+{
+	// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
+	if (timeLeft) return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	else return 0;
+}
 
 /**
  * Returns the velocity of the left wheel
