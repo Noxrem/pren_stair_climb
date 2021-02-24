@@ -317,6 +317,8 @@ tError quadParseCommand(const char *cmd)
     termWriteLine("q (quad) commands:");
     termWriteLine("  help");
     termWriteLine("  status");
+    termWriteLine("  getRpmR");
+    termWriteLine("  getRpmL");
     termWriteLine("  reset");
     result = EC_SUCCESS;
   }
@@ -340,6 +342,18 @@ tError quadParseCommand(const char *cmd)
     termWrite("\n");
     result = EC_SUCCESS;
   }
+  else if (strncmp(cmd, "getRpmR", sizeof("getRpmR")-1) == 0)	// Returns the rpm of the right motor
+  {
+	  termWrite("R:");
+	  termWriteNum16s(quadGetRPMRight());
+	  result = EC_SUCCESS;
+  }
+  else if (strncmp(cmd, "getRpmL", sizeof("getRpmL")-1) == 0)	// Returns the rpm of the left motor
+    {
+  	  termWrite("R:");
+  	  termWriteNum16s(quadGetRPMLeft());
+  	  result = EC_SUCCESS;
+    }
   else if (strncmp(cmd, "reset", sizeof("reset")-1) == 0)
   {
     cmd += sizeof("reset");
