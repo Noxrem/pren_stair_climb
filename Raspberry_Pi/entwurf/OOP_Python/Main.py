@@ -37,6 +37,8 @@ def measure_distance_during_turning():
 while not is_found_pictogram:
     is_found_pictogram, found_pictogram = robot.object_detector.find_pictogram()
 
+robot.acknowledge_pictogram(found_pictogram)
+
 # Drehen und Treppe suchen
 with concurrent.futures.ThreadPoolExecutor(2) as executor:
     future1 = executor.submit(robot.search_stair)
@@ -54,4 +56,4 @@ with concurrent.futures.ThreadPoolExecutor(2) as executor:
     print("distance right: " + str(distance_right))
 
 robot.winch.pull_up()
-robot.speaker.celebrate()
+robot.speaker.celebrate(found_pictogram)
