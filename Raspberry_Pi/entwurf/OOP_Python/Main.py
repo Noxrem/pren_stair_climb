@@ -3,7 +3,6 @@ import concurrent.futures
 from threading import Thread
 import time
 
-
 is_found_pictogram = False
 is_found_stair = False
 found_pictogram = None
@@ -18,10 +17,12 @@ def turn_during_searching_stair():
         robot.turn_right_1degree()
         time.sleep(0.2)
 
+
 def turn_during_measuring_distance():
     while abs(int(distance_right) - int(distance_left)) > 2:
         robot.turn_right_1degree()
         time.sleep(0.2)
+
 
 def measure_distance_during_turning():
     # entspricht do-while-Schleife
@@ -56,4 +57,4 @@ with concurrent.futures.ThreadPoolExecutor(2) as executor:
     print("distance right: " + str(distance_right))
 
 robot.winch.pull_up()
-robot.speaker.celebrate(found_pictogram)
+robot.final_celebrate(found_pictogram)

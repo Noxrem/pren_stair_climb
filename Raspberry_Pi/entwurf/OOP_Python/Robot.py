@@ -86,8 +86,8 @@ class Robot:
     def let_bridge_down(self):
         self.magnet_manager.set_off_power_bridge()
 
-    def final_celebrate(self):
-        self.speaker.celebrate()
+    def final_celebrate(self, found_pictogram_english_lowercase):
+        self.speaker.celebrate(found_pictogram_english_lowercase)
 
     def search_pictogram(self):
         self.object_detector.find_pictogram()
