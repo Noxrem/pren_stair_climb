@@ -15,7 +15,7 @@ class Speaker:
                       "This is a wrench"]
         self.celebration_sound = "celebration.mp3"
 
-    def playText(self, found_pictogram_english_lowercase):
+    def play_text(self, found_pictogram_english_lowercase):
         message = None
         if found_pictogram_english_lowercase == "hammer":
             message = self.texts[0]

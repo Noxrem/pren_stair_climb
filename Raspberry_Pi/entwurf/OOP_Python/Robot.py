@@ -75,7 +75,7 @@ class Robot:
         self.object_detector.camera.camServo.turn_right()
 
     def acknowledge_pictogram(self, found_pictogram_english_lowercase):
-        self.speaker.playText(found_pictogram_english_lowercase)
+        self.speaker.play_text(found_pictogram_english_lowercase)
 
     def pull_up(self):
         self.winch.pull_up()
