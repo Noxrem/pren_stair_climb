@@ -11,7 +11,10 @@
  *--------------------------------------------------------------------
  */
 
+#include <string.h>
 #include "platform.h"
+#include "term.h"
+#include "util.h"
 #include "drive.h"
 #include "quad.h"
 #include "motor.h"

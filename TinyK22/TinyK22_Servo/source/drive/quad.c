@@ -243,7 +243,10 @@ void FTM2_IRQHandler(void)
 int16_t quadGetRPMLeft(void)
 {
 	// rpm = 60 * (250'000 / timeLeft) / 1439	( factor 1000 to avoid float, add 500 to round)
-	if (timeLeft) return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	if (timeLeft)
+	{
+		return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	}
 	else return 0;
 }
 
@@ -255,7 +258,10 @@ int16_t quadGetRPMLeft(void)
 int16_t quadGetRPMRight(void)
 {
 	// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
-	if (timeLeft) return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	if (timeRight)
+	{
+		return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+	}
 	else return 0;
 }
 
@@ -328,24 +334,28 @@ tError quadParseCommand(const char *cmd)
 	{
 		termWrite("SpeedR:");
 		termWriteNum16s(quadGetSpeedRight());
+		termWriteLine("");
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "getSpdL", sizeof("getSpdL") - 1) == 0)    // Returns the speed of the left motor
 	{
 		termWrite("SpeedL:");
 		termWriteNum16s(quadGetSpeedLeft());
+		termWriteLine("");
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "getRpmR", sizeof("getRpmR") - 1) == 0)    // Returns the rpm of the right motor
 	{
 		termWrite("RpmR:");
 		termWriteNum16s(quadGetRPMRight());
+		termWriteLine("");
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "getRpmL", sizeof("getRpmL") - 1) == 0)    // Returns the rpm of the left motor
 	{
 		termWrite("RpmL:");
 		termWriteNum16s(quadGetRPMLeft());
+		termWriteLine("");
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
