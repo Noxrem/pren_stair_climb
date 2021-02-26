@@ -21,8 +21,8 @@
 
 #define FTM_CLOCK                 250000    // 250 kHz
 #define FTM_PRESCALE              1         // div 1
-#define WHEEL_DIAMETER            6      	// 6 mm
-#define EXT_GEAR_RATIO			  1			// Gear ration from the motor shaft to the actual wheel
+#define WHEEL_DIAMETER            6      		// 6 mm
+#define EXT_GEAR_RATIO			  		1					// Gear ration from the motor shaft to the actual wheel
 #define TICKS_PER_REVOLUTION      5756      // 5756 ticks (counts) per shaft revolution (same as CPR "counts per revolution")
 
 																									  // Since there are 2 encoders (A,B) there is a factor of 4 ticks per period
@@ -311,57 +311,71 @@ int16_t quadGetDistanceRight(void)
  */
 tError quadParseCommand(const char *cmd)
 {
-  tError result = EC_INVALID_ARG;
-  if (strcmp(cmd, "help") == 0)
-  {
-    termWriteLine("q (quad) commands:");
-    termWriteLine("  help");
-    termWriteLine("  status");
-    termWriteLine("  getRpmR");
-    termWriteLine("  getRpmL");
-    termWriteLine("  reset");
-    result = EC_SUCCESS;
-  }
-  else if (strncmp(cmd, "status", sizeof("status")-1) == 0)
-  {
-    termWriteLine("quad status:");
-    termWrite("L:");
-    termWriteNum32s(ticksLeft);
-    termWrite(" ");
-    termWriteNum16s(quadGetDistanceLeft());
-    termWrite(" ");
-    termWriteNum16s(quadGetSpeedLeft());
-    termWriteLine("");
+	tError result = EC_INVALID_ARG;
+	if (strcmp(cmd, "help") == 0)
+	{
+		termWriteLine("q (quad) commands:");
+		termWriteLine("  help");
+		termWriteLine("  getSpdR");
+		termWriteLine("  getSpdL");
+		termWriteLine("  getRpmR");
+		termWriteLine("  getRpmL");
+		termWriteLine("  status");
+		termWriteLine("  reset");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getSpdR", sizeof("getSpdR") - 1) == 0)    // Returns the speed of the right motor
+	{
+		termWrite("SpeedR:");
+		termWriteNum16s(quadGetSpeedRight());
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getSpdL", sizeof("getSpdL") - 1) == 0)    // Returns the speed of the left motor
+	{
+		termWrite("SpeedL:");
+		termWriteNum16s(quadGetSpeedLeft());
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getRpmR", sizeof("getRpmR") - 1) == 0)    // Returns the rpm of the right motor
+	{
+		termWrite("RpmR:");
+		termWriteNum16s(quadGetRPMRight());
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getRpmL", sizeof("getRpmL") - 1) == 0)    // Returns the rpm of the left motor
+	{
+		termWrite("RpmL:");
+		termWriteNum16s(quadGetRPMLeft());
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
+	{
+		termWriteLine("quad status:");
+		termWrite("L:");
+		termWriteNum32s(ticksLeft);
+		termWrite(" ");
+		termWriteNum16s(quadGetDistanceLeft());
+		termWrite(" ");
+		termWriteNum16s(quadGetSpeedLeft());
+		termWriteLine("");
 
-    termWrite("R:");
-    termWriteNum32s(ticksRight);
-    termWrite(" ");
-    termWriteNum16s(quadGetDistanceRight());
-    termWrite(" ");
-    termWriteNum16s(quadGetSpeedRight());
-    termWrite("\n");
-    result = EC_SUCCESS;
-  }
-  else if (strncmp(cmd, "getRpmR", sizeof("getRpmR")-1) == 0)	// Returns the rpm of the right motor
-  {
-	  termWrite("R:");
-	  termWriteNum16s(quadGetRPMRight());
-	  result = EC_SUCCESS;
-  }
-  else if (strncmp(cmd, "getRpmL", sizeof("getRpmL")-1) == 0)	// Returns the rpm of the left motor
-    {
-  	  termWrite("R:");
-  	  termWriteNum16s(quadGetRPMLeft());
-  	  result = EC_SUCCESS;
-    }
-  else if (strncmp(cmd, "reset", sizeof("reset")-1) == 0)
-  {
-    cmd += sizeof("reset");
-    ticksLeft = ticksRight = errorLeft = errorRight = 0;
-    termWriteLine("OK");
-    result = EC_SUCCESS;
-  }
-  return result;
+		termWrite("R:");
+		termWriteNum32s(ticksRight);
+		termWrite(" ");
+		termWriteNum16s(quadGetDistanceRight());
+		termWrite(" ");
+		termWriteNum16s(quadGetSpeedRight());
+		termWrite("\n");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "reset", sizeof("reset") - 1) == 0)
+	{
+		cmd += sizeof("reset");
+		ticksLeft = ticksRight = errorLeft = errorRight = 0;
+		termWriteLine("OK");
+		result = EC_SUCCESS;
+	}
+	return result;
 }
 
 

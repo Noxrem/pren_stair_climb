@@ -55,12 +55,23 @@ tError servoParseCommand(const char *cmd)
   {
     termWriteLine("srv (servo) commands:");
     termWriteLine("  help");
+    termWriteLine("  status");
     termWriteLine("  pta4 [0..180]");					// Servo on pin PTA4 with 0..180 degrees
     termWriteLine("  pta5 [0..180]");					// Servo on pin PTA5 with 0..180 degrees
     termWriteLine("  pta45 [0..180]");					// Servo on pin PTA4 and PTA5 with 0..180 degrees
-    termWriteLine("  status");
+
     result = EC_SUCCESS;
   }
+	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
+	{
+		uint16_t degPTA4 = mapRangeToAnother(FTM0->CONTROLS[1].CnV, SERVO_CnV_MIN,
+				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 1 value to degrees (0..180)
+		uint16_t degPTA5 = mapRangeToAnother(FTM0->CONTROLS[2].CnV, SERVO_CnV_MIN,
+				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 2 value to degrees (0..180)
+		servoPrintValue("pta4", degPTA4);				// Print current degree of servo
+		servoPrintValue("pta5", degPTA5);
+		result = EC_SUCCESS;
+	}
 	else if (strncmp(cmd, "pta45", sizeof("pta45") - 1) == 0)
 	{
 		cmd += sizeof("pta45");						// cuts off the "pta45" from the string, now the value afterwards is in cmd
@@ -88,7 +99,7 @@ tError servoParseCommand(const char *cmd)
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
 		uint16_t ch_value = mapRangeToAnother(v, 0, 180, SERVO_CnV_MIN,
-				SERVO_CnV_MAX);    						// Map the value from (0...180) to the range of the Servo pulse width
+				SERVO_CnV_MAX);    									// Map the value from (0...180) to the range of the Servo pulse width
 		FTM0->CONTROLS[1].CnV = ch_value;				// Set PWM pulse width
 
 		servoPrintValue("pta4", v);				// Print current degree of servo
@@ -108,16 +119,6 @@ tError servoParseCommand(const char *cmd)
 		FTM0->CONTROLS[2].CnV = ch_value;				// Set PWM pulse width
 
 		servoPrintValue("pta5", v);				// Print current degree of servo
-		result = EC_SUCCESS;
-	}
-	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
-	{
-		uint16_t degPTA4 = mapRangeToAnother(FTM0->CONTROLS[1].CnV,
-				SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel 1 value to degrees (0..180)
-		uint16_t degPTA5 = mapRangeToAnother(FTM0->CONTROLS[2].CnV,
-						SERVO_CnV_MIN, SERVO_CnV_MAX, 0, 180);	// Convert ftm0 channel 2 value to degrees (0..180)
-		servoPrintValue("pta4", degPTA4);				// Print current degree of servo
-		servoPrintValue("pta5", degPTA5);
 		result = EC_SUCCESS;
 	}
   return result;
