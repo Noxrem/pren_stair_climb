@@ -10,3 +10,7 @@ while True:
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
         break
+
+# When everything done, release the capture
+cap.release()
+cv2.destroyAllWindows()
