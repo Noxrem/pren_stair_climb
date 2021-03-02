@@ -65,7 +65,7 @@ void ProcessDrive(void)
     i=0;
     if (getMotorsEnabled()) // If the motors are enabled
     {
-
+    	speedL = speedR = 10;	// 30mm/s
       driveSetSpeed(speedL, speedR);
       driveToWork();
     }
@@ -91,7 +91,7 @@ void main(void)
 //  soundPlayerInit();
   motorInit();
   quadInit();
-//  driveInit();
+  driveInit();
 //  pwrSwitchInit();
 //  EnableDebugLeds();
 //  ledInit();
@@ -120,7 +120,7 @@ void main(void)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
       BlinkBlueLedEveryMS(1000);
-//      ProcessDrive();
+      ProcessDrive();
     }
   }
 }
