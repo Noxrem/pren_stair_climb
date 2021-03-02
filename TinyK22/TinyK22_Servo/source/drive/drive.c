@@ -203,11 +203,11 @@ tError driveParseCommand(const char *cmd)
   {
     termWriteLine("drv (drive) commands:");
     termWriteLine("  help");
-    termWriteLine("  setPIParam");
+    termWriteLine("  setPIDParam");
     termWriteLine("  status");
     result = EC_SUCCESS;
   }
-  else if (strncmp(cmd, "setPIParam", sizeof("setPIParam")-1) == 0)
+  else if (strncmp(cmd, "setPIDParam", sizeof("setPIDParam")-1) == 0)
   {
     cmd += sizeof("setPIParam");
     int16_t v;

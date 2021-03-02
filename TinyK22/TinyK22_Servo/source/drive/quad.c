@@ -245,7 +245,8 @@ int16_t quadGetRPMLeft(void)
 	// rpm = 60 * (250'000 / timeLeft) / 1439	( factor 1000 to avoid float, add 500 to round)
 	if (timeLeft)
 	{
-		return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+		// TODO only outputs 0
+		return (int16_t)(((60 * (((int32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
 	}
 	else return 0;
 }
@@ -260,7 +261,8 @@ int16_t quadGetRPMRight(void)
 	// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
 	if (timeRight)
 	{
-		return (int16_t)(((60 * (((uint32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+		// TODO only outputs 0
+		return (int16_t)(((60 * (((int32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
 	}
 	else return 0;
 }
@@ -326,6 +328,7 @@ tError quadParseCommand(const char *cmd)
 		termWriteLine("  getSpdL");
 		termWriteLine("  getRpmR");
 		termWriteLine("  getRpmL");
+		termWrtieLine("  getContSpd [0/1]");
 		termWriteLine("  status");
 		termWriteLine("  reset");
 		result = EC_SUCCESS;
@@ -358,6 +361,20 @@ tError quadParseCommand(const char *cmd)
 		termWriteLine("");
 		result = EC_SUCCESS;
 	}
+	else if (strncmp(cmd, "getContSpd", sizeof("getContSpd") - 1) == 0)    // Starts/Stops the continuous transmission of the current speed
+		{
+			cmd += sizeof("getContSpd");	// sets string pointer to next argument
+			uint8_t enabledContinuousTransmission;
+			result = utilScanDecimal8u(&cmd, &enabledContinuousTransmittion);	// get the argument
+			if(enabledContinuousTransmission)	// If the continuous transmission should be enabled
+			{
+				// TODO implement continuous speed output
+			}
+			else
+			{
+				// TODO implement continuous speed output stop
+			}
+		}
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
 	{
 		termWriteLine("quad status:");
