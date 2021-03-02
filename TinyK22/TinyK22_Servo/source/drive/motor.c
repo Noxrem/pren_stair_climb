@@ -24,8 +24,15 @@
 static tCommandLineHandler clh;       // terminal command line handler
 static int8_t motorValueRight;
 static int8_t motorValueLeft;
+static bool motorsEnabled = false;		// Enables/disables the motors and speed update
 
-
+/**
+ * Getter Method if the motors are enabled/disabled
+ */
+bool getMotorsEnabled(void)
+{
+	return motorsEnabled;
+}
 
 /**
  * Increments or decrements the PWM value oft the right wheel
@@ -169,6 +176,7 @@ tError motorParseCommand(const char *cmd)
   else if (strncmp(cmd, "enable", sizeof("enable")-1) == 0)
   {
 	  // enable motors
+  	motorsEnabled = true;
 	  motorSetSLP('R', true);	// set the SLP Pins of the motor driver
 	  motorSetSLP('L', true);
 	  termWriteLine("Motors enabled");
@@ -177,6 +185,7 @@ tError motorParseCommand(const char *cmd)
   else if (strncmp(cmd, "disable", sizeof("disable")-1) == 0)
   {
 	  // disable motors
+  	motorsEnabled = false;
 	  motorSetSLP('R', false);	// clear the SLP Pins of the motor driver
 	  motorSetSLP('L', false);
 	  termWriteLine("Motors disabled");

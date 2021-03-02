@@ -16,6 +16,8 @@
 #define Hallo 1
 #define MOTOR_MAX_VALUE               127
 
+bool getMotorsEnabled(void);
+
 void motorIncrementPwmRight(int8_t value);
 void motorIncrementPwmLeft(int8_t value);
 

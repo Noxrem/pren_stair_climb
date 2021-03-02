@@ -245,8 +245,20 @@ int16_t quadGetRPMLeft(void)
 	// rpm = 60 * (250'000 / timeLeft) / 1439	( factor 1000 to avoid float, add 500 to round)
 	if (timeLeft)
 	{
-		// TODO only outputs 0
-		return (int16_t)(((60 * (((int32_t)FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+		int32_t rpmX1000;
+		int16_t rpm;
+		// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
+		rpmX1000 = 60 * (((FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION);	// rpm with a factor of 1000
+
+		if(rpmX1000 < 0)	// If rpmX1000 is negative round with (-500)
+		{
+			rpm = (rpmX1000 - 500) / 1000;
+		}
+		else 							// rpmX100 is positive, round with (+500)
+		{
+			rpm = (rpmX1000 + 500) / 1000;
+		}
+		return rpm;
 	}
 	else return 0;
 }
@@ -258,11 +270,22 @@ int16_t quadGetRPMLeft(void)
  */
 int16_t quadGetRPMRight(void)
 {
-	// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
 	if (timeRight)
 	{
-		// TODO only outputs 0
-		return (int16_t)(((60 * (((int32_t)FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION) +500) / 1000);
+		int32_t rpmX1000;
+		int16_t rpm;
+		// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
+		rpmX1000 = 60 * (((FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION);	// rpm with a factor of 1000
+
+		if(rpmX1000 < 0)	// If rpmX1000 is negative round with (-500)
+		{
+			rpm = (rpmX1000 - 500) / 1000;
+		}
+		else 							// rpmX100 is positive, round with (+500)
+		{
+			rpm = (rpmX1000 + 500) / 1000;
+		}
+		return rpm;
 	}
 	else return 0;
 }
@@ -328,7 +351,7 @@ tError quadParseCommand(const char *cmd)
 		termWriteLine("  getSpdL");
 		termWriteLine("  getRpmR");
 		termWriteLine("  getRpmL");
-		termWrtieLine("  getContSpd [0/1]");
+		termWriteLine("  getContSpd [0/1]");
 		termWriteLine("  status");
 		termWriteLine("  reset");
 		result = EC_SUCCESS;
@@ -365,7 +388,7 @@ tError quadParseCommand(const char *cmd)
 		{
 			cmd += sizeof("getContSpd");	// sets string pointer to next argument
 			uint8_t enabledContinuousTransmission;
-			result = utilScanDecimal8u(&cmd, &enabledContinuousTransmittion);	// get the argument
+			result = utilScanDecimal8u(&cmd, &enabledContinuousTransmission);	// get the argument
 			if(enabledContinuousTransmission)	// If the continuous transmission should be enabled
 			{
 				// TODO implement continuous speed output

@@ -18,7 +18,7 @@
 #include "term.h"
 //#include "sound.h"
 //#include "soundPlayer.h"
-//#include "drive.h"
+#include "drive.h"
 //#include "pwrSwitch.h"
 //#include "i2c.h"
 //#include "led.h"
@@ -27,6 +27,10 @@
 //#include "util.h"
 //#include "eeprom.h"
 #include "servo/servo.h"
+
+// Speed of the driving motors
+int16_t speedL = 0;
+int16_t speedR = 0;
 
 /**
  * Lets the blue Led on the TinyK22 blink in a specified amount of ms.
@@ -49,7 +53,29 @@ void BlinkBlueLedEveryMS(uint16_t timeMS)
   }
 }
 
+/**
+ * The process for the driving motors that gets called periodically. (25ms)
+ * Calls the PID control for the motors.
+ */
+void ProcessDrive(void)
+{
+  static uint16_t i;				// create int that keeps the value (static)
+  if (i++ == FTM3_TOFS_MS(25)) 	// run pid worker every 25ms
+  {
+    i=0;
+    if (getMotorsEnabled()) // If the motors are enabled
+    {
 
+      driveSetSpeed(speedL, speedR);
+      driveToWork();
+    }
+    else
+    {
+    	speedL = speedR = 0;
+      driveToWork();
+    }
+  }
+}
 
 
 
@@ -94,6 +120,7 @@ void main(void)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
       BlinkBlueLedEveryMS(1000);
+//      ProcessDrive();
     }
   }
 }
