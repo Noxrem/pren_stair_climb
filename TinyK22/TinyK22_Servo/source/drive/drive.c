@@ -25,6 +25,8 @@ static int16_t setValueLeft;
 static int16_t setValueRight;
 static uint8_t kpL, kiL, kdL;
 static uint8_t kpR, kiR, kdR;
+//static int16_t kpL, kiL, kdL;					// PID parameters set to 16bit signed int
+//static int16_t kpR, kiR, kdR;
 static int16_t integL, devL, devOldL;
 static int16_t integR, devR, devOldR;
 static int32_t valL, valR;
@@ -63,20 +65,30 @@ void driveSetSpeed(int16_t speedL, int16_t speedR)
 
 
 /**
- * This function sets the control parameters
- * @param[in] pKpL Kp left 0..255
+ * This function sets the control parameters for the right motor
  * @param[in] pKpR Kp right 0..255
- * @param[in] pKiL Ki left 0..255
  * @param[in] pKiR Ki right 0..255
+ * @param[in] pKdR Kd right 0..255
  */
-void driveSetParameters(uint8_t pKpL, uint8_t pKpR, uint8_t pKiL, uint8_t pKiR)
+void driveSetParametersR(uint8_t pKpR, uint8_t pKiR, uint8_t pKdR)
 {
-  kpL = pKpL;
   kpR = pKpR;
-  kiL = pKiL;
   kiR = pKiR;
+  kdR = pKdR;
 }
 
+/**
+ * This function sets the control parameters for the left motor
+ * @param[in] pKpL Kp left 0..255
+ * @param[in] pKiL Ki left 0..255
+ * @param[in] pKdL Kd left 0..255
+ */
+void driveSetParametersL(uint8_t pKpL, uint8_t pKiL, uint8_t pKdL)
+{
+  kpL = pKpL;
+  kiL = pKiL;
+  kdL = pKdL;
+}
 
 /**
  * This function contains the PID closed loop controller
@@ -191,6 +203,33 @@ void driveToWork(void)
 }
 
 /**
+ * Argument parser for setPIDParam command
+ * Extracts the pid parameters out of the args string
+ *
+ * @param[in] args
+ * 	the arguments to parse
+ * @param[out] pkp
+ * 	Address of variable to save the output P-value
+ * @param[out] pki
+ * 	Address of variable to save the output I-value
+ * @param[out] pkd
+ * 	Address of variable to save the output D-value
+ **/
+tError parsePIDParam(const char *args, uint8_t *pkp, uint8_t *pki, uint8_t *pkd)
+{
+	tError result = EC_INVALID_ARG;
+	result = utilScanDecimal8u(&args, pkp);		// scan the first argument (kp parameter)
+	if (result != EC_SUCCESS) return result;
+	// TODO implement command parsing
+
+	result = utilScanDecimal8u(&args, pki);		// scan the second argument (ki parameter)
+	if(result != EC_SUCCESS) return result;
+
+	result = utilScanDecimal8u(&args, pkd);		// scan the third argument (kd parameter)
+	if(result != EC_SUCCESS) return result;
+	return EC_SUCCESS;
+}
+/**
  * Command line parser for the drive PID controller.
  *
  * @param[in] cmd
@@ -203,18 +242,57 @@ tError driveParseCommand(const char *cmd)
   {
     termWriteLine("drv (drive) commands:");
     termWriteLine("  help");
-    termWriteLine("  setPIDParam");
+    termWriteLine("  setPIDParamR [kp 0..255] [ki 0..255] [kd 0..255]");
+    termWriteLine("  setPIDParamL [kp 0..255] [ki 0..255] [kd 0..255]");
     termWriteLine("  status");
     result = EC_SUCCESS;
   }
-  else if (strncmp(cmd, "setPIDParam", sizeof("setPIDParam")-1) == 0)
+  else if (strncmp(cmd, "setPIDParamR", sizeof("setPIDParamR")-1) == 0)
   {
-    cmd += sizeof("setPIParam");
-    int16_t v;
-    result = utilScanDecimal16s(&cmd, &v);
-    if (result != EC_SUCCESS) return result;
-    // TODO implement command parsing
+    cmd += sizeof("setPIDParamR");
+    uint8_t kp;
+    uint8_t ki;
+    uint8_t kd;
+
+    result = parsePIDParam(cmd, &kp, &ki, &kd);
+    if(result != EC_SUCCESS) return result;
+    driveSetParametersR(kp, ki, kd);	// Set PID right parameters
+
+    char str[6];														// Return the received value for checking
+    termWrite("PIDR: ");
+    utilNum16sToStr(str, sizeof(str), kp);
+    termWrite(str);
+    termWrite(" ");
+    utilNum16sToStr(str, sizeof(str), ki);
+    termWrite(str);
+    termWrite(" ");
+    utilNum16sToStr(str, sizeof(str), kd);
+    termWriteLine(str);
+    result = EC_SUCCESS;
   }
+  else if (strncmp(cmd, "setPIDParamL", sizeof("setPIDParamL")-1) == 0)
+	{
+		cmd += sizeof("setPIDParamL");
+    uint8_t kp;
+    uint8_t ki;
+    uint8_t kd;
+
+    result = parsePIDParam(cmd, &kp, &ki, &kd);
+		if(result != EC_SUCCESS) return result;
+		driveSetParametersL(kp, ki, kd);	// Set PID left parameters
+
+		char str[6];														// Return the received value for checking
+		termWrite("PIDL: ");
+		utilNum16sToStr(str, sizeof(str), kp);
+		termWrite(str);
+		termWrite(" ");
+		utilNum16sToStr(str, sizeof(str), ki);
+		termWrite(str);
+		termWrite(" ");
+		utilNum16sToStr(str, sizeof(str), kd);
+		termWriteLine(str);
+		result = EC_SUCCESS;
+	}
   else if (strcmp(cmd, "status") == 0)	// returns state of the motor values
   {
 	  // TODO implement PID status output

@@ -20,7 +20,8 @@
 #define PID_PERIOD              25                        // [ms]
 
 
-void driveSetParameters(uint8_t pKpL, uint8_t pKpR, uint8_t pKiL, uint8_t pKiR);
+void driveSetParametersR(uint8_t pKpR, uint8_t pKiR, uint8_t pKdR);
+void driveSetParametersL(uint8_t pKpL, uint8_t pKiL, uint8_t pKdL);
 void driveSetSpeed(int16_t speedL, int16_t speedR);
 void driveToWork(void);
 void driveInit(void);
