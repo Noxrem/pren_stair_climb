@@ -242,11 +242,27 @@ tError driveParseCommand(const char *cmd)
   {
     termWriteLine("drv (drive) commands:");
     termWriteLine("  help");
+    termWriteLine("  setSpd [right(mm/s)] [left(mm/s)]");
     termWriteLine("  setPIDParamR [kp 0..255] [ki 0..255] [kd 0..255]");
     termWriteLine("  setPIDParamL [kp 0..255] [ki 0..255] [kd 0..255]");
     termWriteLine("  status");
     result = EC_SUCCESS;
   }
+  else if (strncmp(cmd, "setSpd", sizeof("setSpd")-1) == 0)
+    {
+      cmd += sizeof("setSpd");
+      int16_t drvSpdR;
+      int16_t drvSpdL;
+
+      result = utilScanDecimal16s(&cmd, &drvSpdR);		// parse the message to get the right motor speed
+      if(result != EC_SUCCESS) return result;
+
+      result = utilScanDecimal16s(&cmd, &drvSpdL);		// parse the message to get the left motor speed
+      if(result != EC_SUCCESS) return result;
+
+      driveSetSpeed(drvSpdL, drvSpdR);	// set the desired speed of the motors
+      result = EC_SUCCESS;
+    }
   else if (strncmp(cmd, "setPIDParamR", sizeof("setPIDParamR")-1) == 0)
   {
     cmd += sizeof("setPIDParamR");
@@ -295,7 +311,27 @@ tError driveParseCommand(const char *cmd)
 	}
   else if (strcmp(cmd, "status") == 0)	// returns state of the motor values
   {
-	  // TODO implement PID status output
+	  termWriteLine("drive status: ");
+	  termWrite("SetSpdR: ");							// return the set speed right
+	  termWriteNum16s(setValueRight);
+	  termWriteLine("");
+	  termWrite("SetSpdL: ");							// return the set speed left
+	  termWriteNum16s(setValueLeft);
+	  termWriteLine("");
+	  termWrite("PIDR: ");								// return the PID parameters right
+	  termWriteNum16s(kpR);
+	  termWrite(" ");
+	  termWriteNum16s(kiR);
+	  termWrite(" ");
+	  termWriteNum16s(kdR);
+	  termWriteLine("");
+	  termWrite("PIDL: ");								// return the PID parameters left
+	  termWriteNum16s(kpL);
+	  termWrite(" ");
+	  termWriteNum16s(kiL);
+	  termWrite(" ");
+	  termWriteNum16s(kdL);
+	  termWriteLine("");
 	  result = EC_SUCCESS;
   }
   return result;

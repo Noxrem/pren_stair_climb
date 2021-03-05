@@ -65,8 +65,9 @@ void ProcessDrive(void)
     i=0;
     if (getMotorsEnabled()) // If the motors are enabled
     {
-    	speedL = speedR = 10;	// 30mm/s
-      driveSetSpeed(speedL, speedR);
+    	quadContinuousSpeedTransmission();	// Sends continuous speed data via UART, if getContSpd is enabled
+//    	speedL = speedR = 10;	// 30mm/s
+//      driveSetSpeed(speedL, speedR);
       driveToWork();
     }
     else

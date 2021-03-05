@@ -21,7 +21,7 @@
 
 #define FTM_CLOCK                 250000    // 250 kHz
 #define FTM_PRESCALE              1         // div 1
-#define WHEEL_DIAMETER            6      		// 6 mm
+#define WHEEL_DIAMETER            112      	// 112 mm
 #define EXT_GEAR_RATIO			  		1					// Gear ration from the motor shaft to the actual wheel
 #define TICKS_PER_REVOLUTION      5756      // 5756 ticks (counts) per shaft revolution (same as CPR "counts per revolution")
 
@@ -75,6 +75,8 @@ static uint8_t errorRight;
 static int32_t timeRight;
 
 static tCommandLineHandler clh;                       // terminal command line handler
+
+static uint8_t enableContinuousSpeedTransmission;			// If set true, the speed of the right/left motors is transmitted via UART
 
 
 //uint16_t times[256];
@@ -332,6 +334,23 @@ int16_t quadGetDistanceRight(void)
    return (int16_t)((ticksRight * NM_PER_TICK) / 1000000);
 }
 
+/**
+ * Function that gets periodically called for
+ * sending the speed of the wheels. Sends the speed
+ * data, when "enableContinuousSpeedTransmission"
+ * is enabled.
+ */
+void quadContinuousSpeedTransmission(void)
+{
+	if(enableContinuousSpeedTransmission)
+	{
+		termWrite("SpdR: ");
+		termWriteNum16s(quadGetSpeedRight());
+		termWrite(" SpdL: ");
+		termWriteNum16s(quadGetSpeedLeft());
+		termWriteLine("");
+	}
+}
 
 /**
  * Command line parser for this file.
@@ -386,17 +405,18 @@ tError quadParseCommand(const char *cmd)
 	}
 	else if (strncmp(cmd, "getContSpd", sizeof("getContSpd") - 1) == 0)    // Starts/Stops the continuous transmission of the current speed
 		{
-			cmd += sizeof("getContSpd");	// sets string pointer to next argument
-			uint8_t enabledContinuousTransmission;
-			result = utilScanDecimal8u(&cmd, &enabledContinuousTransmission);	// get the argument
-			if(enabledContinuousTransmission)	// If the continuous transmission should be enabled
+			cmd += sizeof("getContSpd");	// set string pointer to next argument
+			result = utilScanDecimal8u(&cmd, &enableContinuousSpeedTransmission);	// get the argument
+			if(result != EC_SUCCESS) return result;
+			if(enableContinuousSpeedTransmission)	// If the continuous transmission should be enabled
 			{
-				// TODO implement continuous speed output
+				enableContinuousSpeedTransmission = true;
 			}
 			else
 			{
-				// TODO implement continuous speed output stop
+				enableContinuousSpeedTransmission = false;
 			}
+			result = EC_SUCCESS;
 		}
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
 	{
@@ -469,4 +489,6 @@ void quadInit(void)
 
   // register terminal command line handler
   termRegisterCommandLineHandler(&clh, "q", "(quad)", quadParseCommand);
+
+  enableContinuousSpeedTransmission = false;	// disable continuous speed tranmission
 }

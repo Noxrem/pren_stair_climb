@@ -19,6 +19,7 @@ int16_t quadGetSpeedLeft(void);
 int16_t quadGetSpeedRight(void);
 int16_t quadGetDistanceLeft(void);
 int16_t quadGetDistanceRight(void);
+void quadContinuousSpeedTransmission(void);
 
 tError quadParseCommand(const char *cmd);
 

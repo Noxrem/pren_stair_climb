@@ -221,15 +221,17 @@ tError motorParseCommand(const char *cmd)
   {
 	  int16_t motorRPercent = (motorValueRight * 100) / MOTOR_MAX_VALUE;	// convert the motor value R into percent
 	  int16_t motorLPercent = (motorValueLeft * 100) / MOTOR_MAX_VALUE;		// convert the motor value L into percent
-	  char strRPercent[5];
-	  char strLPercent[5];
-	  utilNum16sToStr(strRPercent, sizeof(strRPercent), motorRPercent);
-	  utilNum16sToStr(strLPercent, sizeof(strLPercent), motorLPercent);
-	  termWrite("Motor R: ");
-	  termWrite(strRPercent);
-	  termWrite(" ");
-	  termWrite("Motor L: ");
-	  termWriteLine(strLPercent);
+//	  char strRPercent[5];
+//	  char strLPercent[5];
+//	  utilNum16sToStr(strRPercent, sizeof(strRPercent), motorRPercent);
+//	  utilNum16sToStr(strLPercent, sizeof(strLPercent), motorLPercent);
+	  termWriteLine("motor status:");
+	  termWrite("ValueR: ");
+	  termWriteNum16s(motorRPercent);
+	  termWriteLine("");
+	  termWrite("ValueL: ");
+	  termWriteNum16s(motorLPercent);
+	  termWriteLine("");
 	  result = EC_SUCCESS;
   }
   return result;
