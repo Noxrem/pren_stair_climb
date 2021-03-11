@@ -8,7 +8,7 @@ video = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_SIMPLEX
 bottomLeftCornerOfText = (10, 100)
 fontScale = 1
-fontColor = (0, 255, 0)
+fontColor = (0, 0, 255)
 lineType = 2
 
 
@@ -72,7 +72,7 @@ while True:
                 horizontal_lines.append(line)
                 print("h" + str(len(horizontal_lines)))
             if abs(y2 - y1) > line_v_length and abs(x2 - x1) < 20:  # Rotation line_v
-                cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
+                cv2.line(frame, (x1, y1), (x2, y2), (255, 0, 0), 5)
                 vertical_lines.append(line)
                 print("v" + str(len(vertical_lines)))
             if len(horizontal_lines) >= amount_h_lines and len(vertical_lines) >= amount_v_lines and len(lines) >= amount_lines:
