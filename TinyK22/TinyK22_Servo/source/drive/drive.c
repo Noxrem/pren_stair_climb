@@ -106,20 +106,20 @@ void driveToWork(void)
 
   // pre control calculations
   //------------------------------------------------------------------
-  // 2 tests with 22mm/s and 46mm/s Gear_ratio = 1, Wheel_diameter = 6mm, no load
-  sl[sli] = (uint8_t)valL;     // 22=50  46=100 only tested with right motor
-  sr[sli++] = (uint8_t)valR;   // 22=50  46=100
+  // 2 tests with 50% and 100% Gear_ratio = 1, Wheel_diameter = 112mm, no load
+  sl[sli] = (uint8_t)valL;     // 427=50  873=100
+  sr[sli++] = (uint8_t)valR;   // 427=50  860=100
 
   // y=m*x+n => preControl: val = setValue * m + n
 
   //              equation 1    equation 2
-  // left motor:  22=50*m+n    46=100*m+n  =>  m=0.48  n=-2
-  // right motor: 22=50*m+n    46=100*m+n  =>  m=0.48  n=-2
+  // left motor:  427=50*m+n    873=100*m+n  =>  m=8.92  n=-19
+  // right motor: 427=50*m+n    860=100*m+n  =>  m=8.66  n=-6
   //
-  #define M_LEFT    480        // = m * 1000
-  #define M_RIGHT   480        // = m * 1000
-  #define N_LEFT    -2
-  #define N_RIGHT   -2
+  #define M_LEFT    892        // = m * 100
+  #define M_RIGHT   866        // = m * 100
+  #define N_LEFT    -19
+  #define N_RIGHT   -6
   //------------------------------------------------------------------
 
 
@@ -156,7 +156,7 @@ void driveToWork(void)
 
     // pre control
     // y=m*x+n => preControl: setValue*m + n
-    valL += (M_LEFT * setValueL) / 1000 + (setValueL > 0 ? N_LEFT : -N_LEFT);
+    valL += (M_LEFT * setValueL) / 100 + (setValueL > 0 ? N_LEFT : -N_LEFT);
 
     if (valL > MOTOR_MAX_VALUE) {
       valL = MOTOR_MAX_VALUE;
@@ -183,7 +183,7 @@ void driveToWork(void)
 
     // pre control
     // y=m*x+n => preControl: setValue*m + n
-    valR += (M_RIGHT * setValueR) / 1000 + (setValueR > 0 ? N_RIGHT : -N_RIGHT);
+    valR += (M_RIGHT * setValueR) / 100 + (setValueR > 0 ? N_RIGHT : -N_RIGHT);
 
     if (valR > MOTOR_MAX_VALUE) {
       valR = MOTOR_MAX_VALUE;
