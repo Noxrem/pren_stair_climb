@@ -106,20 +106,20 @@ void driveToWork(void)
 
   // pre control calculations
   //------------------------------------------------------------------
-  // 2 tests with 50% and 100% Gear_ratio = 1, Wheel_diameter = 112mm, no load
-  sl[sli] = (uint8_t)valL;     // 427=50  873=100
-  sr[sli++] = (uint8_t)valR;   // 427=50  860=100
+  // 2 tests with 63 and 127 Gear_ratio = 1, Wheel_diameter = 112mm, no load, Motor_Voltage = 11.1V
+  sl[sli] = (uint8_t)valL;     // 332=63  686=127
+  sr[sli++] = (uint8_t)valR;   // 332=63  679=127
 
   // y=m*x+n => preControl: val = setValue * m + n
 
   //              equation 1    equation 2
-  // left motor:  427=50*m+n    873=100*m+n  =>  m=8.92  n=-19
-  // right motor: 427=50*m+n    860=100*m+n  =>  m=8.66  n=-6
+  // left motor:  332=63*m+n    686=127*m+n  =>  m=5.53  n=-16
+  // right motor: 332=63*m+n    679=127*m+n  =>  m=5.42  n=-10
   //
-  #define M_LEFT    892        // = m * 100
-  #define M_RIGHT   866        // = m * 100
-  #define N_LEFT    -19
-  #define N_RIGHT   -6
+  #define M_LEFT    553        // = m * 100
+  #define M_RIGHT   542        // = m * 100
+  #define N_LEFT    -16
+  #define N_RIGHT   -10
   //------------------------------------------------------------------
 
 

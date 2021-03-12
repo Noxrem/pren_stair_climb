@@ -150,8 +150,8 @@ tError motorParseCommand(const char *cmd)
     termWriteLine("  help");
     termWriteLine("  enable");
     termWriteLine("  disable");
-    termWriteLine("  setL [-100..100]");
-    termWriteLine("  setR [-100..100]");
+    termWriteLine("  setL [-127..127]");
+    termWriteLine("  setR [-127..127]");
     termWriteLine("  getFltR");
     termWriteLine("  getFltL");
     termWriteLine("  status");
@@ -163,7 +163,8 @@ tError motorParseCommand(const char *cmd)
     int16_t v;
     result = utilScanDecimal16s(&cmd, &v);
     if (result != EC_SUCCESS) return result;
-    motorSetPwmLeft((int16_t)((MOTOR_MAX_VALUE * v) / 100));
+//    motorSetPwmLeft((int16_t)((MOTOR_MAX_VALUE * v) / 100));	// entry in percent
+    motorSetPwmLeft((int8_t)v);	// value between -127..0..127
   }
   else if (strncmp(cmd, "setR", sizeof("setR")-1) == 0)
   {
@@ -171,7 +172,8 @@ tError motorParseCommand(const char *cmd)
     int16_t v;
     result = utilScanDecimal16s(&cmd, &v);
     if (result != EC_SUCCESS) return result;
-    motorSetPwmRight((int16_t)((MOTOR_MAX_VALUE * v) / 100));
+//    motorSetPwmRight((int16_t)((MOTOR_MAX_VALUE * v) / 100));
+    motorSetPwmRight((int8_t)v);	// value between -127..0..127
   }
   else if (strncmp(cmd, "enable", sizeof("enable")-1) == 0)
   {
@@ -219,18 +221,20 @@ tError motorParseCommand(const char *cmd)
   }
   else if (strcmp(cmd, "status") == 0)	// returns state of the motor values
   {
-	  int16_t motorRPercent = (motorValueRight * 100) / MOTOR_MAX_VALUE;	// convert the motor value R into percent
-	  int16_t motorLPercent = (motorValueLeft * 100) / MOTOR_MAX_VALUE;		// convert the motor value L into percent
+//	  int16_t motorRPercent = (motorValueRight * 100) / MOTOR_MAX_VALUE;	// convert the motor value R into percent
+//	  int16_t motorLPercent = (motorValueLeft * 100) / MOTOR_MAX_VALUE;		// convert the motor value L into percent
 //	  char strRPercent[5];
 //	  char strLPercent[5];
 //	  utilNum16sToStr(strRPercent, sizeof(strRPercent), motorRPercent);
 //	  utilNum16sToStr(strLPercent, sizeof(strLPercent), motorLPercent);
 	  termWriteLine("motor status:");
 	  termWrite("ValueR: ");
-	  termWriteNum16s(motorRPercent);
+//	  termWriteNum16s(motorRPercent);	// output in percent
+	  termWriteNum16s(motorValueRight);
 	  termWriteLine("");
 	  termWrite("ValueL: ");
-	  termWriteNum16s(motorLPercent);
+//	  termWriteNum16s(motorLPercent);		// output in percent
+	  termWriteNum16s(motorValueLeft);
 	  termWriteLine("");
 	  result = EC_SUCCESS;
   }
