@@ -1,3 +1,6 @@
 .DS_Store
 .idea
 *.mp3
+.ipynb_checkpoints/
+**/pictograms/training/*negatives/*.jpg
+**/pictograms/training/**/*_*/*.jpg
