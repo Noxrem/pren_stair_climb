@@ -17,12 +17,12 @@ def nothing(x):
 
 
 windowName = "Trackbar Board"
-trackbar1Name = 'Threshold_Amount_Lines'
+trackbar1_name = 'Threshold_amount_lines'
 cv2.namedWindow(windowName)
-cv2.createTrackbar(trackbar1Name, windowName, 0, 255, nothing)
+cv2.createTrackbar(trackbar1_name, windowName, 0, 255, nothing)
 
 while True:
-    amountLines = cv2.getTrackbarPos(trackbar1Name, windowName)
+    amountLines = cv2.getTrackbarPos(trackbar1_name, windowName)
     ret, orig_frame = video.read()
     if not ret:
         video = cv2.VideoCapture(0)

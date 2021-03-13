@@ -4,6 +4,7 @@ import Winch
 import Speaker
 import ObjectDetector
 import MagnetManager
+import StairDetector
 
 
 class Robot:
@@ -16,6 +17,7 @@ class Robot:
     speaker = None
     object_detector = None
     magnet_manager = None
+    stair_detector = None
 
     def __init__(self, name):
         self.name = name
@@ -29,6 +31,7 @@ class Robot:
         self.magnet_manager = MagnetManager.MagnetManager()
         self.magnet_manager.set_on_power_bridge()
         self.magnet_manager.set_on_power_socket()
+        self.stair_detector = StairDetector.StairDetector()
 
     # TODO: Momentane Annahme: 1 Grad Drehung bei 30 Millisekunden Rotation
 
@@ -93,7 +96,7 @@ class Robot:
         self.object_detector.find_pictogram()
 
     def search_stair(self):
-        return self.object_detector.find_stair()
+        return self.stair_detector.find_stair()
 
     def measure_distance_multiple(self):
         distance_left = self.distance_sensor_left.get_distance_multiple("left")
