@@ -118,8 +118,8 @@ void driveToWork(void)
   //
   #define M_LEFT    553        // = m * 100
   #define M_RIGHT   542        // = m * 100
-  #define N_LEFT    -16
-  #define N_RIGHT   -10
+  #define N_LEFT    16		// was negative before
+  #define N_RIGHT   10
   //------------------------------------------------------------------
 
 
@@ -148,6 +148,8 @@ void driveToWork(void)
   {
     devL = (setValueL - speedLeft);       // calc deviation: max devL = +2000 - -2000 = 4000
     valL = (kpL * devL);                  // P-Part: max (kpL * devL) = 1024000
+    termWriteNum32s(valL);
+    termWriteLine("");
     if (kiL) integL += devL;              // I-Part with anti-windup
     valL += (kiL * integL);
     valL += (kdL*(setValueL-devOldL));    // D-Part
@@ -339,8 +341,8 @@ tError driveParseCommand(const char *cmd)
 
 void driveInit(void)
 {
-  kpL = kpR = 70;//80;
-  kiL = kiR = 20;//30;
+  kpL = kpR = 10;//80;
+  kiL = kiR = 0;//30;
   kdL = kdR = 0;
   setValueLeft = setValueRight = 00;  //30... 7sec 30m = 4cm/sec
 

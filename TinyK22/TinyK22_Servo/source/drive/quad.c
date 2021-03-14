@@ -310,7 +310,7 @@ int16_t quadGetSpeedLeft(void)
  */
 int16_t quadGetSpeedRight(void)
 {
-  if (timeRight) return (int16_t)(((int32_t)VELOCITY_PER_PERIOD) / timeRight);
+  if (timeRight) return (int16_t)-(((int32_t)VELOCITY_PER_PERIOD) / timeRight);	// Invert the speed
   else return 0;
 }
 
