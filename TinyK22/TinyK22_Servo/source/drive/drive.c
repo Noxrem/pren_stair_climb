@@ -147,19 +147,22 @@ void driveToWork(void)
   if (setValueL)
   {
     devL = (setValueL - speedLeft);       // calc deviation: max devL = +2000 - -2000 = 4000
+
     valL = (kpL * devL);                  // P-Part: max (kpL * devL) = 1024000
-    termWriteNum32s(valL);
-    termWriteLine("");
     if (kiL) integL += devL;              // I-Part with anti-windup
     valL += (kiL * integL);
     valL += (kdL*(setValueL-devOldL));    // D-Part
     devOldL = setValueL;
-    valL /= 1000;                         // scaling
-
+    valL /= 100;                         // scaling (before it was 1000)
+//    		termWrite("valL before:");
+//        termWriteNum32s(valL);	// debug
+//        termWriteLine("");
     // pre control
     // y=m*x+n => preControl: setValue*m + n
     valL += (M_LEFT * setValueL) / 100 + (setValueL > 0 ? N_LEFT : -N_LEFT);
-
+//    termWrite("valL after:");
+//            termWriteNum32s(valL);	// debug
+//            termWriteLine("");
     if (valL > MOTOR_MAX_VALUE) {
       valL = MOTOR_MAX_VALUE;
       integL -= devL;

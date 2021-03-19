@@ -60,7 +60,7 @@ void BlinkBlueLedEveryMS(uint16_t timeMS)
 void ProcessDrive(void)
 {
   static uint16_t i;				// create int that keeps the value (static)
-  if (i++ == FTM3_TOFS_MS(25)) 	// run pid worker every 25ms
+  if (i++ == FTM3_TOFS_MS(PID_PERIOD)) 	// run pid worker every 25ms
   {
     i=0;
     if (getMotorsEnabled()) // If the motors are enabled
