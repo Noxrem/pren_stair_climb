@@ -1,6 +1,5 @@
-import cv2
-import numpy as np
-import Camera
+from Test import Camera
+
 
 # TODO: create test class
 

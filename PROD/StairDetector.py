@@ -2,7 +2,7 @@
 
 import cv2
 import numpy as np
-import Camera
+from Test import Camera
 
 
 class StairDetector:

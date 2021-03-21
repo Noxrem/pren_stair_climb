@@ -3,12 +3,12 @@ import UARTAccess
 
 class MagnetManager:
     is_switched_on_magnet_bridge = None
-    is_switched_on_magnet_socle = None
+    is_switched_on_magnet_socket = None
     serial_access = None
 
     def __init__(self):
         print("new MagnetManager created")
-        self.is_switched_on_magnet_socle = True
+        self.is_switched_on_magnet_socket = True
         self.is_switched_on_magnet_bridge = True
         self.serial_access = UARTAccess.UARTAccess()
 
@@ -30,15 +30,16 @@ class MagnetManager:
             message = "mag set b"
             print(message)
             self.serial_access.write(message)
+            self.is_switched_on_magnet_bridge = True
         else:
             print("magnet for the bridge is already switched on")
-
 
     def set_off_power_bridge(self):
         if self.is_switched_on_magnet_bridge:
             message = "mag off b"
             print(message)
             self.serial_access.write(message)
+            self.is_switched_on_magnet_bridge = False
         else:
             print("magnet for the bridge is already switched off")
 
@@ -46,21 +47,22 @@ class MagnetManager:
         message = "mag state s"
         print(message)
         # TODO Status auslesen und zuweisen
-        return self.is_switched_on_magnet_socle
+        return self.is_switched_on_magnet_socket
 
     def set_on_power_socket(self):
         if not self.is_switched_on_magnet_bridge:
             message = "mag set s"
             print(message)
             self.serial_access.write(message)
+            self.is_switched_on_magnet_socket = True
         else:
-            print("magnet for the socle is already switched on")
+            print("magnet for the socket is already switched on")
 
     def set_off_power_socket(self):
         if self.is_switched_on_magnet_bridge:
             message = "mag off s"
             print(message)
             self.serial_access.write(message)
+            self.is_switched_on_magnet_socket = False
         else:
-            print("magnet for the socle is already switched off")
-
+            print("magnet for the socket is already switched off")
