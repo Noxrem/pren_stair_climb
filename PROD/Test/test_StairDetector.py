@@ -1,10 +1,10 @@
 import StairDetector
 from unittest import TestCase
 
-#manueller Test
+
+# manual test
 
 class TestStairDetector((TestCase)):
-
     stair_detector = None
 
     def setUp(self):

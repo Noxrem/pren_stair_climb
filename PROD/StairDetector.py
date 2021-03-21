@@ -6,14 +6,25 @@ import Camera
 
 
 class StairDetector:
-    camera = Camera.Camera()
-    video = camera.cam
+    camera = None
+    video = None
+    font = None
+    bottom_left_corner_of_text = None
+    font_scale = None
+    font_color = None
+    line_type = None
 
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    bottom_left_corner_of_text = (10, 100)
-    font_scale = 1
-    font_color = (0, 0, 255)
-    line_type = 2
+    def __init__(self):
+        print("stair detector created")
+        self.camera = Camera.Camera()
+        self.video = self.camera.cam
+
+        self.font = cv2.FONT_HERSHEY_SIMPLEX
+        self.bottom_left_corner_of_text = (10, 100)
+        self.font_scale = 1
+        self.font_color = (0, 0, 255)
+        self.line_type = 2
+
 
     def nothing(self):
         pass

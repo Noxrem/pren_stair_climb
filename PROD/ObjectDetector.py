@@ -2,10 +2,17 @@ import cv2
 import numpy as np
 import Camera
 
+# TODO: create test class
 
 class ObjectDetector:
-    camera = Camera.Camera()
-    video = camera.cam
+    camera = None
+    video = None
+
+    def __init__(self):
+        print("stair detector created")
+        self.camera = Camera.Camera()
+        self.video = self.camera.cam
+
 
     def find_pictogram(self):
         print("find pictogram")
