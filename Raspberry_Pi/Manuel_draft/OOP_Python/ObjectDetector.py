@@ -1,4 +1,6 @@
 import Camera
+import time
+import cv2
 
 class ObjectDetector:
     camera = None
@@ -14,7 +16,7 @@ class ObjectDetector:
 
     def do_haarcascade(self):
         print("do haar cascade")
-        self.camera.stream_video()
+        time.sleep(2)
         # TODO: Hier HaarCascade einbauen und is_found und found_object setzen
         is_found = True
         found_object = "paint bucket"
