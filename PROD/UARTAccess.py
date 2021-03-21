@@ -5,12 +5,17 @@ class UARTAccess:
     access = None
 
     def __init__(self):
-        # TODO:  Activate the line below and delete the line after the next line (is not working on laptop)
-        self.access = serial.Serial("/dev/ttyS0", 9600)
+        # TODO: delete first line & activate and adjust code
+        self.access = "Access"
+        # self.access = serial.Serial("/dev/ttyS0", baudrate=9600, parity=serial.PARITY_NONE,
+        #                            stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=1)
 
     def write(self, message):
-        self.access.write(message)
+        # TODO: activate code
+        print("UART write")
+        # self.access.write(message)
 
     def read(self):
+        # TODO: activate code
+        print("UART read")
         self.access.read()
-
