@@ -8,16 +8,16 @@ class StairDetector:
     # Write some Text
 
     font = cv2.FONT_HERSHEY_SIMPLEX
-    bottomLeftCornerOfText = (10, 100)
-    fontScale = 1
-    fontColor = (0, 0, 255)
-    lineType = 2
+    bottom_left_corner_of_text = (10, 100)
+    font_scale = 1
+    font_color = (0, 0, 255)
+    line_type = 2
 
     def nothing(self):
         pass
 
     def find_stair(self):
-        windowName = "Trackbar Board"
+        window_name = "Trackbar Board"
 
         trackbar0_name = 'NoVLines'
         trackbar1_name = 'NoHLines'
@@ -28,28 +28,27 @@ class StairDetector:
         trackbar6_name = 'lineRotation'
         trackbar7_name = 'canny1'
         trackbar8_name = 'canny2'
-        cv2.namedWindow(windowName, cv2.WINDOW_GUI_NORMAL)
-        cv2.createTrackbar(trackbar0_name, windowName, 8, 30, self.nothing)  # third parameter = default value / best value 8
-        cv2.createTrackbar(trackbar1_name, windowName, 4, 10, self.nothing)  # third parameter = default value / best value 4
-        cv2.createTrackbar(trackbar2_name, windowName, 100, 200, self.nothing)  # best value 100
-        cv2.createTrackbar(trackbar3_name, windowName, 40, 100, self.nothing)  # best value: 50
-        cv2.createTrackbar(trackbar4_name, windowName, 313, 700, self.nothing)  # best value: 313
-        cv2.createTrackbar(trackbar5_name, windowName, 50, 200, self.nothing)  # best value: 50
-        cv2.createTrackbar(trackbar6_name, windowName, 1, 30, self.nothing)  # best value: 1
-        cv2.createTrackbar(trackbar7_name, windowName, 100, 255, self.nothing)  # best value: 100
-        cv2.createTrackbar(trackbar8_name, windowName, 120, 255, self.nothing)  # best value: 120
+        cv2.namedWindow(window_name, cv2.WINDOW_GUI_NORMAL)
+        cv2.createTrackbar(trackbar0_name, window_name, 8, 30, self.nothing)  # third parameter = default value / best value 8
+        cv2.createTrackbar(trackbar1_name, window_name, 4, 10, self.nothing)  # third parameter = default value / best value 4
+        cv2.createTrackbar(trackbar2_name, window_name, 100, 200, self.nothing)  # best value 100
+        cv2.createTrackbar(trackbar3_name, window_name, 40, 100, self.nothing)  # best value: 50
+        cv2.createTrackbar(trackbar4_name, window_name, 313, 700, self.nothing)  # best value: 313
+        cv2.createTrackbar(trackbar5_name, window_name, 50, 200, self.nothing)  # best value: 50
+        cv2.createTrackbar(trackbar6_name, window_name, 1, 30, self.nothing)  # best value: 1
+        cv2.createTrackbar(trackbar7_name, window_name, 100, 255, self.nothing)  # best value: 100
+        cv2.createTrackbar(trackbar8_name, window_name, 120, 255, self.nothing)  # best value: 120
 
         while True:
-
-            amount_v_lines = cv2.getTrackbarPos(trackbar0_name, windowName)
-            amount_h_lines = cv2.getTrackbarPos(trackbar1_name, windowName)
-            amount_lines = cv2.getTrackbarPos(trackbar2_name, windowName)
-            max_line_gap = cv2.getTrackbarPos(trackbar3_name, windowName)
-            line_h_length = cv2.getTrackbarPos(trackbar4_name, windowName)
-            line_v_length = cv2.getTrackbarPos(trackbar5_name, windowName)
-            line_rotation = cv2.getTrackbarPos(trackbar6_name, windowName)
-            canny1 = cv2.getTrackbarPos(trackbar7_name, windowName)
-            canny2 = cv2.getTrackbarPos(trackbar8_name, windowName)
+            amount_v_lines = cv2.getTrackbarPos(trackbar0_name, window_name)
+            amount_h_lines = cv2.getTrackbarPos(trackbar1_name, window_name)
+            amount_lines = cv2.getTrackbarPos(trackbar2_name, window_name)
+            max_line_gap = cv2.getTrackbarPos(trackbar3_name, window_name)
+            line_h_length = cv2.getTrackbarPos(trackbar4_name, window_name)
+            line_v_length = cv2.getTrackbarPos(trackbar5_name, window_name)
+            line_rotation = cv2.getTrackbarPos(trackbar6_name, window_name)
+            canny1 = cv2.getTrackbarPos(trackbar7_name, window_name)
+            canny2 = cv2.getTrackbarPos(trackbar8_name, window_name)
             ret, orig_frame = self.video.read()
             if not ret:
                 self.video = cv2.VideoCapture(0)
@@ -61,7 +60,6 @@ class StairDetector:
             # mask = cv2.inRange(hsv, color1, color2)
             edges = cv2.Canny(frame, canny1, canny2)
             lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, maxLineGap=max_line_gap)
-            horizontal_lines = list()
             if lines is not None:
                 horizontal_lines = list()
                 vertical_lines = list()
@@ -79,11 +77,11 @@ class StairDetector:
                             lines) >= amount_lines:
                         print("stair detected")
                         cv2.putText(frame, 'stair detected!',
-                                    self.bottomLeftCornerOfText,
+                                    self.bottom_left_corner_of_text,
                                     self.font,
-                                    self.fontScale,
-                                    self.fontColor,
-                                    self.lineType)
+                                    self.font_scale,
+                                    self.font_color,
+                                    self.line_type)
             cv2.imshow("frame", frame)
             cv2.imshow("edges", edges)
             key = cv2.waitKey(1)
@@ -91,4 +89,3 @@ class StairDetector:
                 break
         self.video.release()
         cv2.destroyAllWindows()
-
