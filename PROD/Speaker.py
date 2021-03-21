@@ -8,6 +8,7 @@ class Speaker:
     language = None
 
     def __init__(self):
+        print("new speaker created")
         self.texts = ["This is a hammer",
                       "This is a sandwich",
                       "This is a ruler",
