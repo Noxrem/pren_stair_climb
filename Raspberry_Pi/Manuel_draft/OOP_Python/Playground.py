@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class StairDetector:
+class PlaygroundStairDetector:
     video = cv2.VideoCapture(0)
 
     # Write some Text
@@ -16,7 +16,7 @@ class StairDetector:
     def nothing(self):
         pass
 
-    def find_stair(self):
+    def findstair(self):
         windowName = "Trackbar Board"
 
         trackbar0_name = 'NoVLines'
@@ -92,3 +92,5 @@ class StairDetector:
         self.video.release()
         cv2.destroyAllWindows()
 
+playground = PlaygroundStairDetector()
+playground.findstair()

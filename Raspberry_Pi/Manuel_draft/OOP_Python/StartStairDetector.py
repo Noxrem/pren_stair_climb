@@ -1,5 +1,7 @@
 import Robot
+import StairDetector
 
 robot = Robot.Robot("Gefyra")
 
-robot.search_stair()
+stair_detector = StairDetector.StairDetector()
+stair_detector.find_stair()
