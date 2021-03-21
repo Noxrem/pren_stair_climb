@@ -20,7 +20,9 @@ class Camera:
         self.rawCapture = PiRGBArray(self.cam, size=(640, 480))
 
     def turn_ahead(self):
+        print("camera turn ahead")
         self.camServo.turn_ahead()
 
     def turn_right(self):
+        print("camera turn right")
         self.camServo.turn_right()

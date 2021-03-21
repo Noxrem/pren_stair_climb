@@ -19,6 +19,7 @@ class StairDetector:
         pass
 
     def find_stair(self):
+        print("find stair")
         window_name = "Trackbar Board"
 
         trackbar0_name = 'NoVLines'
