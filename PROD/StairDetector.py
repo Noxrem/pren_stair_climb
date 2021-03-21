@@ -25,7 +25,6 @@ class StairDetector:
         self.font_color = (0, 0, 255)
         self.line_type = 2
 
-
     def nothing(self):
         pass
 
@@ -43,8 +42,10 @@ class StairDetector:
         trackbar7_name = 'canny1'
         trackbar8_name = 'canny2'
         cv2.namedWindow(window_name, cv2.WINDOW_GUI_NORMAL)
-        cv2.createTrackbar(trackbar0_name, window_name, 8, 30, self.nothing)  # third parameter = default value / best value 8
-        cv2.createTrackbar(trackbar1_name, window_name, 4, 10, self.nothing)  # third parameter = default value / best value 4
+        cv2.createTrackbar(trackbar0_name, window_name, 8, 30,
+                           self.nothing)  # third parameter = default value / best value 8
+        cv2.createTrackbar(trackbar1_name, window_name, 4, 10,
+                           self.nothing)  # third parameter = default value / best value 4
         cv2.createTrackbar(trackbar2_name, window_name, 100, 200, self.nothing)  # best value 100
         cv2.createTrackbar(trackbar3_name, window_name, 40, 100, self.nothing)  # best value: 50
         cv2.createTrackbar(trackbar4_name, window_name, 313, 700, self.nothing)  # best value: 313

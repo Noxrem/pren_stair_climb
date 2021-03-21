@@ -1,4 +1,5 @@
 import UARTAccess
+import time
 
 
 class Winch:
@@ -13,3 +14,5 @@ class Winch:
         print("pull up")
         message = ""  # TODO: define UART
         self.serial_access.write(message)
+        time.sleep(10)  # TODO: define duration
+        print("pulled up")
