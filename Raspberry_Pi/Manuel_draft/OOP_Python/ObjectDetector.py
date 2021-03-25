@@ -16,7 +16,7 @@ class ObjectDetector:
 
     def do_haarcascade(self):
         print("do haar cascade")
-        time.sleep(2)
+
         # TODO: Hier HaarCascade einbauen und is_found und found_object setzen
         is_found = True
         found_object = "paint bucket"

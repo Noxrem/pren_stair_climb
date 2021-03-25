@@ -5,8 +5,6 @@ import numpy as np
 class StairDetector:
     video = cv2.VideoCapture(0)
 
-    # Write some Text
-
     font = cv2.FONT_HERSHEY_SIMPLEX
     bottom_left_corner_of_text = (10, 100)
     font_scale = 1
