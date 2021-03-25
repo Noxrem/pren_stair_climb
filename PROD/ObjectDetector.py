@@ -1,4 +1,4 @@
-from Test import Camera
+import Camera
 
 
 # TODO: create test class
