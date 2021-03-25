@@ -7,9 +7,9 @@ class MagnetManager:
     serial_access = None
 
     def __init__(self):
-        print("new MagnetManager created")
-        self.is_switched_on_magnet_socket = True
-        self.is_switched_on_magnet_bridge = True
+        print("create new MagnetManager")
+        self.is_switched_on_magnet_socket = False
+        self.is_switched_on_magnet_bridge = False
         self.serial_access = UARTAccess.UARTAccess()
 
     def get_available_arguments(self):

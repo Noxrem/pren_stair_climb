@@ -12,7 +12,7 @@ class Camera:
     rawCapture = None
 
     def __init__(self):
-        print("new camera created")
+        print("create new camera")
         self.camServo = CamServo.CamServo()
         self.cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.cam_resolution = (640, 480)

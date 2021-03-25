@@ -4,8 +4,8 @@ class DistanceSensor:
     amount_of_multiple_measurements = 5  # TODO: Anzahl Messungen definieren
 
     def __init__(self):
+        print("create new distance sensor")
         self.distance = 15
-        print("new distance sensor created")
 
     def get_available_arguments(self):
         message = "dst help"

@@ -12,10 +12,10 @@ class TestMagnetManager(TestCase):
         self.assertIsNotNone(self.magnet_manager)
 
     def test_init_state_bridge(self):
-        self.assertTrue(self.magnet_manager.is_switched_on_magnet_bridge)
+        self.assertFalse(self.magnet_manager.is_switched_on_magnet_bridge)
 
     def test_init_state_socket(self):
-        self.assertTrue(self.magnet_manager.is_switched_on_magnet_socket)
+        self.assertFalse(self.magnet_manager.is_switched_on_magnet_socket)
 
     def test_get_available_arguments(self):
         assert True

@@ -6,7 +6,7 @@ class Motor:
     serial_access = None
 
     def __init__(self):
-        print("new motor created")
+        print("create new motor")
         self.is_enabled = False
         self.serial_access = UARTAccess.UARTAccess()
 

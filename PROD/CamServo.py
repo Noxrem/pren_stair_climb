@@ -6,6 +6,7 @@ class CamServo:
     serial_access = None
 
     def __init__(self):
+        print("new CamServo created")
         self.is_ahead = True
         self.serial_access = UARTAccess.UARTAccess()
 

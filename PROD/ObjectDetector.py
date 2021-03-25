@@ -8,7 +8,7 @@ class ObjectDetector:
     video = None
 
     def __init__(self):
-        print("stair detector created")
+        print("create new stair detector")
         self.camera = Camera.Camera()
         self.video = self.camera.cam
 

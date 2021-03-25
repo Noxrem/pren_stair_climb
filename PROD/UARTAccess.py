@@ -6,7 +6,7 @@ class UARTAccess:
 
     def __init__(self):
         # TODO: delete first line & activate and adjust code
-        print("new UART access created")
+        print("create new UART access")
         self.access = "Access"
         # self.access = serial.Serial("/dev/ttyS0", baudrate=9600, parity=serial.PARITY_NONE,
         #                            stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=1)

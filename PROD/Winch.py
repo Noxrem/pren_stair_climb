@@ -7,7 +7,7 @@ class Winch:
     serial_access = None
 
     def __init__(self):
-        print("Winch created")
+        print("create new Winch")
         self.serial_access = UARTAccess.UARTAccess()
 
     def pull_up(self):
