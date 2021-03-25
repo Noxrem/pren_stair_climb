@@ -59,7 +59,8 @@ class Robot:
         print("Robot: turn right 90 degrees")
         self.motor_left.enable()
         self.motor_right.enable()
-        self.motor_left.rotate("setL", "50", "2700") # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
+        self.motor_left.rotate("setL", "50",
+                               "2700")  # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
         self.motor_right.rotate("setR", "-50", "2700")
         self.motor_left.disable()
         self.motor_right.disable()
@@ -68,7 +69,8 @@ class Robot:
         print("Robot: turn left 90 degrees")
         self.motor_left.enable()
         self.motor_right.enable()
-        self.motor_left.rotate("setL", "-50", "2700") # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
+        self.motor_left.rotate("setL", "-50",
+                               "2700")  # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
         self.motor_right.rotate("setR", "50", "2700")
         self.motor_left.disable()
         self.motor_right.disable()
@@ -125,10 +127,6 @@ class Robot:
         print("Robot: celebrate")
         self.speaker.celebrate(found_pictogram_english_lowercase)
 
-    def find_pictogram(self):
-        print("Robot: find pictogram")
-        self.object_detector.find_pictogram()
-
     def find_stair(self):
         print("Robot: find stair")
         return self.stair_detector.find_stair()
@@ -143,6 +141,10 @@ class Robot:
         distance = self.distance_sensor.get_distance_single()
         return distance
 
+    # TODO: Ab hier kombinierte Methoden. Abklärungen bzgl. UART und Parallelisierungen notwendig
 
+    # Below: private methods
 
-
+    def _find_pictogram(self):
+        print("Robot: find pictogram")
+        self.object_detector.find_pictogram()
