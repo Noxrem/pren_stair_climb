@@ -23,17 +23,17 @@ class Robot:
     def __init__(self, name):
         print("create new Robot")
         self.name = name
+        self.camera = Camera.Camera()
         self.motor_left = Motor.Motor()
         self.motor_right = Motor.Motor()
         self.distance_sensor = DistanceSensor.DistanceSensor()
         self.winch = Winch.Winch()
         self.speaker = Speaker.Speaker()
-        self.object_detector = ObjectDetector.ObjectDetector()
+        self.object_detector = ObjectDetector.ObjectDetector(self.camera)
         self.magnet_manager = MagnetManager.MagnetManager()
         self.magnet_manager.set_on_power_bridge()
         self.magnet_manager.set_on_power_socket()
-        self.stair_detector = StairDetector.StairDetector()
-        self.camera = Camera.Camera()
+        self.stair_detector = StairDetector.StairDetector(self.camera)
 
     # TODO: Momentane Annahme: 1 Grad Drehung bei 30 Millisekunden Rotation
 

@@ -50,7 +50,7 @@ class MagnetManager:
         return self.is_switched_on_magnet_socket
 
     def set_on_power_socket(self):
-        if not self.is_switched_on_magnet_bridge:
+        if not self.is_switched_on_magnet_socket:
             message = "mag set s"
             print(message)
             self.serial_access.write(message)
@@ -59,7 +59,7 @@ class MagnetManager:
             print("magnet for the socket is already switched on")
 
     def set_off_power_socket(self):
-        if self.is_switched_on_magnet_bridge:
+        if self.is_switched_on_magnet_socket:
             message = "mag off s"
             print(message)
             self.serial_access.write(message)

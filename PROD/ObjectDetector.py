@@ -1,5 +1,3 @@
-import Camera
-
 
 # TODO: create test class
 
@@ -7,9 +5,9 @@ class ObjectDetector:
     camera = None
     video = None
 
-    def __init__(self):
-        print("create new stair detector")
-        self.camera = Camera.Camera()
+    def __init__(self, camera):
+        print("create new object detector")
+        self.camera = camera
         self.video = self.camera.cam
 
 

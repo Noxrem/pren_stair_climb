@@ -2,7 +2,6 @@
 
 import cv2
 import numpy as np
-import Camera
 
 
 class StairDetector:
@@ -14,9 +13,9 @@ class StairDetector:
     font_color = None
     line_type = None
 
-    def __init__(self):
+    def __init__(self, camera):
         print("create new stair detector")
-        self.camera = Camera.Camera()
+        self.camera = camera
         self.video = self.camera.cam
 
         self.font = cv2.FONT_HERSHEY_SIMPLEX
