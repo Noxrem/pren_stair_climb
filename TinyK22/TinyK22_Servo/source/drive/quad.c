@@ -421,20 +421,20 @@ tError quadParseCommand(const char *cmd)
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
 	{
 		termWriteLine("quad status:");
-		termWrite("L:");
-		termWriteNum32s(ticksLeft);
-		termWrite(" ");
-		termWriteNum16s(quadGetDistanceLeft());
-		termWrite(" ");
-		termWriteNum16s(quadGetSpeedLeft());
-		termWriteLine("");
-
 		termWrite("R:");
 		termWriteNum32s(ticksRight);
 		termWrite(" ");
 		termWriteNum16s(quadGetDistanceRight());
 		termWrite(" ");
 		termWriteNum16s(quadGetSpeedRight());
+		termWriteLine("");
+
+		termWrite("L:");
+		termWriteNum32s(ticksLeft);
+		termWrite(" ");
+		termWriteNum16s(quadGetDistanceLeft());
+		termWrite(" ");
+		termWriteNum16s(quadGetSpeedLeft());
 		termWrite("\n");
 		result = EC_SUCCESS;
 	}
