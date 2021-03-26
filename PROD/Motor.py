@@ -33,7 +33,13 @@ class Motor:
         else:
             print("motor is already disabled")
 
-    # TODO: Spezifikation: UART Schnittstellenbefehle müssen um Argument 3 Drehdauer ergänzt werden
-    def rotate(self, arg1_side, arg2_speed, arg3_duration_millisecond):
-        message = "mot " + arg1_side + " " + arg2_speed + " " + arg3_duration_millisecond
+    def rotate(self, speed_right, speed_left):
+        message = "mot " + str(speed_right) + " " + str(speed_left)
+        self.serial_access.write(message)
         print(message)
+
+    def stop(self):
+        message = "mot stop"
+        self.serial_access.write(message)
+        print(message)
+

@@ -6,12 +6,12 @@ import ObjectDetector
 import Speaker
 import StairDetector
 import Winch
+import time
 
 
 class Robot:
     name = None
-    motor_left = None
-    motor_right = None
+    motor_pair = None
     distance_sensor = None
     winch = None
     speaker = None
@@ -19,13 +19,15 @@ class Robot:
     magnet_manager = None
     stair_detector = None
     camera = None
+    found_object = None
+    distance_to_stair = None
 
     def __init__(self, name):
         print("create new Robot")
         self.name = name
         self.camera = Camera.Camera()
-        self.motor_left = Motor.Motor()
-        self.motor_right = Motor.Motor()
+        self.motor_pair = Motor.Motor()
+        self.motor_pair.enable()
         self.distance_sensor = DistanceSensor.DistanceSensor()
         self.winch = Winch.Winch()
         self.speaker = Speaker.Speaker()
@@ -35,63 +37,53 @@ class Robot:
         self.magnet_manager.set_on_power_socket()
         self.stair_detector = StairDetector.StairDetector(self.camera)
 
-    # TODO: Momentane Annahme: 1 Grad Drehung bei 30 Millisekunden Rotation
+    def stop(self):
+        print("Robot: stop")
+        self.motor_pair.stop()
 
-    def go_forward(self):
-        print("Robot: go forward")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "50", "30")
-        self.motor_right.rotate("setR", "50", "30")
-        self.motor_left.disable()
-        self.motor_right.disable()
+    def go_forward_slow(self):
+        print("Robot: go forward slow")
+        self.motor_pair.rotate(10, 10)
 
-    def go_backward(self):
-        print("Robot: go backward")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "-50", "30")
-        self.motor_right.rotate("setR", "-50", "30")
-        self.motor_left.disable()
-        self.motor_right.disable()
+    def go_forward_medium(self):
+        print("Robot: go forward medium")
+        self.motor_pair.rotate(30, 30)
+
+    def go_forward_fast(self):
+        print("Robot: go forward fast")
+        self.motor_pair.rotate(50, 50)
+
+    def go_backward_slow(self):
+        print("Robot: go backward slow")
+        self.motor_pair.rotate(-10, -10)
+
+    def go_backward_medium(self):
+        print("Robot: go backward medium")
+        self.motor_pair.rotate(-30, -30)
+
+    def go_backward_fast(self):
+        print("Robot: go backward fast")
+        self.motor_pair.rotate(-50, -50)
+
+    def turn_right(self):
+        print("Robot: turn right")
+        self.motor_pair.rotate(-10, 10)
+
+    def turn_left(self):
+        print("Robot: turn left")
+        self.motor_pair.rotate(10, -10)
 
     def turn_right_90degrees(self):
         print("Robot: turn right 90 degrees")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "50",
-                               "2700")  # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
-        self.motor_right.rotate("setR", "-50", "2700")
-        self.motor_left.disable()
-        self.motor_right.disable()
+        self.turn_right()
+        duration_milliseconds = 3000  # TODO: define the correct duration
+        time.sleep(duration_milliseconds / 1000)
 
     def turn_left_90degrees(self):
-        print("Robot: turn left 90 degrees")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "-50",
-                               "2700")  # TODO: Is third parameter "duration" needed? Here: 1 degree = 30 milliseconds
-        self.motor_right.rotate("setR", "50", "2700")
-        self.motor_left.disable()
-        self.motor_right.disable()
-
-    def turn_right_1degree(self):
-        print("Robot: turn right 1 degree")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "50", "30")
-        self.motor_right.rotate("setR", "-50", "30")
-        self.motor_left.disable()
-        self.motor_right.disable()
-
-    def turn_left_1degree(self):
-        print("Robot: turn left 1 degree")
-        self.motor_left.enable()
-        self.motor_right.enable()
-        self.motor_left.rotate("setL", "-50", "30")
-        self.motor_right.rotate("setR", "50", "30")
-        self.motor_left.disable()
-        self.motor_right.disable()
+        print("Robot: turn right 90 degrees")
+        self.turn_left()
+        duration_milliseconds = 3000  # TODO: define the correct duration
+        time.sleep(duration_milliseconds / 1000)
 
     def turn_cam_ahead(self):
         if not self.camera.camServo.is_ahead:
@@ -127,24 +119,41 @@ class Robot:
         print("Robot: celebrate")
         self.speaker.celebrate(found_pictogram_english_lowercase)
 
-    def find_stair(self):
-        print("Robot: find stair")
-        return self.stair_detector.find_stair()
-
     def measure_distance_multiple(self):
         print("Robot: measure distance multiple")
-        distance = self.distance_sensor.get_distance_multiple()
-        return distance
+        self.distance = self.distance_sensor.get_distance_multiple()
 
     def measure_distance_single(self):
         print("Robot: measure distance single")
-        distance = self.distance_sensor.get_distance_single()
-        return distance
+        self.distance = self.distance_sensor.get_distance_single()
 
-    # TODO: Ab hier kombinierte Methoden. Abklärungen bzgl. UART und Parallelisierungen notwendig
+    # Below: combined methods
+
+    def turn_and_find_pictogram(self, is_turn_direction_left):
+        print("Robot: turn and find pictogram")
+        if is_turn_direction_left:
+            self.turn_left()
+        else:
+            self.turn_right()
+        is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform()
+        self.stop()
+        if not is_found:
+            print("pictogram couldn't be found")
+            #  TODO: Define what to do if not is found
+
+    def turn_and_find_stair(self, is_turn_direction_left):
+        print("Robot: turn and find stair")
+        if is_turn_direction_left:
+            self.turn_left()
+        else:
+            self.turn_right()
+        self.stair_detector.find_stair()
+        duration_eliminate_offset = 200  # TODO: Define duration
+        time.sleep(duration_eliminate_offset / 1000)
+        self.stop()
 
     # Below: private methods
 
-    def _find_pictogram(self):
-        print("Robot: find pictogram")
-        self.object_detector.find_pictogram()
+
+
+

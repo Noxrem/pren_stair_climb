@@ -1,3 +1,5 @@
-import Game
+import Robot
 
-game = Game.Game()
+robot = Robot.Robot("Gefyra")
+robot.turn_and_find_pictogram(True)
+robot.turn_and_find_stair(False)
