@@ -57,7 +57,7 @@ tError servoParseCommand(const char *cmd)
     termWriteLine("  status");
     termWriteLine("  pta4 [0..180]");					// Servo on pin PTA4 with 0..180 degrees
     termWriteLine("  pta5 [0..180]");					// Servo on pin PTA5 with 0..180 degrees
-    termWriteLine("  pta45 [0..180]");					// Servo on pin PTA4 and PTA5 with 0..180 degrees
+    termWriteLine("  pta45 [0..180]");				// Servo on pin PTA4 and PTA5 with 0..180 degrees
 
     result = EC_SUCCESS;
   }
@@ -67,7 +67,7 @@ tError servoParseCommand(const char *cmd)
 				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 1 value to degrees (0..180)
 		uint16_t degPTA5 = mapRangeToAnother(FTM0->CONTROLS[2].CnV, SERVO_CnV_MIN,
 				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 2 value to degrees (0..180)
-		termWriteLine("servo status:")
+		termWriteLine("servo status:");
 		servoPrintValue("pta4", degPTA4);				// Print current degree of servo
 		servoPrintValue("pta5", degPTA5);
 		result = EC_SUCCESS;

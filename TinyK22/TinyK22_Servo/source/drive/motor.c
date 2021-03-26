@@ -79,13 +79,13 @@ void motorSetPwmRight(int8_t value)
   {
 	  // drive backward
 	  value = -value;             	// value has to be a positive channel value!
-	  motorSetDIR('R', true);
+	  motorSetDIR('R', false);
 	  MOTOR_RIGHT_PWM();			// set motor right as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
 	  // drive forward
-	  motorSetDIR('R', false);
+	  motorSetDIR('R', true);
 	  MOTOR_RIGHT_PWM();		// set motor right as timer Pin (pwm signal)
   }
   else
@@ -115,13 +115,13 @@ void motorSetPwmLeft(int8_t value)
   {
 	  // drive backwards
 	  value = -value;
-	  motorSetDIR('L', true);
+	  motorSetDIR('L', false);
 	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else if (value > 0)
   {
 	  // drive forward
-	  motorSetDIR('L', false);
+	  motorSetDIR('L', true);
 	  MOTOR_LEFT_PWM();				// set motor left as timer Pin (pwm signal)
   }
   else
@@ -274,15 +274,15 @@ bool motorGetFLT(char side)
  */
 void motorSetDIR(char side, bool value)
 {
-	if(side == 'R')
+	if(side == 'R')	// set motor R direction pin
 	{
-		if(value) { MOTOR_R_DIR_PDOR |= (uint32_t)(1 << MOTOR_R_DIR_PIN); }	// set motor R direction pin
-		else { MOTOR_R_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_R_DIR_PIN); }
+		if(value) { MOTOR_R_DIR_PDOR |= (uint32_t)(1 << MOTOR_R_DIR_PIN); }	// forward DIR: 1
+		else { MOTOR_R_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_R_DIR_PIN); }			// backward DIR: 0
 	}
-	else if(side == 'L')
+	else if(side == 'L')	// set motor L direction pin
 	{
-		if(value) { MOTOR_L_DIR_PDOR |= (uint32_t)(1 << MOTOR_L_DIR_PIN); }	// set motor L direction pin
-		else { MOTOR_L_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_L_DIR_PIN); }
+		if(value) { MOTOR_L_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_L_DIR_PIN); }	// forward DIR: 0
+		else { MOTOR_L_DIR_PDOR |= (uint32_t)(1 << MOTOR_L_DIR_PIN); }				// backward DIR: 1
 	}
 	else { }	// error: invalid argument
 }

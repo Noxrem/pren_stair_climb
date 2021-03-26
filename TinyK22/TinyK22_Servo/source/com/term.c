@@ -249,11 +249,11 @@ void termInit(uint16_t baudrate)
       lpuart0Init(baudrate);
     #endif
 
-    termWriteLine(NULL);
-    if(TGT_IS_RPI_HAT)
-    	termWriteLine("RPI HAT ready... :-)");
-    else
-    	termWriteLine("MC-Car ready... :-)");
+//    termWriteLine(NULL);
+//    if(TGT_IS_RPI_HAT)
+//    	termWriteLine("RPI HAT ready... :-)");
+//    else
+//    	termWriteLine("MC-Car ready... :-)");
   }
 
   if (TGT_IS_TINYK22)
@@ -262,8 +262,17 @@ void termInit(uint16_t baudrate)
     #if (UART1_EN)
       uart1Init(baudrate);
     #endif
-    termWriteLine(NULL);
-    termWriteLine("tinyk22 ready... :-)");
+//    termWriteLine(NULL);
+//    termWriteLine("tinyk22 ready... :-)");
   }
+
+  termWriteLine(NULL);										// send UART ready message
+  if(TGT_IS_MCCAR)
+  	termWriteLine("MC-Car ready... :-)");
+  else if(TGT_IS_RPI_HAT)
+  	termWriteLine("RPI HAT ready... :-)");
+  else
+  	termWriteLine("tinyk22 ready... :-)");
+
 }
 
