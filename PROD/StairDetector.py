@@ -52,8 +52,8 @@ class StairDetector:
                            self.nothing)  # best value: 100  # TODO: define best value
         cv2.createTrackbar(trackbar8_name, window_name, 43, 255,
                            self.nothing)  # best value: 120  # TODO: define best value
-        cv2.createTrackbar(trackbar9_name, window_name, 10, 255,
-                           self.nothing)  # best value: ?  # TODO: define best value
+        cv2.createTrackbar(trackbar9_name, window_name, 90, 300,
+                           self.nothing)  # best value: ?  # TODO: define best value. Depends on frame rate
 
         while True:
             amount_v_lines = cv2.getTrackbarPos(trackbar0_name, window_name)
@@ -68,9 +68,6 @@ class StairDetector:
             target_amount_detections = cv2.getTrackbarPos(trackbar9_name, window_name)
             video = video_capture
             ret, orig_frame = video.read()
-            # if not ret:
-            #     self.video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-            #     continue
             frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
             # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) # TODO: Remove Code
             # color1 = np.array([0, 0, 0])
@@ -106,5 +103,5 @@ class StairDetector:
             key = cv2.waitKey(1)
             if self.detection_counter >= target_amount_detections or key == 27:
                 break
-        self.video.release()
+        video_capture.release()
         cv2.destroyAllWindows()
