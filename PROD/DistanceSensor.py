@@ -1,11 +1,9 @@
 class DistanceSensor:
-    distance = None
     target_distance_set_down_socket = 30  # TODO: Distanz definieren
     amount_of_multiple_measurements = 5  # TODO: Anzahl Messungen definieren
 
     def __init__(self):
         print("create new distance sensor")
-        self.distance = 15
 
     def get_available_arguments(self):
         message = "dst help"
@@ -16,8 +14,8 @@ class DistanceSensor:
     def get_distance_single(self):
         message = "dst" + " s"
         print(message)
-        self.distance = DistanceSensor.receive_distance(self)
-        return self.distance
+        distance = DistanceSensor._receive_distance(self)
+        return distance
 
     def get_distance_multiple(self):
         message = "dst" + " m"
@@ -26,14 +24,15 @@ class DistanceSensor:
         counter = 0
         sum_distances = 0
         for i in range(self.amount_of_multiple_measurements):
-            self.distance = DistanceSensor.receive_distance(self)
-            distances.insert(counter, self.distance)
-            sum_distances += self.distance
+            distance = DistanceSensor._receive_distance(self)
+            distances.insert(counter, distance)
+            sum_distances += distance
             counter += 1
-        self.distance = sum_distances / self.amount_of_multiple_measurements
-        return self.distance
+        distance = sum_distances / self.amount_of_multiple_measurements
+        return distance
 
-    def receive_distance(self):
-        # TODO: Distanz über UART empfangen und zuweisen
-        print("Distance: " + str(self.distance))
-        return self.distance
+    def _receive_distance(self):
+        # TODO: Methode von Nati integrieren
+        distance = 0
+        print("Distance: " + str(distance))
+        return distance

@@ -19,9 +19,7 @@ class Robot:
     object_detector = None
     magnet_manager = None
     stair_detector = None
-    camera = None
     found_object = None
-    distance_to_stair = None
 
     def __init__(self, name):
         print("create new Robot")
@@ -122,11 +120,13 @@ class Robot:
 
     def measure_distance_multiple(self):
         print("Robot: measure distance multiple")
-        self.distance = self.distance_sensor.get_distance_multiple()
+        distance = self.distance_sensor.get_distance_multiple()
+        return distance
 
     def measure_distance_single(self):
         print("Robot: measure distance single")
-        self.distance = self.distance_sensor.get_distance_single()
+        distance = self.distance_sensor.get_distance_single()
+        return distance
 
     # Below: combined methods
 
@@ -152,6 +152,17 @@ class Robot:
         duration_eliminate_offset = 200  # TODO: Define duration
         time.sleep(duration_eliminate_offset / 1000)
         self.stop()
+
+    def go_forward_and_get_distance(self):
+        print("Robot: go forward and get distance")
+        self.go_forward_medium()
+        distance = self.measure_distance_multiple()
+        offset_to_slow_down_millimeter = 20000  # TODO: Define offset
+        while distance > offset_to_slow_down_millimeter:
+            distance = self.measure_distance_multiple()
+        self.stop()
+
+
 
     # Below: private methods
 
