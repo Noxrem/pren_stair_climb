@@ -121,7 +121,7 @@ void main(void)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
       BlinkBlueLedEveryMS(1000);
-//      ProcessDrive();
+      ProcessDrive();
     }
   }
 }

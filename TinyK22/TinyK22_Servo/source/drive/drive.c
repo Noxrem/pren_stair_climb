@@ -147,7 +147,6 @@ void driveToWork(void)
   if (setValueL)
   {
     devL = (setValueL - speedLeft);       // calc deviation: max devL = +2000 - -2000 = 4000
-
     valL = (kpL * devL);                  // P-Part: max (kpL * devL) = 1024000
     if (kiL) integL += devL;              // I-Part with anti-windup
     valL += (kiL * integL);
@@ -184,11 +183,11 @@ void driveToWork(void)
     valR += (kiR * integR);
     valR += (kdR*(setValueR-devOldR));    // D-Part
     devOldR = setValueR;
-    valR /= 1000;                         // scaling
+    valR /= 100;                         // scaling (before it was 1000)
 
-    // pre control
-    // y=m*x+n => preControl: setValue*m + n
-    valR += (M_RIGHT * setValueR) / 100 + (setValueR > 0 ? N_RIGHT : -N_RIGHT);
+//    // pre control
+//    // y=m*x+n => preControl: setValue*m + n
+//    valR += (M_RIGHT * setValueR) / 100 + (setValueR > 0 ? N_RIGHT : -N_RIGHT);
 
     if (valR > MOTOR_MAX_VALUE) {
       valR = MOTOR_MAX_VALUE;
@@ -344,8 +343,8 @@ tError driveParseCommand(const char *cmd)
 
 void driveInit(void)
 {
-  kpL = kpR = 10;//80;
-  kiL = kiR = 0;//30;
+  kpL = kpR = 50;	// Tested values with only the Gefyra without bridge
+  kiL = kiR = 10;
   kdL = kdR = 0;
   setValueLeft = setValueRight = 00;  //30... 7sec 30m = 4cm/sec
 
