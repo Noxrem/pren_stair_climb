@@ -6,7 +6,7 @@ from picamera.array import PiRGBArray
 
 class Camera:
     cam_servo = None
-    cam = None
+    capture = None
     cam_resolution = None
     cam_frame_rate = None
     rawCapture = None
@@ -14,10 +14,10 @@ class Camera:
     def __init__(self):
         print("create new camera")
         self.camServo = CamServo.CamServo()
-        self.cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        self.capture = cv2.VideoCapture(0)
         self.cam_resolution = (640, 480)
         self.cam_frame_rate = 32
-        self.rawCapture = PiRGBArray(self.cam, size=(640, 480))
+        self.rawCapture = PiRGBArray(self.capture, size=(640, 480))
 
     def turn_ahead(self):
         print("camera turn ahead")

@@ -5,8 +5,6 @@ import numpy as np
 
 
 class StairDetector:
-    camera = None
-    video = None
     font = None
     bottom_left_corner_of_text = None
     font_scale = None
@@ -14,10 +12,8 @@ class StairDetector:
     line_type = None
     detection_counter = None
 
-    def __init__(self, camera):
+    def __init__(self):
         print("create new stair detector")
-        self.camera = camera
-        self.video = self.camera.cam
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         self.bottom_left_corner_of_text = (10, 100)
         self.font_scale = 1
@@ -28,7 +24,7 @@ class StairDetector:
     def nothing(self):
         pass
 
-    def find_stair(self):
+    def find_stair(self, video_capture):
         print("find stair")
         window_name = "Trackbar Board"
 
@@ -52,8 +48,10 @@ class StairDetector:
         cv2.createTrackbar(trackbar4_name, window_name, 313, 700, self.nothing)  # best value: 313
         cv2.createTrackbar(trackbar5_name, window_name, 50, 200, self.nothing)  # best value: 50
         cv2.createTrackbar(trackbar6_name, window_name, 1, 200, self.nothing)  # best value: 1
-        cv2.createTrackbar(trackbar7_name, window_name, 100, 255, self.nothing)  # best value: 100
-        cv2.createTrackbar(trackbar8_name, window_name, 120, 255, self.nothing)  # best value: 120
+        cv2.createTrackbar(trackbar7_name, window_name, 18, 255,
+                           self.nothing)  # best value: 100  # TODO: define best value
+        cv2.createTrackbar(trackbar8_name, window_name, 43, 255,
+                           self.nothing)  # best value: 120  # TODO: define best value
         cv2.createTrackbar(trackbar9_name, window_name, 10, 255,
                            self.nothing)  # best value: ?  # TODO: define best value
 
@@ -68,10 +66,11 @@ class StairDetector:
             canny1 = cv2.getTrackbarPos(trackbar7_name, window_name)
             canny2 = cv2.getTrackbarPos(trackbar8_name, window_name)
             target_amount_detections = cv2.getTrackbarPos(trackbar9_name, window_name)
-            ret, orig_frame = self.video.read()
-            if not ret:
-                self.video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-                continue
+            video = video_capture
+            ret, orig_frame = video.read()
+            # if not ret:
+            #     self.video = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+            #     continue
             frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
             # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) # TODO: Remove Code
             # color1 = np.array([0, 0, 0])

@@ -13,6 +13,7 @@ class Robot:
     name = None
     motor_pair = None
     distance_sensor = None
+    camera = None
     winch = None
     speaker = None
     object_detector = None
@@ -25,17 +26,17 @@ class Robot:
     def __init__(self, name):
         print("create new Robot")
         self.name = name
-        self.camera = Camera.Camera()
         self.motor_pair = Motor.Motor()
         self.motor_pair.enable()
         self.distance_sensor = DistanceSensor.DistanceSensor()
+        self.camera = Camera.Camera()
         self.winch = Winch.Winch()
         self.speaker = Speaker.Speaker()
-        self.object_detector = ObjectDetector.ObjectDetector(self.camera)
+        self.object_detector = ObjectDetector.ObjectDetector()
         self.magnet_manager = MagnetManager.MagnetManager()
         self.magnet_manager.set_on_power_bridge()
         self.magnet_manager.set_on_power_socket()
-        self.stair_detector = StairDetector.StairDetector(self.camera)
+        self.stair_detector = StairDetector.StairDetector()
 
     def stop(self):
         print("Robot: stop")
@@ -135,7 +136,7 @@ class Robot:
             self.turn_left()
         else:
             self.turn_right()
-        is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform()
+        is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform(self.camera.capture)
         self.stop()
         if not is_found:
             print("pictogram couldn't be found")
@@ -147,7 +148,7 @@ class Robot:
             self.turn_left()
         else:
             self.turn_right()
-        self.stair_detector.find_stair()
+        self.stair_detector.find_stair(self.camera.capture)
         duration_eliminate_offset = 200  # TODO: Define duration
         time.sleep(duration_eliminate_offset / 1000)
         self.stop()
