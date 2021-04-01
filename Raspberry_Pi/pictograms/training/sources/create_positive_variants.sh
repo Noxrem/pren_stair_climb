@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ITERATIONS=9
+ITERATIONS=4
 IDX=1
 BASE_PATH="/Users/stofers/Development/HSLU/PREN/pren_stair_climb/Raspberry_Pi/pictograms/training/sources"
 IMG_NAME=$1
@@ -13,8 +13,8 @@ if [ $# -eq 0 ]; then
 fi
 
 convert $BASE_PATH/${IMG_NAME}${INPUT_FORMAT} -fuzz 20% -transparent white $BASE_PATH/$IMG_NAME.png
-mkdir $BASE_PATH/$IMG_NAME
-cp $BASE_PATH/${IMG_NAME}${INPUT_FORMAT} $BASE_PATH/$IMG_NAME/${IMG_NAME}_0${OUTPUT_FORMAT}
+mkdir -p $BASE_PATH/$IMG_NAME
+convert $BASE_PATH/${IMG_NAME}${INPUT_FORMAT} $BASE_PATH/$IMG_NAME/${IMG_NAME}_0${OUTPUT_FORMAT}
 while [ $IDX -le $ITERATIONS ]
 do
 	RANDOM_BRIGHT=`jot -r 1 -10 60`
@@ -22,5 +22,5 @@ do
 	convert $BASE_PATH/$IMG_NAME/${IMG_NAME}_${IDX}.png -fuzz 50% -fill none -draw "color 0,0 floodfill" -background white -flatten $BASE_PATH/$IMG_NAME/${IMG_NAME}_${IDX}${OUTPUT_FORMAT}
 	IDX=$((IDX+1))
 done
-rm $BASE_PATH/${IMG_NAME}*.png
+#rm $BASE_PATH/${IMG_NAME}*.png
 rm $BASE_PATH/$IMG_NAME/${IMG_NAME}*.png
