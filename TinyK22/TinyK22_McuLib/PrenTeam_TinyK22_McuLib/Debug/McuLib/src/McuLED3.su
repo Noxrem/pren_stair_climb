@@ -1,0 +1,6 @@
+McuLED3.c:76:16:PrintStatus	16	static
+McuLED3.c:86:16:PrintHelp	16	static
+McuLED3.c:111:9:McuLED3_ParseCommand	24	static
+McuLED3.c:234:6:McuLED3_Init	8	static
+McuLED3.c:252:6:McuLED3_Deinit	8	static
+McuLED3.c:274:6:McuLED3_SetRatio16	16	static

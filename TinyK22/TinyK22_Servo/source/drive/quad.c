@@ -21,15 +21,18 @@
 
 #define FTM_CLOCK                 250000    // 250 kHz
 #define FTM_PRESCALE              1         // div 1
-#define WHEEL_DIAMETER            19.2      // 19.2 mm
-#define TICKS_PER_REVOLUTION      142       // 142 ticks per wheel revolution
+#define WHEEL_DIAMETER            112      	// 112 mm
+#define EXT_GEAR_RATIO			  		1					// Gear ration from the motor shaft to the actual wheel
+#define TICKS_PER_REVOLUTION      5756      // 5756 ticks (counts) per shaft revolution (same as CPR "counts per revolution")
 
-#define PERIODS_PER_REVOLUTION    (TICKS_PER_REVOLUTION / 4.0)                                      // 35.50 periods/revolution
-#define WHEEL_CIRCUMFERENCE       (WHEEL_DIAMETER * 3.141593)                                       // 60.32 mm
-#define UM_PER_TICK               (((10000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)   // 424.788 => 425 Micrometer/Ticks
+																									  // Since there are 2 encoders (A,B) there is a factor of 4 ticks per period
+#define PERIODS_PER_REVOLUTION 	  (TICKS_PER_REVOLUTION / 4.0)                                     	  // 1439 periods/revolution (same as PPR "pulses/periods per revolution")
+#define WHEEL_CIRCUMFERENCE       (WHEEL_DIAMETER * 3.141593)                                         // 18.85 mm
+#define NM_PER_TICK               (((10000000.0 * WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION)+5)/10)  // 1'042 Nanometer/Tick (+5/10 is for rounding)
 
-// velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
-#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PERIODS_PER_REVOLUTION * FTM_PRESCALE)+5)/10) // =424779 430847
+// old velocity  = (19.2mm * PI * 250'000 * 4) / (142 * Ticks) = (19.2mm * PI * 250'000) / (35.5 * Ticks) = 424779/Ticks
+// velocity = (6mm * PI * 250'000 * 4) / (5756 * Ticks) = (6mm * PI * 250'000) / (1439 * Ticks * External_Gear_Ratio) = 3'275/Ticks
+#define VELOCITY_PER_PERIOD       ((((uint32_t)(10 * WHEEL_CIRCUMFERENCE * FTM_CLOCK)) / (PERIODS_PER_REVOLUTION * FTM_PRESCALE * EXT_GEAR_RATIO)+5)/10) // 3'275
 
 #define QuadLeftA                 ((GPIOA->PDIR & (1<<13)) != 0) // FTM1_CH1
 #define QuadLeftB                 ((GPIOA->PDIR & (1<<12)) != 0) // FTM1_CH0
@@ -72,6 +75,8 @@ static uint8_t errorRight;
 static int32_t timeRight;
 
 static tCommandLineHandler clh;                       // terminal command line handler
+
+static uint8_t enableContinuousSpeedTransmission;			// If set true, the speed of the right/left motors is transmitted via UART
 
 
 //uint16_t times[256];
@@ -139,8 +144,8 @@ void FTM1_IRQHandler(void)
     }
   }
 
-  if (FTM1->CONTROLS[1].CnSC & FTM_CnSC_CHF_MASK) { // check for channel 1 interrupte
-    FTM1->CONTROLS[1].CnSC &= ~FTM_CnSC_CHF_MASK;   // clear interrupt fla
+  if (FTM1->CONTROLS[1].CnSC & FTM_CnSC_CHF_MASK) { // check for channel 1 interrupt
+    FTM1->CONTROLS[1].CnSC &= ~FTM_CnSC_CHF_MASK;   // clear interrupt flag
     if (QuadLeftA) {                                // rising edge:
       if (risingOkA) time = risingA;                //   if second or later call => period is valid
       risingA = 0;                                  //   reset period measuring time
@@ -232,12 +237,65 @@ void FTM2_IRQHandler(void)
   OnExitQuadRightISR();
 }
 
+/**
+ * Returns the rpm of the left wheel
+ * @return
+ * 	the rpm in revolutions per minute
+ */
+int16_t quadGetRPMLeft(void)
+{
+	// rpm = 60 * (250'000 / timeLeft) / 1439	( factor 1000 to avoid float, add 500 to round)
+	if (timeLeft)
+	{
+		int32_t rpmX1000;
+		int16_t rpm;
+		// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
+		rpmX1000 = 60 * (((FTM_CLOCK / timeLeft) * 1000) / PERIODS_PER_REVOLUTION);	// rpm with a factor of 1000
 
+		if(rpmX1000 < 0)	// If rpmX1000 is negative round with (-500)
+		{
+			rpm = (rpmX1000 - 500) / 1000;
+		}
+		else 							// rpmX100 is positive, round with (+500)
+		{
+			rpm = (rpmX1000 + 500) / 1000;
+		}
+		return rpm;
+	}
+	else return 0;
+}
+
+/**
+ * Returns the rpm of the right wheel
+ * @return
+ * 	the rpm in revolutions per minute
+ */
+int16_t quadGetRPMRight(void)
+{
+	if (timeRight)
+	{
+		int32_t rpmX1000;
+		int16_t rpm;
+		// rpm = 60 * (250'000 / timeRight) / 1439	( factor 1000 to avoid float, add 500 to round)
+		rpmX1000 = 60 * (((FTM_CLOCK / timeRight) * 1000) / PERIODS_PER_REVOLUTION);	// rpm with a factor of 1000
+
+		if(rpmX1000 < 0)	// If rpmX1000 is negative round with (-500)
+		{
+			rpm = (rpmX1000 - 500) / 1000;
+		}
+		else 							// rpmX100 is positive, round with (+500)
+		{
+			rpm = (rpmX1000 + 500) / 1000;
+		}
+		return rpm;
+	}
+	else return 0;
+}
 
 /**
  * Returns the velocity of the left wheel
  * @return
- *   the distance in mm
+ *   the velocity in mm/s
  */
 int16_t quadGetSpeedLeft(void)
 {
@@ -248,7 +306,7 @@ int16_t quadGetSpeedLeft(void)
 /**
  * Returns the velocity of the right wheel
  * @return
- *   the distance in mm
+ *   the the velocity in mm/s
  */
 int16_t quadGetSpeedRight(void)
 {
@@ -263,7 +321,7 @@ int16_t quadGetSpeedRight(void)
  */
 int16_t quadGetDistanceLeft(void)
 {
-   return (int16_t)((ticksLeft * UM_PER_TICK) / 1000);
+   return (int16_t)((ticksLeft * NM_PER_TICK) / 1000000);
 }
 
 /**
@@ -273,9 +331,26 @@ int16_t quadGetDistanceLeft(void)
  */
 int16_t quadGetDistanceRight(void)
 {
-   return (int16_t)((ticksRight * UM_PER_TICK) / 1000);
+   return (int16_t)((ticksRight * NM_PER_TICK) / 1000000);
 }
 
+/**
+ * Function that gets periodically called for
+ * sending the speed of the wheels. Sends the speed
+ * data, when "enableContinuousSpeedTransmission"
+ * is enabled.
+ */
+void quadContinuousSpeedTransmission(void)
+{
+	if(enableContinuousSpeedTransmission)
+	{
+		termWrite("SpdR: ");
+		termWriteNum16s(quadGetSpeedRight());
+		termWrite(" SpdL: ");
+		termWriteNum16s(quadGetSpeedLeft());
+		termWriteLine("");
+	}
+}
 
 /**
  * Command line parser for this file.
@@ -286,43 +361,91 @@ int16_t quadGetDistanceRight(void)
  */
 tError quadParseCommand(const char *cmd)
 {
-  tError result = EC_INVALID_ARG;
-  if (strcmp(cmd, "help") == 0)
-  {
-    termWriteLine("q (quad) commands:");
-    termWriteLine("  help");
-    termWriteLine("  status");
-    termWriteLine("  reset");
-    result = EC_SUCCESS;
-  }
-  else if (strncmp(cmd, "status", sizeof("status")-1) == 0)
-  {
-    termWriteLine("quad status:");
-    termWrite("L:");
-    termWriteNum32s(ticksLeft);
-    termWrite(" ");
-    termWriteNum16s(quadGetDistanceLeft());
-    termWrite(" ");
-    termWriteNum16s(quadGetSpeedLeft());
-    termWriteLine("");
+	tError result = EC_INVALID_ARG;
+	if (strcmp(cmd, "help") == 0)
+	{
+		termWriteLine("q (quad) commands:");
+		termWriteLine("  help");
+		termWriteLine("  getSpdR");
+		termWriteLine("  getSpdL");
+		termWriteLine("  getRpmR");
+		termWriteLine("  getRpmL");
+		termWriteLine("  getContSpd [0/1]");
+		termWriteLine("  status");
+		termWriteLine("  reset");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getSpdR", sizeof("getSpdR") - 1) == 0)    // Returns the speed of the right motor
+	{
+		termWrite("SpeedR:");
+		termWriteNum16s(quadGetSpeedRight());
+		termWriteLine("");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getSpdL", sizeof("getSpdL") - 1) == 0)    // Returns the speed of the left motor
+	{
+		termWrite("SpeedL:");
+		termWriteNum16s(quadGetSpeedLeft());
+		termWriteLine("");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getRpmR", sizeof("getRpmR") - 1) == 0)    // Returns the rpm of the right motor
+	{
+		termWrite("RpmR:");
+		termWriteNum16s(quadGetRPMRight());
+		termWriteLine("");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getRpmL", sizeof("getRpmL") - 1) == 0)    // Returns the rpm of the left motor
+	{
+		termWrite("RpmL:");
+		termWriteNum16s(quadGetRPMLeft());
+		termWriteLine("");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "getContSpd", sizeof("getContSpd") - 1) == 0)    // Starts/Stops the continuous transmission of the current speed
+		{
+			cmd += sizeof("getContSpd");	// set string pointer to next argument
+			result = utilScanDecimal8u(&cmd, &enableContinuousSpeedTransmission);	// get the argument
+			if(result != EC_SUCCESS) return result;
+			if(enableContinuousSpeedTransmission)	// If the continuous transmission should be enabled
+			{
+				enableContinuousSpeedTransmission = true;
+			}
+			else
+			{
+				enableContinuousSpeedTransmission = false;
+			}
+			result = EC_SUCCESS;
+		}
+	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
+	{
+		termWriteLine("quad status:");
+		termWrite("R:");
+		termWriteNum32s(ticksRight);
+		termWrite(" ");
+		termWriteNum16s(quadGetDistanceRight());
+		termWrite(" ");
+		termWriteNum16s(quadGetSpeedRight());
+		termWriteLine("");
 
-    termWrite("R:");
-    termWriteNum32s(ticksRight);
-    termWrite(" ");
-    termWriteNum16s(quadGetDistanceRight());
-    termWrite(" ");
-    termWriteNum16s(quadGetSpeedRight());
-    termWrite("\n");
-    result = EC_SUCCESS;
-  }
-  else if (strncmp(cmd, "reset", sizeof("reset")-1) == 0)
-  {
-    cmd += sizeof("reset");
-    ticksLeft = ticksRight = errorLeft = errorRight = 0;
-    termWriteLine("OK");
-    result = EC_SUCCESS;
-  }
-  return result;
+		termWrite("L:");
+		termWriteNum32s(ticksLeft);
+		termWrite(" ");
+		termWriteNum16s(quadGetDistanceLeft());
+		termWrite(" ");
+		termWriteNum16s(quadGetSpeedLeft());
+		termWrite("\n");
+		result = EC_SUCCESS;
+	}
+	else if (strncmp(cmd, "reset", sizeof("reset") - 1) == 0)
+	{
+		cmd += sizeof("reset");
+		ticksLeft = ticksRight = errorLeft = errorRight = 0;
+		termWriteLine("OK");
+		result = EC_SUCCESS;
+	}
+	return result;
 }
 
 
@@ -346,7 +469,7 @@ void quadInit(void)
   // set clockgating for FTM1 & FTM2
   SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK | SIM_SCGC6_FTM2_MASK;
 
-  // configure the timer with "Fixed frequency clock" as clocksource and with a "Prescaler" of 0 => 250'000 kHz
+  // configure the timer with "Fixed frequency clock" as clocksource and with a "Prescaler" of 0 => 250'000 Hz
   FTM1->SC = FTM_SC_CLKS(2) |  FTM_SC_PS(0) | FTM_SC_TOIE(1);
   FTM2->SC = FTM_SC_CLKS(2) |  FTM_SC_PS(0) | FTM_SC_TOIE(1);
 
@@ -366,4 +489,6 @@ void quadInit(void)
 
   // register terminal command line handler
   termRegisterCommandLineHandler(&clh, "q", "(quad)", quadParseCommand);
+
+  enableContinuousSpeedTransmission = false;	// disable continuous speed tranmission
 }

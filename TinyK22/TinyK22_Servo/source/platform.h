@@ -46,6 +46,7 @@
 
 #define TGT_IS_MCCAR                        ((SIM->SDID & SIM_SDID_PINID_MASK) == 0x08) // 100-pin
 #define TGT_IS_TINYK22                      ((SIM->SDID & SIM_SDID_PINID_MASK) == 0x05) // 64-pin
+#define TGT_IS_RPI_HAT											1	// if the target is on a Raspberry Pi HAT (enables UART connection over UART0 with RPI)
 
 #define NULL                     ((void *)0)
 #define TRUE                               1

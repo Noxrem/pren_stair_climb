@@ -1,0 +1,16 @@
+McuULN2003.c:117:6:McuULN2003_GetDefaultConfig	16	static
+McuULN2003.c:122:21:McuULN2003_InitMotor	40	static
+McuULN2003.c:154:21:McuULN2003_DeinitMotor	24	static
+McuULN2003.c:169:6:McuULN2003_SetStepMode	16	static
+McuULN2003.c:173:21:McuULN2003_GetStepMode	16	static
+McuULN2003.c:177:13:SetStep	24	static
+McuULN2003.c:183:6:McuULN2003_PowerOff	16	static
+McuULN2003.c:188:13:McuULN2003_TableMakeStep	32	static
+McuULN2003.c:220:6:McuULN2003_MoveCallback	24	static
+McuULN2003.c:234:6:McuULN2003_IncStep	24	static
+McuULN2003.c:248:6:McuULN2003_DecStep	24	static
+McuULN2003.c:262:6:McuULN2003_SetPos	24	static
+McuULN2003.c:267:9:McuULN2003_GetPos	16	static
+McuULN2003.c:271:6:McuULN2003_Step	16	static
+McuULN2003.c:285:6:McuULN2003_Deinit	4	static
+McuULN2003.c:289:6:McuULN2003_Init	4	static

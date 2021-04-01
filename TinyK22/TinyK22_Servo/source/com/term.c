@@ -48,7 +48,7 @@ void termRegisterCommandLineHandler(tCommandLineHandler *clh, char* cmd, char *c
  */
 void termWriteChar(char ch)
 {
-  if (TGT_IS_MCCAR)
+  if (TGT_IS_MCCAR || TGT_IS_RPI_HAT)	// if the target is the MCCAR or the Raspberry Pi HAT
   {
     // check if uart0 is enabled
     #if (UART0_EN)
@@ -192,7 +192,7 @@ void termParseCommand(char *cmd)
 void termDoWork(void)
 {
   char cmd[512];
-  if (TGT_IS_MCCAR)
+  if (TGT_IS_MCCAR || TGT_IS_RPI_HAT)		// if the target is the MCCAR or the Raspberry Pi HAT
   {
     #if (UART0_EN)
       if (uart0HasLineReceived())
@@ -237,7 +237,7 @@ void termInit(uint16_t baudrate)
   // Send the first message to all uarts
   destination = uartAll;
 
-  if (TGT_IS_MCCAR)
+  if (TGT_IS_MCCAR || TGT_IS_RPI_HAT)		// if the target is the MCCAR or the Raspberry Pi HAT)
   {
     // initialize uart0 only if the uart is enabled
     #if (UART0_EN)
@@ -249,8 +249,11 @@ void termInit(uint16_t baudrate)
       lpuart0Init(baudrate);
     #endif
 
-    termWriteLine(NULL);
-    termWriteLine("MC-Car ready... :-)");
+//    termWriteLine(NULL);
+//    if(TGT_IS_RPI_HAT)
+//    	termWriteLine("RPI HAT ready... :-)");
+//    else
+//    	termWriteLine("MC-Car ready... :-)");
   }
 
   if (TGT_IS_TINYK22)
@@ -259,8 +262,17 @@ void termInit(uint16_t baudrate)
     #if (UART1_EN)
       uart1Init(baudrate);
     #endif
-    termWriteLine(NULL);
-    termWriteLine("tinyk22 ready... :-)");
+//    termWriteLine(NULL);
+//    termWriteLine("tinyk22 ready... :-)");
   }
+
+  termWriteLine(NULL);										// send UART ready message
+  if(TGT_IS_MCCAR)
+  	termWriteLine("MC-Car ready... :-)");
+  else if(TGT_IS_RPI_HAT)
+  	termWriteLine("RPI HAT ready... :-)");
+  else
+  	termWriteLine("tinyk22 ready... :-)");
+
 }
 

@@ -1,0 +1,8 @@
+CRC_Generator.c:17:6:CRC_Init	16	static
+CRC_Generator.c:23:6:CRC_CalculateBlock	32	static
+CRC_Generator.c:33:6:CRC_CalculateNextValue	32	static
+CRC_Generator.c:62:10:CRC_GetCrcValue	24	static
+CRC_Generator.c:74:9:CRC_CalculateWithTableCRC8	40	static
+CRC_Generator.c:94:10:CRC_CalculateWithTableCRC16	40	static
+CRC_Generator.c:124:10:CRC_CalculateWithTableCRC32	40	static
+CRC_Generator.c:154:10:CRC_Reflect	24	static
