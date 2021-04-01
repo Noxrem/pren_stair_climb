@@ -13,12 +13,12 @@
 #include "platform.h"
 #include "ftm0.h"
 #include "ftm3.h"
-//#include "motor.h"
-//#include "quad.h"
+#include "motor.h"
+#include "quad.h"
 #include "term.h"
 //#include "sound.h"
 //#include "soundPlayer.h"
-//#include "drive.h"
+#include "drive.h"
 //#include "pwrSwitch.h"
 //#include "i2c.h"
 //#include "led.h"
@@ -27,6 +27,10 @@
 //#include "util.h"
 //#include "eeprom.h"
 #include "servo/servo.h"
+
+// Speed of the driving motors
+int16_t speedL = 0;
+int16_t speedR = 0;
 
 /**
  * Lets the blue Led on the TinyK22 blink in a specified amount of ms.
@@ -49,7 +53,30 @@ void BlinkBlueLedEveryMS(uint16_t timeMS)
   }
 }
 
-
+/**
+ * The process for the driving motors that gets called periodically. (25ms)
+ * Calls the PID control for the motors.
+ */
+void ProcessDrive(void)
+{
+  static uint16_t i;				// create int that keeps the value (static)
+  if (i++ == FTM3_TOFS_MS(PID_PERIOD)) 	// run pid worker every 25ms
+  {
+    i=0;
+    if (getMotorsEnabled()) // If the motors are enabled
+    {
+    	quadContinuousSpeedTransmission();	// Sends continuous speed data via UART, if getContSpd is enabled
+//    	speedL = speedR = 10;	// 30mm/s
+//      driveSetSpeed(speedL, speedR);
+      driveToWork();
+    }
+    else
+    {
+    	speedL = speedR = 0;
+      driveToWork();
+    }
+  }
+}
 
 
 
@@ -63,9 +90,9 @@ void main(void)
   termInit(57600);
 //  soundInit();
 //  soundPlayerInit();
-//  motorInit();
-//  quadInit();
-//  driveInit();
+  motorInit();
+  quadInit();
+  driveInit();
 //  pwrSwitchInit();
 //  EnableDebugLeds();
 //  ledInit();
@@ -79,6 +106,10 @@ void main(void)
   PORTC->PCR[2] = PORT_PCR_MUX(1);
   GPIOC->PDDR |= (1<<2);
 
+//  // Set the motor PWM to a test value
+//  motorSetPwmLeft(127);
+//  motorSetPwmRight(59);
+
   while(TRUE)
   {
     // check for commands from terminal
@@ -90,6 +121,7 @@ void main(void)
     {
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
       BlinkBlueLedEveryMS(1000);
+      ProcessDrive();
     }
   }
 }

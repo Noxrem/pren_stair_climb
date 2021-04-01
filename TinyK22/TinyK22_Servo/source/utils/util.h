@@ -60,6 +60,7 @@ void utilStrcatNum16s(char *dst, size_t dstSize, int16_t num);
 void utilStrcatNum32u(char *dst, size_t dstSize, uint32_t val);
 void utilStrcatNum32s(char *dst, size_t dstSize, int32_t val);
 
+tError utilScanDecimal8u(const char **str, uint8_t *value);
 tError utilScanDecimal16u(const char **str, uint16_t *value);
 tError utilScanDecimal16s(const char **str, int16_t *value);
 

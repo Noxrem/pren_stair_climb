@@ -1,0 +1,7 @@
+McuWait.c:98:6:McuWait_Wait10Cycles	0	static
+McuWait.c:173:6:McuWait_Wait100Cycles	0	static
+McuWait.c:259:6:McuWait_WaitCycles	24	static
+McuWait.c:294:6:McuWait_WaitLongCycles	24	static
+McuWait.c:327:6:McuWait_Waitms	24	static
+McuWait.c:395:6:McuWait_Init	4	static
+McuWait.c:415:6:McuWait_Deinit	4	static

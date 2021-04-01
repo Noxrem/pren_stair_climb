@@ -13,9 +13,15 @@
 #ifndef SOURCES_DRIVE_QUAD_H_
 #define SOURCES_DRIVE_QUAD_H_
 
-
+int16_t quadGetRPMLeft(void);
+int16_t quadGetRPMRight(void);
 int16_t quadGetSpeedLeft(void);
 int16_t quadGetSpeedRight(void);
+int16_t quadGetDistanceLeft(void);
+int16_t quadGetDistanceRight(void);
+void quadContinuousSpeedTransmission(void);
+
+tError quadParseCommand(const char *cmd);
 
 void quadInit(void);
 

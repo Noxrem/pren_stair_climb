@@ -1,0 +1,14 @@
+McuArmTools.c:128:16:PrintStatus	120	static
+McuArmTools.c:155:16:PrintHelp	16	static
+McuArmTools.c:174:6:McuArmTools_SoftwareReset	4	static
+McuArmTools.c:213:9:McuArmTools_UIDGet	40	static
+McuArmTools.c:333:6:McuArmTools_UIDSame	24	static
+McuArmTools.c:366:9:McuArmTools_UIDtoString	32	static
+McuArmTools.c:400:9:McuArmTools_ParseCommand	32	static
+McuArmTools.c:433:26:McuArmTools_GetKinetisFamilyString	16	static
+McuArmTools.c:518:7:McuArmTools_GetPC	16	static
+McuArmTools.c:542:7:McuArmTools_GetSP	16	static
+McuArmTools.c:567:6:McuArmTools_SetPSP	16	static
+McuArmTools.c:589:6:McuArmTools_SetLR	16	static
+McuArmTools.c:697:6:McuArmTools_Deinit	4	static
+McuArmTools.c:712:6:McuArmTools_Init	4	static
