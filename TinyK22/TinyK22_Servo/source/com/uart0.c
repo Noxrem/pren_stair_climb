@@ -192,7 +192,7 @@ uint16_t uart0ReadLine(char *str, uint16_t length)
  *   TRUE, if there is a new line character, otherweise FALSE.
  */
 bool uart0HasLineReceived(void)
-{
+ {
   uint16_t i;
   uint16_t index = rxBufReadPos;
 

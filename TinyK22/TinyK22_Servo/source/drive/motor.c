@@ -24,6 +24,7 @@
 static tCommandLineHandler clh;       // terminal command line handler
 static int8_t motorValueRight;
 static int8_t motorValueLeft;
+static int8_t motorValueWinch;
 static bool motorsEnabled = false;		// Enables/disables the motors and speed update
 
 /**
@@ -133,6 +134,40 @@ void motorSetPwmLeft(int8_t value)
   FTM3->CONTROLS[1].CnV = v;
 }
 
+/**
+ * Sets the PWM value of the winch motor
+ *
+ * @param[in] value
+ *   the value between -MOTOR_MAX_VALUE..0..+MOTOR_MAX_VALUE
+ *   A value of '0' stops the winch.
+ */
+void motorSetPwmWinch(int8_t value)
+{
+  if (value > MOTOR_MAX_VALUE) value = MOTOR_MAX_VALUE;
+  if (value < -MOTOR_MAX_VALUE) value = -MOTOR_MAX_VALUE;
+  motorValueWinch = value;
+
+  if (value < 0)
+  {
+	  // drive backwards
+	  value = -value;
+	  motorSetDIR('W', false);
+	  MOTOR_WINCH_PWM();				// set winch motor as timer Pin (pwm signal)
+  }
+  else if (value > 0)
+  {
+	  // drive forward
+	  motorSetDIR('W', true);
+	  MOTOR_WINCH_PWM();				// set winch motor as timer Pin (pwm signal)
+  }
+  else
+  {
+	  // stop
+	  MOTOR_WINCH_GPIO();			// set motor left as GPIO Pin (low-level)
+  }
+  int16_t v = (uint16_t)(((FTM3_MODULO + 1) * ((uint32_t)value)) / MOTOR_MAX_VALUE);
+  FTM3->CONTROLS[2].CnV = v;
+}
 
 /**
  * Command line parser for this file.
@@ -152,6 +187,7 @@ tError motorParseCommand(const char *cmd)
     termWriteLine("  disable");
     termWriteLine("  setL [-127..127]");
     termWriteLine("  setR [-127..127]");
+    termWriteLine("  setW [-127..127]");
     termWriteLine("  getFltR");
     termWriteLine("  getFltL");
     termWriteLine("  status");
@@ -175,12 +211,22 @@ tError motorParseCommand(const char *cmd)
 //    motorSetPwmRight((int16_t)((MOTOR_MAX_VALUE * v) / 100));
     motorSetPwmRight((int8_t)v);	// value between -127..0..127
   }
+  else if (strncmp(cmd, "setW", sizeof("setW")-1) == 0)
+    {
+      cmd += sizeof("setW");
+      if(!motorsEnabled) return EC_INVALID_CMD;	// cmd not available if the motors are disabled
+      int16_t v;
+      result = utilScanDecimal16s(&cmd, &v);
+      if (result != EC_SUCCESS) return result;
+      motorSetPwmWinch((int8_t)v);	// value between -127..0..127
+    }
   else if (strncmp(cmd, "enable", sizeof("enable")-1) == 0)
   {
 	  // enable motors
   	motorsEnabled = true;
 	  motorSetSLP('R', true);	// set the SLP Pins of the motor driver
 	  motorSetSLP('L', true);
+	  motorSetSLP('W', true);	// sets the PWM to 0
 	  termWriteLine("Motors enabled");
 	  result = EC_SUCCESS;
   }
@@ -190,6 +236,7 @@ tError motorParseCommand(const char *cmd)
   	motorsEnabled = false;
 	  motorSetSLP('R', false);	// clear the SLP Pins of the motor driver
 	  motorSetSLP('L', false);
+	  motorSetSLP('W', false);	// sets the PWM to 0
 	  termWriteLine("Motors disabled");
   	  result = EC_SUCCESS;
   }
@@ -236,6 +283,9 @@ tError motorParseCommand(const char *cmd)
 //	  termWriteNum16s(motorLPercent);		// output in percent
 	  termWriteNum16s(motorValueLeft);
 	  termWriteLine("");
+	  termWrite("ValueW: ");
+		termWriteNum16s(motorValueWinch);
+		termWriteLine("");
 	  result = EC_SUCCESS;
   }
   return result;
@@ -267,7 +317,7 @@ bool motorGetFLT(char side)
  * Sets the GPIO PDOR value of the motor driver board DIR Pin
  *
  * @param[in] side
- *   side of the motor: R or L
+ *   side of the motor: R or L or W
  *
  * @param[in] value
  * 	 value to set the pin to
@@ -284,15 +334,21 @@ void motorSetDIR(char side, bool value)
 		if(value) { MOTOR_L_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_L_DIR_PIN); }	// forward DIR: 0
 		else { MOTOR_L_DIR_PDOR |= (uint32_t)(1 << MOTOR_L_DIR_PIN); }				// backward DIR: 1
 	}
+	else if(side == 'W')	// set motor winch direction pin
+	{
+		if(value) { MOTOR_W_DIR_PDOR |= (uint32_t)(1 << MOTOR_W_DIR_PIN); }	// forward DIR: 1
+		else { MOTOR_W_DIR_PDOR &= ~(uint32_t)(1 << MOTOR_W_DIR_PIN); }			// backward DIR: 0
+	}
 	else { }	// error: invalid argument
 }
 
 /**
  * Activates or deactivates the motor driver
  * Sets the GPIO PDOR value of the motor driver board SLP Pin
+ * The winch motor driver has no SLP Pin. So just the PWM is set to 0.
  *
  * @param[in] side
- *   side of the motor: R or L
+ *   side of the motor: R or L or W
  *
  * @param[in] value
  * 	 value to set the pin to
@@ -317,6 +373,10 @@ void motorSetSLP(char side, bool value)
 			motorSetPwmLeft(0);												// disable PWM
 		}
 	}
+	else if(side == 'W')
+	{
+		motorSetPwmWinch(0);												// disable PWM
+	}
 	else { }	// error: invalid argument
 }
 
@@ -336,8 +396,8 @@ void motorInit(void)
 	// GPIO Direction
 	GPIOB->PDDR &= ~(1<<2 | 1<<3);	// configure PTB2 & PTB3 (FLT) as input
 
-	GPIOD->PDDR |= 1<<0 | 1<<1;					// configure PTD0 & PTD1 (PWM) as output
-	GPIOC->PDDR |= 1<<8 | 1<<9 | 1<<10 | 1<<11;	// configure PTC8, PTC9, PTC10 & PTC11 as output
+	GPIOD->PDDR |= 1<<0 | 1<<1 | 1<<2 | 1<<3;			// configure PTD0 & PTD1 & PTD2 (PWM) as output and PTD3 as output (GPIO)
+	GPIOC->PDDR |= 1<<8 | 1<<9 | 1<<10 | 1<<11;		// configure PTC8, PTC9, PTC10 & PTC11 as output
 
 	// PORT as GPIO with pull-up (FLT)
 	PORTB->PCR[2] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB2 as GPIO with pull-up
@@ -349,45 +409,37 @@ void motorInit(void)
 	PORTC->PCR[10] = PORT_PCR_MUX(1);
 	PORTC->PCR[11] = PORT_PCR_MUX(1);
 
+	// PORTD as GPIO
+	PORTD->PCR[3] = PORT_PCR_MUX(1);
+
 	// Motor Sleep Pin (high to disable motor)
 	motorSetSLP('R', false);
 	motorSetSLP('L', false);
+	motorSetSLP('W', false);
 
 	// Motor Direction Pin (low: current from A to B)
 	motorSetDIR('R', false);
 	motorSetDIR('L', false);
+	motorSetDIR('W', false);
 
-	// GPIO Clear Bits on PTD0 & PTD1
-	GPIOD->PCOR |= 1<<0 | 1<<1;
+	// GPIO Clear Bits on PTD0 & PTD1 & PTD2
+	GPIOD->PCOR |= 1<<0 | 1<<1 | 1<<2;
 
 	// configures the pin muxing of the 2 pins as GPIO-Pin.
 	// the output level will be '0' (break operation) because of the configuration above.
 	MOTOR_RIGHT_GPIO();
 	MOTOR_LEFT_GPIO();
-
-
-//  // Configure the pin direction of the 4 pins as output.
-//  GPIOD->PDDR = 1<<0 | 1<<1;               // configure PTD0 & PTD1 as output
-//  GPIOE->PDDR = 1<<5 | 1<<6;               // configure PTE5 & PTE6 as output
-//
-//  // set the pin value of all of the 4 pins to '1'
-//  GPIOD->PSOR = 1<<0 | 1<<1;               // set PTD0 & PTD1 = 1
-//  GPIOE->PSOR = 1<<5 | 1<<6;               // set PTE5 & PTE6 = 1
-//
-//  // configures the pin muxing of all of the 4 pins as GPIO-Pin.
-//  // the output level will be '1' because of the configuration above.
-//  MOTOR_LEFT_A_GPIO();
-//  MOTOR_LEFT_B_GPIO();
-//  MOTOR_RIGHT_A_GPIO();
-//  MOTOR_RIGHT_B_GPIO();
+	MOTOR_WINCH_GPIO();
 
 	// set PWM value to 0
 	FTM3->CONTROLS[0].CnV = 0;
 	FTM3->CONTROLS[1].CnV = 0;
+	FTM3->CONTROLS[2].CnV = 0;
 
-	// configure both channels as edge aligned PWM with high-true pulses
+	// configure all three channels as edge aligned PWM with high-true pulses
 	FTM3->CONTROLS[0].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
 	FTM3->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
+	FTM3->CONTROLS[2].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
 
   // register terminal command line handler
   termRegisterCommandLineHandler(&clh, "mot", "(motor)", motorParseCommand);
