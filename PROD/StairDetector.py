@@ -41,8 +41,8 @@ class StairDetector:
         cv2.namedWindow(window_name, cv2.WINDOW_GUI_NORMAL)
         cv2.createTrackbar(trackbar0_name, window_name, 8, 30,
                            self.nothing)  # third parameter = default value / best value 8
-        cv2.createTrackbar(trackbar1_name, window_name, 4, 10,
-                           self.nothing)  # third parameter = default value / best value 4
+        cv2.createTrackbar(trackbar1_name, window_name, 8, 10,
+                           self.nothing)  # third parameter = default value / best value 8
         cv2.createTrackbar(trackbar2_name, window_name, 100, 200, self.nothing)  # best value 100
         cv2.createTrackbar(trackbar3_name, window_name, 40, 100, self.nothing)  # best value: 40
         cv2.createTrackbar(trackbar4_name, window_name, 313, 700, self.nothing)  # best value: 313
@@ -52,7 +52,7 @@ class StairDetector:
                            self.nothing)  # best value: 100  # TODO: define best value
         cv2.createTrackbar(trackbar8_name, window_name, 43, 255,
                            self.nothing)  # best value: 120  # TODO: define best value
-        cv2.createTrackbar(trackbar9_name, window_name, 90, 300,
+        cv2.createTrackbar(trackbar9_name, window_name, 60, 300,
                            self.nothing)  # best value: ?  # TODO: define best value. Depends on frame rate
 
         while True:
