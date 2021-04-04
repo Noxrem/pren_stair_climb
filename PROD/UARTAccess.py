@@ -19,4 +19,4 @@ class UARTAccess:
     def read(self):
         # TODO: activate code
         print("UART read")
-        self.access.read()
+        return self.access.read()
