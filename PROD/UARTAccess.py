@@ -1,4 +1,5 @@
 import serial
+import time
 
 
 class UARTAccess:
@@ -13,17 +14,10 @@ class UARTAccess:
         print("UART write")
         self.access.write(str.encode(message))
 
-    def read(self):
-        print("UART read")
-        return self.access.readline()
-
     def write_and_read(self, message):
         print("UART write and read")
         self.write(message)
-        is_data_available = True
-        while is_data_available:
-            line = self.read()
-            if line == "":
-                is_data_available = False
-            else:
-                print(line)
+        time.sleep(0.5)  # TODO: define needed minimal duration
+        while self.access.inWaiting() > 0:
+            line = self.access.readline()
+            print(line)
