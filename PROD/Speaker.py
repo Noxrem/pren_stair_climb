@@ -40,7 +40,7 @@ class Speaker:
         playsound('TTS_message_pictogram.mp3')
 
     def celebrate(self, found_pictogram_english_lowercase):
-        print("Play MP3 file celebration")
+        print("celebrate")
         message = "We have found the " + found_pictogram_english_lowercase
         slow = False
         tts = gTTS(text=message, lang=self.language, slow=slow)

@@ -8,7 +8,7 @@ class CamServo:
     serial_access = None
 
     def __init__(self):
-        print("new CamServo created")
+        print("create new CamServo")
         self.degrees = 90
         self.serial_access = UARTAccess.UARTAccess()
 
