@@ -10,10 +10,15 @@ class Motor:
         self.is_enabled = False
         self.serial_access = UARTAccess.UARTAccess()
 
-    def get_available_arguments(self):
+    def drive_help(self):
+        message = "drv help"
+        print(message)
+        self.serial_access.write_and_read(message)
+
+    def motor_help(self):
         message = "mot help"
-        available_arguments = []  # TODO Liste mit verfügbaren Argumenten befüllen
-        return available_arguments
+        print(message)
+        self.serial_access.write_and_read(message)
 
     def enable(self):
         if not self.is_enabled:
@@ -34,12 +39,20 @@ class Motor:
             print("motor is already disabled")
 
     def rotate(self, speed_right, speed_left):
-        message = "mot " + str(speed_right) + " " + str(speed_left)
+        message = "drv " + "setSpd " + str(speed_right) + " " + str(speed_left)
         self.serial_access.write(message)
         print(message)
 
     def stop(self):
-        message = "mot stop"
+        message = "drv " + "setSpd " + str(0) + " " + str(0)
         self.serial_access.write(message)
         print(message)
+
+    def get_speed_right(self):
+        message = "q " + "getSpdR"
+        self.serial_access.write_and_read(message)
+
+    def get_speed_left(self):
+        message = "q " + "getSpdL"
+        self.serial_access.write_and_read(message)
 

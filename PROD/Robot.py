@@ -11,7 +11,7 @@ import time
 
 class Robot:
     name = None
-    motor_pair = None
+    motor_wheels = None
     distance_sensor = None
     camera = None
     winch = None
@@ -24,8 +24,8 @@ class Robot:
     def __init__(self, name):
         print("create new Robot")
         self.name = name
-        self.motor_pair = Motor.Motor()
-        self.motor_pair.enable()
+        self.motor_wheels = Motor.Motor()
+        self.motor_wheels.enable()
         self.distance_sensor = DistanceSensor.DistanceSensor()
         self.camera = Camera.Camera()
         self.winch = Winch.Winch()
@@ -38,65 +38,65 @@ class Robot:
 
     def stop(self):
         print("Robot: stop")
-        self.motor_pair.stop()
+        self.motor_wheels.stop()
 
     def go_forward_slow(self):
         print("Robot: go forward slow")
-        self.motor_pair.rotate(10, 10)
+        self.motor_wheels.rotate(10, 10)
 
     def go_forward_medium(self):
         print("Robot: go forward medium")
-        self.motor_pair.rotate(30, 30)
+        self.motor_wheels.rotate(30, 30)
 
     def go_forward_fast(self):
         print("Robot: go forward fast")
-        self.motor_pair.rotate(50, 50)
+        self.motor_wheels.rotate(50, 50)
 
     def go_backward_slow(self):
         print("Robot: go backward slow")
-        self.motor_pair.rotate(-10, -10)
+        self.motor_wheels.rotate(-10, -10)
 
     def go_backward_medium(self):
         print("Robot: go backward medium")
-        self.motor_pair.rotate(-30, -30)
+        self.motor_wheels.rotate(-30, -30)
 
     def go_backward_fast(self):
         print("Robot: go backward fast")
-        self.motor_pair.rotate(-50, -50)
+        self.motor_wheels.rotate(-50, -50)
 
     def turn_right(self):
         print("Robot: turn right")
-        self.motor_pair.rotate(-10, 10)
+        self.motor_wheels.rotate(-10, 10)
 
     def turn_left(self):
         print("Robot: turn left")
-        self.motor_pair.rotate(10, -10)
+        self.motor_wheels.rotate(10, -10)
 
     def turn_right_90degrees(self):
         print("Robot: turn right 90 degrees")
         self.turn_right()
         duration_milliseconds = 3000  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
+        self.stop()
 
     def turn_left_90degrees(self):
         print("Robot: turn right 90 degrees")
         self.turn_left()
         duration_milliseconds = 3000  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
+        self.stop()
 
     def turn_cam_ahead(self):
-        if not self.camera.camServo.is_ahead:
-            print("Robot: camera turn ahead")
-            self.camera.turn_ahead()
-        else:
-            print("Robot: camera is already turned ahead")
+        print("Robot: camera turn ahead")
+        self.camera.cam_servo.turn_ahead()
 
     def turn_cam_right(self):
-        if self.camera.camServo.is_ahead:
-            print("Robot: camera turn right")
-            self.camera.turn_right()
-        else:
-            print("Robot: camera is already turned right")
+        print("Robot: camera turn right")
+        self.camera.cam_servo.turn_right()
+
+    def turn_cam_left(self):
+        print("Robot: camera turn left")
+        self.camera.cam_servo.turn_left()
 
     def acknowledge_pictogram(self, found_pictogram_english_lowercase):
         print("Robot: acknowledge pictogram")
@@ -163,8 +163,6 @@ class Robot:
         self.stop()
 
 
-
-    # Below: private methods
 
 
 
