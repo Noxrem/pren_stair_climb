@@ -40,8 +40,9 @@ class Motor:
 
     def rotate(self, speed_right, speed_left):
         message = "drv " + "setSpd " + str(speed_right) + " " + str(speed_left)
-        self.serial_access.write(message)
+        self.serial_access.write_and_read(message)
         print(message)
+
 
     def stop(self):
         message = "drv " + "setSpd " + str(0) + " " + str(0)
