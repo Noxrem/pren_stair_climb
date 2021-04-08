@@ -43,7 +43,6 @@ class Motor:
         self.serial_access.write_and_read(message)
         print(message)
 
-
     def stop(self):
         message = "drv " + "setSpd " + str(0) + " " + str(0)
         self.serial_access.write(message)
