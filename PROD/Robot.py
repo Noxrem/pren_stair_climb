@@ -1,6 +1,8 @@
 import Camera
 import DistanceSensor
+import PressureSensor
 import MagnetManager
+import Accelerometer
 import Motor
 import ObjectDetector
 import Speaker
@@ -12,7 +14,11 @@ import time
 class Robot:
     name = None
     motor_wheels = None
-    distance_sensor = None
+    distance_sensor_front = None
+    distance_sensor_side = None
+    pressure_sensor_left = None
+    pressure_sensor_right = None
+    accelerometer = None
     camera = None
     winch = None
     speaker = None
@@ -26,7 +32,11 @@ class Robot:
         self.name = name
         self.motor_wheels = Motor.Motor()
         self.motor_wheels.enable()
-        self.distance_sensor = DistanceSensor.DistanceSensor()
+        self.distance_sensor_front = DistanceSensor.DistanceSensor()
+        self.distance_sensor_side = DistanceSensor.DistanceSensor()
+        self.pressure_sensor_left = PressureSensor.PressureSensor()
+        self.pressure_sensor_right = PressureSensor.PressureSensor()
+        self.accelerometer = Accelerometer.Accelerometer()
         self.camera = Camera.Camera()
         self.winch = Winch.Winch()
         self.speaker = Speaker.Speaker()
@@ -120,12 +130,12 @@ class Robot:
 
     def measure_distance_multiple(self):
         print("Robot: measure distance multiple")
-        distance = self.distance_sensor.get_distance_multiple()
+        distance = self.distance_sensor_front.get_distance_multiple()
         return distance
 
     def measure_distance_single(self):
         print("Robot: measure distance single")
-        distance = self.distance_sensor.get_distance_single()
+        distance = self.distance_sensor_front.get_distance_single()
         return distance
 
     # Below: combined methods
