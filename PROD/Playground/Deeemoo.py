@@ -1,0 +1,2 @@
+class Deeemoo:
+    whatever = None
