@@ -52,35 +52,35 @@ class Robot:
 
     def go_forward_slow(self):
         print("Robot: go forward slow")
-        self.motor_wheels.rotate(10, 10)
+        self.motor_wheels.rotate(20, 20)
 
     def go_forward_medium(self):
         print("Robot: go forward medium")
-        self.motor_wheels.rotate(30, 30)
+        self.motor_wheels.rotate(50, 50)
 
     def go_forward_fast(self):
         print("Robot: go forward fast")
-        self.motor_wheels.rotate(50, 50)
+        self.motor_wheels.rotate(70, 70)
 
     def go_backward_slow(self):
         print("Robot: go backward slow")
-        self.motor_wheels.rotate(-10, -10)
+        self.motor_wheels.rotate(-20, -20)
 
     def go_backward_medium(self):
         print("Robot: go backward medium")
-        self.motor_wheels.rotate(-30, -30)
+        self.motor_wheels.rotate(-50, -50)
 
     def go_backward_fast(self):
         print("Robot: go backward fast")
-        self.motor_wheels.rotate(-50, -50)
+        self.motor_wheels.rotate(-70, -70)
 
     def turn_right(self):
         print("Robot: turn right")
-        self.motor_wheels.rotate(-10, 10)
+        self.motor_wheels.rotate(-30, 30)
 
     def turn_left(self):
         print("Robot: turn left")
-        self.motor_wheels.rotate(10, -10)
+        self.motor_wheels.rotate(30, -30)
 
     def turn_right_90degrees(self):
         print("Robot: turn right 90 degrees")
