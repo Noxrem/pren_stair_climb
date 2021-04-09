@@ -22,7 +22,7 @@ class Speaker:
         message = None
         if found_pictogram_english_lowercase == "hammer":
             message = self.texts[0]
-        elif found_pictogram_english_lowercase == "sandwich":
+        elif found_pictogram_english_lowercase == "wrap":
             message = self.texts[1]
         elif found_pictogram_english_lowercase == "ruler":
             message = self.texts[2]
