@@ -7,7 +7,8 @@ from PIL import Image
 import matplotlib.pyplot as pl
 
 server_socket = socket.socket()
-server_socket.bind(('192.168.137.38', 8000))  # ADD IP HERE
+server_socket.bind(('192.168.137.158', 8000))  # manus yoga
+#server_socket.bind(('192.168.0.18', 8000))  # ADD IP HERE
 server_socket.listen(0)
 
 # Accept a single connection and make a file-like object out of it
@@ -57,6 +58,7 @@ try:
         #image = cv2.imread(image_stream)
 
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # converting the color image to a gray scale image
         hammers = hammer_clsfr.detectMultiScale(gray)
         rulers = ruler_clsfr.detectMultiScale(gray)
@@ -69,41 +71,41 @@ try:
         for (x, y, w, h) in hammers:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, hammer, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, hammer, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         for (x, y, w, h) in rulers:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, ruler, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, ruler, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         for (x, y, w, h) in paintbuckets:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, paintbucket, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, paintbucket, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         for (x, y, w, h) in pencils:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, pencil, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, pencil, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         for (x, y, w, h) in wraps:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, wrap, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, wrap, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         for (x, y, w, h) in wrenchs:
             # going through each and assigning the x,y,w,h
 
-            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # Drawing a rectangle bounding the faces
-            cv2.putText(img, wrench, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(image, wrench, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         if img is None:
             img = pl.imshow(image)
@@ -115,7 +117,7 @@ try:
 
         #print('Image is ' % image.data)
         #image.verify()
-        print('Got Image')
+        #print('Got Image')
 finally:
     connection.close()
     server_socket.close()

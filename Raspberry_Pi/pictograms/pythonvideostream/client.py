@@ -3,17 +3,21 @@ import socket
 import struct
 import time
 import picamera
+import cv2
 
 client_socket = socket.socket()
 
-client_socket.connect(('192.168.1.108', 8000))  # ADD IP HERE
+client_socket.connect(('192.168.137.38', 8000))  # ADD IP HERE
+#client_socket.connect(('192.168.137.38', 8000))manus ip
 
 # Make a file-like object out of the connection
 connection = client_socket.makefile('wb')
 try:
     camera = picamera.PiCamera()
     camera.vflip = True
+    camera.hflip = True
     camera.resolution = (640, 480)
+    camera.iso = 100
     # Start a preview and let the camera warm up for 2 seconds
     camera.start_preview()
     time.sleep(2)
@@ -33,7 +37,7 @@ try:
         stream.seek(0)
         connection.write(stream.read())
         # If we've been capturing for more than 30 seconds, quit
-        if time.time() - start > 60:
+        if time.time() - start > 600:
             break
         # Reset the stream for the next capture
         stream.seek(0)
