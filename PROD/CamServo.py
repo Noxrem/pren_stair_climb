@@ -1,7 +1,5 @@
 import UARTAccess
 
-# info: left = 0 degrees / ahead = 90 degrees / right = 180 degrees
-
 
 class CamServo:
     degrees = None
@@ -12,6 +10,8 @@ class CamServo:
         self.degrees = 90
         self.serial_access = UARTAccess.UARTAccess()
 
+#  TODO: define degrees
+
     def turn_ahead(self):
         if self.degrees != 90:
             print("turn cam servo ahead")
@@ -21,34 +21,39 @@ class CamServo:
         else:
             print("cam servo is already turned ahead")
 
-    def turn_right(self):
+    def turn_up(self):
         if self.degrees != 180:
-            print("turn cam servo right")
+            print("turn cam servo up")
             message = "srv pta4 180"
             self.serial_access.write(message)
             self.degrees = 180
         else:
-            print("cam servo is already turned right")
+            print("cam servo is already turned up")
 
-    def turn_left(self):
+    def turn_down(self):
         if self.degrees != 0:
-            print("turn cam servo left")
+            print("turn cam servo down")
             message = "srv pta4 0"
             self.serial_access.write(message)
             self.degrees = 0
         else:
-            print("cam servo is already turned left")
+            print("cam servo is already turned down")
 
-    def turn_one_degree_right(self):
+    def turn_one_degree_up(self):
         if self.degrees != 180:
             self.degrees = self.degrees + 1
-            print("turn cam servo 1 degree right. Actual degrees: " + str(self.degrees))
+            print("turn cam servo 1 degree up. Actual degrees: " + str(self.degrees))
             message = ("srv pta4 " + str(self.degrees))
             self.serial_access.write(message)
+        else:
+            print("cam servo is already turned up")
 
-    def turn_one_degree_left(self):
+    def turn_one_degree_down(self):
         if self.degrees != 0:
             self.degrees = self.degrees - 1
-            print("turn cam servo 1 degree left. Actual degrees: " + str(self.degrees))
+            print("turn cam servo 1 degree down. Actual degrees: " + str(self.degrees))
             message = ("srv pta4 " + str(self.degrees))
             self.serial_access.write(message)
+        else:
+            print("cam servo is already turned down")
+
