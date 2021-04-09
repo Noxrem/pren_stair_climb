@@ -2,7 +2,6 @@
 class MagnetManager:
     is_switched_on_magnet_bridge = None
     is_switched_on_magnet_socket = None
-    serial_access = None
 
     def __init__(self):
         print("create new MagnetManager")
