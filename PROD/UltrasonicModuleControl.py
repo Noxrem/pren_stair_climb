@@ -25,8 +25,9 @@ class UltrasonicModuleControl:
     sensor_list = None
 
     def __init__(self):
-        self.sensor_front = UltrasonicModule("1", self.GPIO_ECHO_1, self.GPIO_TRIGGER_1)
-        self.sensor_side = UltrasonicModule("2", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2)
+        print("create new ultrasonic module control")
+        self.sensor_front = UltrasonicModule("sensor_front", self.GPIO_ECHO_1, self.GPIO_TRIGGER_1)
+        self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2)
         self.sensor_list = [self.sensor_front, self.sensor_side]
 
     def get_distance_in_cm(self):

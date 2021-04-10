@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 
 class UltrasonicModule:
     def __init__(self, name, echo_gpio, trigger_gpio):
+        print("create new ultrasonic module")
         self.name = name
         self.echo_gpio = echo_gpio
         self.trigger_gpio = trigger_gpio
