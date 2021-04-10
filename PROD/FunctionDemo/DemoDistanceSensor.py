@@ -1,4 +1,5 @@
 import UltrasonicModuleControl
 
 ultrasonic_module_control = UltrasonicModuleControl.UltrasonicModuleControl()
-print(ultrasonic_module_control.get_distance_in_cm())
+while True:
+    print(ultrasonic_module_control.get_distance_in_cm())
