@@ -1,5 +1,5 @@
 import Camera
-import DistanceSensor
+import UltrasonicModuleControl
 import PressureSensor
 import MagnetManager
 import Accelerometer
@@ -14,9 +14,7 @@ import time
 class Robot:
     name = None
     motor_wheels = None
-    distance_sensor_front = None
-    distance_sensor_side = None
-    pressure_sensor_left = None
+    ultrasonic_module_control = None
     pressure_sensor_right = None
     accelerometer = None
     camera = None
@@ -32,8 +30,8 @@ class Robot:
         self.name = name
         self.motor_wheels = Motor.Motor()
         self.motor_wheels.enable()
-        self.distance_sensor_front = DistanceSensor.DistanceSensor()
-        self.distance_sensor_side = DistanceSensor.DistanceSensor()
+        self.ultrasonic_module_control = UltrasonicModuleControl.UltrasonicModuleControl()
+        # self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # TODO: Do we have to calibrate after each start?
         self.pressure_sensor_left = PressureSensor.PressureSensor()
         self.pressure_sensor_right = PressureSensor.PressureSensor()
         self.accelerometer = Accelerometer.Accelerometer()
@@ -114,7 +112,7 @@ class Robot:
 
     def pull_up(self):
         print("Robot: winch pull up")
-        self.winch.pull_up()
+        self.winch.pull_up(80)  # TODO: define speed
 
     def let_socket_down(self):
         print("Robot: let socket down")
@@ -128,14 +126,14 @@ class Robot:
         print("Robot: celebrate")
         self.speaker.celebrate(found_pictogram_english_lowercase)
 
-    def measure_distance_multiple(self):
-        print("Robot: measure distance multiple")
-        distance = self.distance_sensor_front.get_distance_multiple()
+    def measure_distance_sensor_front(self):
+        print("Robot: measure distance sensor front")
+        distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         return distance
 
-    def measure_distance_single(self):
-        print("Robot: measure distance single")
-        distance = self.distance_sensor_front.get_distance_single()
+    def measure_distance_sensor_side(self):
+        print("Robot: measure distance sensor side")
+        distance = self.ultrasonic_module_control.sensor_side.get_distance_multiple_in_cm()
         return distance
 
     # Below: combined methods
@@ -166,10 +164,10 @@ class Robot:
     def go_forward_and_get_distance(self):
         print("Robot: go forward and get distance")
         self.go_forward_medium()
-        distance = self.measure_distance_multiple()
+        distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         offset_to_slow_down_millimeter = 20000  # TODO: Define offset
         while distance > offset_to_slow_down_millimeter:
-            distance = self.measure_distance_multiple()
+            distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         self.stop()
 
 

@@ -1,5 +1,4 @@
-import DistanceSensor
+import UltrasonicModuleControl
 
-distance_sensor = DistanceSensor.DistanceSensor()
-print(distance_sensor.get_distance_single())
-print(distance_sensor.get_distance_multiple())
+ultrasonic_module_control = UltrasonicModuleControl.UltrasonicModuleControl()
+print(ultrasonic_module_control.get_distance_in_cm())
