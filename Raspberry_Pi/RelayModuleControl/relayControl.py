@@ -11,7 +11,7 @@
 # RPi4 pinout: https://www.raspberrypi.org/documentation/usage/gpio/
 
 # Prerequisites
-# python -m pip install smbus2
+# python -m pip install smbus
 
 # Imports
 import sys
