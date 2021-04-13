@@ -1,8 +1,10 @@
+import logging
+
 class Accelerometer:
 
     #  TODO: Nathi: tbd.
 
     def __init__(self):
-        print("create new Accelerometer")
+        logging.info("create new Accelerometer")
 
 

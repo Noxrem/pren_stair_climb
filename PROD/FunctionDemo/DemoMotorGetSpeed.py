@@ -1,7 +1,8 @@
 import Motor
+import logging
 
 motor = Motor.Motor()
-print("**************************Speed right***************************************")
+logging.info("**************************Speed right***************************************")
 motor.get_speed_right()
-print("**************************Speed left***************************************")
+logging.info("**************************Speed left***************************************")
 motor.get_speed_left()

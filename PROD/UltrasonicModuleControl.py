@@ -5,6 +5,7 @@
 import time
 from UltrasonicModule import UltrasonicModule
 import numpy
+import logging
 
 
 class UltrasonicModuleControl:
@@ -25,7 +26,7 @@ class UltrasonicModuleControl:
     sensor_list = None
 
     def __init__(self):
-        print("create new ultrasonic module control")
+        logging.info("create new ultrasonic module control")
         self.sensor_front = UltrasonicModule("sensor_front", self.GPIO_ECHO_1, self.GPIO_TRIGGER_1)
         self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2)
         self.sensor_list = [self.sensor_front, self.sensor_side]
@@ -50,7 +51,7 @@ class UltrasonicModuleControl:
             distance = self.get_distance_mean(sensor, self.NUMBER_MEASUREMENTS)
             if distance - distance_sensor_to_object < 0.05:
                 calibration_ongoing = False
-                print(f"Calibration of sensor {sensor.name} successful: Offset = %.2f cm" % sensor.offset)
+                logging.info(f"Calibration of sensor {sensor.name} successful: Offset = %.2f cm" % sensor.offset)
             else:
                 sensor.offset = 0
 

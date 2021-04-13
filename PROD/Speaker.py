@@ -1,5 +1,6 @@
 from gtts import gTTS
 from playsound import playsound
+import logging
 
 
 class Speaker:
@@ -8,7 +9,7 @@ class Speaker:
     language = None
 
     def __init__(self):
-        print("create new speaker")
+        logging.info("create new speaker")
         self.texts = ["This is a hammer",
                       "This is a sandwich",
                       "This is a ruler",
@@ -33,19 +34,19 @@ class Speaker:
         elif found_pictogram_english_lowercase == "wrench":
             message = self.texts[5]
         slow = False
-        print("Create MP3 file with pictogram text")
+        logging.info("Create MP3 file with pictogram text")
         tts = gTTS(text=message, lang=self.language, slow=slow)
         tts.save('TTS_message_pictogram.mp3')
-        print("Play MP3 file with pictogram text")
+        logging.info("Play MP3 file with pictogram text")
         playsound('TTS_message_pictogram.mp3')
 
     def celebrate(self, found_pictogram_english_lowercase):
-        print("celebrate")
+        logging.info("celebrate")
         message = "We have found the " + found_pictogram_english_lowercase
         slow = False
         tts = gTTS(text=message, lang=self.language, slow=slow)
         tts.save('TTS_message_celebrate.mp3')
-        print("Play MP3 file celebration")
+        logging.info("Play MP3 file celebration")
         playsound('TTS_message_celebrate.mp3')
         playsound(self.celebration_sound)
 

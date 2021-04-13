@@ -1,8 +1,10 @@
+import logging
+
 class PressureSensor:
 
     #  TODO: Nathi: tbd.
 
     def __init__(self):
-        print("create new PressureSensor")
+        logging.info("create new PressureSensor")
 
 

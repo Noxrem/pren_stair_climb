@@ -1,4 +1,5 @@
 import UARTAccess
+import logging
 
 
 class Motor:
@@ -6,47 +7,47 @@ class Motor:
     serial_access = None
 
     def __init__(self):
-        print("create new motor")
+        logging.info("create new motor")
         self.is_enabled = False
         self.serial_access = UARTAccess.UARTAccess()
 
     def drive_help(self):
         message = "drv help"
-        print(message)
+        logging.info(message)
         self.serial_access.write_and_read(message)
 
     def motor_help(self):
         message = "mot help"
-        print(message)
+        logging.info(message)
         self.serial_access.write_and_read(message)
 
     def enable(self):
         if not self.is_enabled:
             message = "mot enable"
-            print(message)
+            logging.info(message)
             self.serial_access.write(message)
             self.is_enabled = True
         else:
-            print("motor is already enabled")
+            logging.warning("motor is already enabled")
 
     def disable(self):
         if self.is_enabled:
             message = "mot disable"
-            print(message)
+            logging.info(message)
             self.serial_access.write(message)
             self.is_enabled = False
         else:
-            print("motor is already disabled")
+            logging.warning("motor is already disabled")
 
     def rotate(self, speed_right, speed_left):
         message = "drv " + "setSpd " + str(speed_right) + " " + str(speed_left)
         self.serial_access.write_and_read(message)
-        print(message)
+        logging.info(message)
 
     def stop(self):
         message = "drv " + "setSpd " + str(0) + " " + str(0)
         self.serial_access.write(message)
-        print(message)
+        logging.info(message)
 
     def get_speed_right(self):
         message = "q " + "getSpdR"

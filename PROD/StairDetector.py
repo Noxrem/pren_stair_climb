@@ -2,6 +2,7 @@
 
 import cv2
 import numpy as np
+import logging
 
 
 class StairDetector:
@@ -13,7 +14,7 @@ class StairDetector:
     detection_counter = None
 
     def __init__(self):
-        print("create new stair detector")
+        logging.info("create new stair detector")
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         self.bottom_left_corner_of_text = (10, 100)
         self.font_scale = 1
@@ -25,7 +26,7 @@ class StairDetector:
         pass
 
     def find_stair(self, video_capture):
-        print("find stair")
+        logging.info("find stair")
         window_name = "Trackbar Board"
 
         trackbar0_name = 'NoVLines'
@@ -83,14 +84,14 @@ class StairDetector:
                     if abs(x2 - x1) > line_h_length and abs(y2 - y1) < line_rotation:
                         cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
                         horizontal_lines.append(line)
-                        print("h" + str(len(horizontal_lines)))
+                        logging.debug("h" + str(len(horizontal_lines)))
                     if abs(y2 - y1) > line_v_length and abs(x2 - x1) < 20:  # Rotation line_v
                         cv2.line(frame, (x1, y1), (x2, y2), (255, 0, 0), 5)
                         vertical_lines.append(line)
-                        print("v" + str(len(vertical_lines)))
+                        logging.debug("v" + str(len(vertical_lines)))
                     if len(horizontal_lines) >= amount_h_lines and len(vertical_lines) >= amount_v_lines and len(
                             lines) >= amount_lines:
-                        print("stair detected")
+                        logging.info("stair detected")
                         cv2.putText(frame, 'stair detected!',
                                     self.bottom_left_corner_of_text,
                                     self.font,
