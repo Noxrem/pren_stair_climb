@@ -6,22 +6,22 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(mess
 
 
 servo = CamServo.CamServo()
-logging.info("********************servo turn left*********************")
-servo.turn_left()
+logging.info("********************servo turn up*********************")
+servo.turn_up()
 time.sleep(5)
 logging.info("********************servo turn ahead*********************")
 servo.turn_ahead()
 time.sleep(5)
-logging.info("********************servo turn left*********************")
-servo.turn_right()
+logging.info("********************servo turn down*********************")
+servo.turn_down()
 time.sleep(5)
 logging.info("********************servo turn ahead*********************")
 servo.turn_ahead()
 time.sleep(5)
-logging.info("********************servo turn 10 times 1 degree left**********************")
+logging.info("********************servo turn 10 times 1 degree up**********************")
 for i in range(10):
-    servo.turn_one_degree_left()
-logging.info("********************servo turn 10 times 1 degree right**********************")
+    servo.turn_one_degree_up()
+logging.info("********************servo turn 10 times 1 degree down**********************")
 for i in range(10):
-    servo.turn_one_degree_right()
+    servo.turn_one_degree_down()
 
