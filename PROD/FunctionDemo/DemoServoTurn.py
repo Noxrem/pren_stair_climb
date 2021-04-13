@@ -2,6 +2,9 @@ import CamServo
 import time
 import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+
+
 servo = CamServo.CamServo()
 logging.info("********************servo turn left*********************")
 servo.turn_left()

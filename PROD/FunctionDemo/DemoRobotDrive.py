@@ -1,5 +1,9 @@
 import Robot
 import time
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+
 
 robot = Robot.Robot("Gefyra")
 robot.go_forward_slow()
