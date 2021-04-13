@@ -1,6 +1,7 @@
 import UARTAccess
 import Accelerometer
 import time
+import logging
 
 
 class Winch:
@@ -9,7 +10,7 @@ class Winch:
     accelerometer = None
 
     def __init__(self):
-        print("create new Winch")
+        logging.info("create new Winch")
         self.serial_access = UARTAccess.UARTAccess()
         self.accelerometer = Accelerometer.Accelerometer()
 
@@ -19,15 +20,15 @@ class Winch:
         time.sleep(5)
         while True:
             if self.accelerometer.get_acceleration_z_direction() == 0:
-                print("pulled up")
+                logging.info("pulled up")
                 break
 
     def pull_up_fast(self):
-        print("pull up fast")
+        logging.info("pull up fast")
         self.pull_up(100)
 
     def pull_up_slow(self):
-        print("pull up slow")
+        logging.info("pull up slow")
         self.pull_up(30)
 
 

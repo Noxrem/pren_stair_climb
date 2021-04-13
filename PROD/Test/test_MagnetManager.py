@@ -1,8 +1,8 @@
 from unittest import TestCase
 import MagnetManager
 
-class TestMagnetManager(TestCase):
 
+class TestMagnetManager(TestCase):
     magnet_manager = None
 
     def setUp(self):

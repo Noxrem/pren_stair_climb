@@ -1,10 +1,11 @@
 import time
 import RPi.GPIO as GPIO
+import logging
 
 
 class UltrasonicModule:
     def __init__(self, name, echo_gpio, trigger_gpio):
-        print("create new ultrasonic module")
+        logging.info("create new ultrasonic module")
         self.name = name
         self.echo_gpio = echo_gpio
         self.trigger_gpio = trigger_gpio
@@ -43,7 +44,7 @@ class UltrasonicModule:
         return distance_in_cm
 
     def get_distance_multiple_in_cm(self):
-        print("get distance multiple")
+        logging.info("get distance multiple")
         distances = []
         counter = 0
         sum_distances = 0

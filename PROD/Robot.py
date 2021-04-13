@@ -9,6 +9,7 @@ import Speaker
 import StairDetector
 import Winch
 import time
+import logging
 
 
 class Robot:
@@ -26,7 +27,7 @@ class Robot:
     found_object = None
 
     def __init__(self, name):
-        print("create new Robot")
+        logging.info("create new Robot")
         self.name = name
         self.motor_wheels = Motor.Motor()
         self.motor_wheels.enable()
@@ -45,101 +46,101 @@ class Robot:
         self.stair_detector = StairDetector.StairDetector()
 
     def stop(self):
-        print("Robot: stop")
+        logging.info("Robot: stop")
         self.motor_wheels.stop()
 
     def go_forward_slow(self):
-        print("Robot: go forward slow")
+        logging.info("Robot: go forward slow")
         self.motor_wheels.rotate(20, 20)
 
     def go_forward_medium(self):
-        print("Robot: go forward medium")
+        logging.info("Robot: go forward medium")
         self.motor_wheels.rotate(50, 50)
 
     def go_forward_fast(self):
-        print("Robot: go forward fast")
+        logging.info("Robot: go forward fast")
         self.motor_wheels.rotate(70, 70)
 
     def go_backward_slow(self):
-        print("Robot: go backward slow")
+        logging.info("Robot: go backward slow")
         self.motor_wheels.rotate(-20, -20)
 
     def go_backward_medium(self):
-        print("Robot: go backward medium")
+        logging.info("Robot: go backward medium")
         self.motor_wheels.rotate(-50, -50)
 
     def go_backward_fast(self):
-        print("Robot: go backward fast")
+        logging.info("Robot: go backward fast")
         self.motor_wheels.rotate(-70, -70)
 
     def turn_right(self):
-        print("Robot: turn right")
+        logging.info("Robot: turn right")
         self.motor_wheels.rotate(-30, 30)
 
     def turn_left(self):
-        print("Robot: turn left")
+        logging.info("Robot: turn left")
         self.motor_wheels.rotate(30, -30)
 
     def turn_right_90degrees(self):
-        print("Robot: turn right 90 degrees")
+        logging.info("Robot: turn right 90 degrees")
         self.turn_right()
         duration_milliseconds = 3000  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
         self.stop()
 
     def turn_left_90degrees(self):
-        print("Robot: turn right 90 degrees")
+        logging.info("Robot: turn right 90 degrees")
         self.turn_left()
         duration_milliseconds = 3000  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
         self.stop()
 
     def turn_cam_ahead(self):
-        print("Robot: camera turn ahead")
+        logging.info("Robot: camera turn ahead")
         self.camera.cam_servo.turn_ahead()
 
     def turn_cam_right(self):
-        print("Robot: camera turn right")
+        logging.info("Robot: camera turn right")
         self.camera.cam_servo.turn_right()
 
     def turn_cam_left(self):
-        print("Robot: camera turn left")
+        logging.info("Robot: camera turn left")
         self.camera.cam_servo.turn_left()
 
     def acknowledge_pictogram(self, found_pictogram_english_lowercase):
-        print("Robot: acknowledge pictogram")
+        logging.info("Robot: acknowledge pictogram")
         self.speaker.play_text(found_pictogram_english_lowercase)
 
     def pull_up(self):
-        print("Robot: winch pull up")
+        logging.info("Robot: winch pull up")
         self.winch.pull_up(80)  # TODO: define speed
 
     def let_socket_down(self):
-        print("Robot: let socket down")
+        logging.info("Robot: let socket down")
         self.magnet_manager.set_off_power_socket()
 
     def let_bridge_down(self):
-        print("Robot: let bridge down")
+        logging.info("Robot: let bridge down")
         self.magnet_manager.set_off_power_bridge()
 
     def celebrate(self, found_pictogram_english_lowercase):
-        print("Robot: celebrate")
+        logging.info("Robot: celebrate")
         self.speaker.celebrate(found_pictogram_english_lowercase)
 
     def measure_distance_sensor_front(self):
-        print("Robot: measure distance sensor front")
+        logging.info("Robot: measure distance sensor front")
         distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         return distance
 
     def measure_distance_sensor_side(self):
-        print("Robot: measure distance sensor side")
+        logging.info("Robot: measure distance sensor side")
         distance = self.ultrasonic_module_control.sensor_side.get_distance_multiple_in_cm()
         return distance
 
     # Below: combined methods
 
     def turn_and_find_pictogram(self, is_turn_direction_left):
-        print("Robot: turn and find pictogram")
+        logging.info("Robot: turn and find pictogram")
         if is_turn_direction_left:
             self.turn_left()
         else:
@@ -147,11 +148,11 @@ class Robot:
         is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform(self.camera.capture)
         self.stop()
         if not is_found:
-            print("pictogram couldn't be found")
+            logging.warning("pictogram couldn't be found")
             #  TODO: Define what to do if not is found
 
     def turn_and_find_stair(self, is_turn_direction_left):
-        print("Robot: turn and find stair")
+        logging.info("Robot: turn and find stair")
         if is_turn_direction_left:
             self.turn_left()
         else:
@@ -162,7 +163,7 @@ class Robot:
         self.stop()
 
     def go_forward_and_get_distance(self):
-        print("Robot: go forward and get distance")
+        logging.info("Robot: go forward and get distance")
         self.go_forward_medium()
         distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         offset_to_slow_down_millimeter = 20000  # TODO: Define offset

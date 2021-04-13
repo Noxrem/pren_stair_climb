@@ -1,5 +1,6 @@
 import cv2
 import CamServo
+import logging
 from picamera.array import PiRGBArray
 
 
@@ -11,7 +12,7 @@ class Camera:
     rawCapture = None
 
     def __init__(self):
-        print("create new camera")
+        logging.info("create new camera")
         self.cam_servo = CamServo.CamServo()
         self.capture = cv2.VideoCapture(0)
         self.cam_resolution = (640, 480)
