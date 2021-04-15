@@ -43,12 +43,24 @@ tError bridgeAlignParseCommand(const char *cmd)
   else if (strncmp(cmd, "setSpd", sizeof("setSpd")-1) == 0)
 	{
 		cmd += sizeof("setSpd");
-		bool_t aligned = false;
+		bool aligned = false;
+		int16_t algnSpeedR = ALIGN_SPEED;				// The speed the device is aligned with
+		int16_t algnSpeedL = ALIGN_SPEED;
 
-		driveSetSpeed(ALIGN_SPEED, ALIGN_SPEED);
+
+		driveSetSpeed(algnSpeedR, algnSpeedL);	// Start the motors
 		while(aligned)
 		{
-			if(!(SWITCH_LEFT_PDIR ));	// TODO fertig implementieren
+			if(!(SWITCH_LEFT_PDIR & (uint32_t)(1 << SWITCH_LEFT_PIN)))	// if the left switch is activated (touching the stairs)
+			{
+				algnSpeedL = 0;
+				driveSetSpeed(algnSpeedR, algnSpeedL);	// stop the left wheel and continue with the right wheel
+			}
+			if(!(SWITCH_RIGHT_PDIR & (uint32_t)(1 << SWITCH_RIGHT_PIN)))	// if the left switch is activated (touching the stairs)
+			{
+				algnSpeedR = 0;
+				driveSetSpeed(algnSpeedR, algnSpeedL);	// stop the right wheel and continue with the left wheel
+			}
 		}
 		result = EC_SUCCESS;
 	}
