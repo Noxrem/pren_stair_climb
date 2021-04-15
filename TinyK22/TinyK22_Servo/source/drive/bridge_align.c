@@ -61,6 +61,10 @@ tError bridgeAlignParseCommand(const char *cmd)
 				algnSpeedR = 0;
 				driveSetSpeed(algnSpeedR, algnSpeedL);	// stop the right wheel and continue with the left wheel
 			}
+			if(!algnSpeedL && !algnSpeedR)	// Leave the while-loop, when both switches have been touched (the device is aligned)
+			{
+				break;	// leave the while loop
+			}
 		}
 		result = EC_SUCCESS;
 	}
