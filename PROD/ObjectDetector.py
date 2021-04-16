@@ -1,4 +1,6 @@
 # TODO: create test class
+import time
+
 import cv2
 import logging
 
@@ -12,8 +14,8 @@ class ObjectDetector:
     pencil = "pencil"
     wrap = "wrap"
     wrench = "wrench"
-    target = None
-    threshold = 10
+    threshold = 5
+    timeout = 30 # in seconds
 
     def __init__(self):
         logging.info("create new object detector")
@@ -29,25 +31,26 @@ class ObjectDetector:
         return is_found, found_pictogram, position_x, position_y
 
     # Below: private methods
-
+    # ugly but do the job
     def _do_haar_cascade(self, video_capture):
         logging.info("do haar cascade")
         is_found = False
         found_object = None
         position_x = None
         position_y = None
+        timeout_start = time.time()
 
-        print("init classifier")
+        logging.info("init classifier")
         hammer_clsfr = cv2.CascadeClassifier(self.base_path + self.hammer + ".xml")
         ruler_clsfr = cv2.CascadeClassifier(self.base_path + self.ruler + ".xml")
         paintbucket_clsfr = cv2.CascadeClassifier(self.base_path + self.paintbucket + ".xml")
         wrap_clsfr = cv2.CascadeClassifier(self.base_path + self.wrap + ".xml")
         wrench_clsfr = cv2.CascadeClassifier(self.base_path + self.wrench + ".xml")
-        pencil_clsfr = cv2.CascadeClassifier(self.base_path + self.pencil + ".xml")
+        # pencil_clsfr = cv2.CascadeClassifier(self.base_path + self.pencil + ".xml")
 
         threshold_hammer = threshold_ruler = threshold_paintbucket = threshold_wrap = threshold_wrench = threshold_pencil = 0
 
-        while not is_found:
+        while not is_found and time.time() < timeout_start + self.timeout:
             # get capture frames
             ret, frame = video_capture.read()
             # converting the color image to a gray scale image
@@ -59,68 +62,75 @@ class ObjectDetector:
             paintbuckets = paintbucket_clsfr.detectMultiScale(gray)
             wraps = wrap_clsfr.detectMultiScale(gray)
             wrenches = wrench_clsfr.detectMultiScale(gray)
-            pencils = pencil_clsfr.detectMultiScale(gray)
+            # pencils = pencil_clsfr.detectMultiScale(gray)
 
-            if len(hammers > 1):
+            if len(hammers) >= 1:
                 threshold_hammer += len(hammers)
                 logging.info("saw some hammers")
 
-            if len(rulers > 1):
+            if len(rulers) >= 1:
                 threshold_ruler += len(rulers)
                 logging.info("saw some rulers")
 
-            if len(paintbuckets > 1):
+            if len(paintbuckets) >= 1:
                 threshold_paintbucket += len(paintbuckets)
                 logging.info("saw some paintbuckets")
 
-            if len(wraps > 1):
+            if len(wraps) >= 1:
                 threshold_wrap += len(wraps)
                 logging.info("saw some wraps")
 
-            if len(wrenches > 1):
+            if len(wrenches) >= 1:
                 threshold_wrench += len(wrenches)
                 logging.info("saw some wrenches")
 
-            if len(pencils > 1):
-                threshold_pencil += len(pencils)
-                logging.info("saw some pencils")
+            # if len(pencils) >= 1:
+            #     threshold_pencil += len(pencils)
+            #     logging.info("saw some pencils")
 
             if threshold_hammer >= self.threshold:
                 is_found = True
                 found_object = self.hammer
                 position_x, position_y, w, h = hammers[0]
                 logging.info("finally, it must be the hammer")
+                break
 
             if threshold_ruler >= self.threshold:
                 is_found = True
                 found_object = self.ruler
                 position_x, position_y, w, h = rulers[0]
                 logging.info("finally, it must be the ruler")
+                break
 
             if threshold_paintbucket >= self.threshold:
                 is_found = True
                 found_object = self.paintbucket
                 position_x, position_y, w, h = paintbuckets[0]
                 logging.info("finally, it must be the paintbucket")
+                break
 
             if threshold_wrap >= self.threshold:
                 is_found = True
                 found_object = self.wrap
                 position_x, position_y, w, h = wraps[0]
                 logging.info("finally, it must be the wrap")
+                break
 
             if threshold_wrench >= self.threshold:
                 is_found = True
                 found_object = self.wrench
                 position_x, position_y, w, h = wrenches[0]
                 logging.info("finally, it must be the wrench")
+                break
 
-            if threshold_pencil >= self.threshold:
-                is_found = True
-                found_object = self.pencil
-                position_x, position_y, w, h = pencils[0]
-                logging.info("finally, it must be the pencil")
+            # if threshold_pencil >= self.threshold:
+            #     is_found = True
+            #     found_object = self.pencil
+            #     position_x, position_y, w, h = pencils[0]
+            #     logging.info("finally, it must be the pencil")
+            #     break
 
-            logging.info("nothing found, try again..")
+            timediff = timeout_start + self.timeout - time.time()
+            logging.warning("nothing found, try again for max " + timediff.__str__() + " seconds..")
 
         return is_found, found_object, position_x, position_y

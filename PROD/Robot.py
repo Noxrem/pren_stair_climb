@@ -147,7 +147,9 @@ class Robot:
             self.turn_right()
         is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform(self.camera.capture)
         self.stop()
-        if not is_found:
+        if is_found and self.found_pictogram is not None:
+            logging.info("Robot: got target, it is - " + self.found_pictogram)
+        else:
             logging.warning("pictogram couldn't be found")
             #  TODO: Define what to do if not is found
 
