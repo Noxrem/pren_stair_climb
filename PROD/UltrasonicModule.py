@@ -16,6 +16,7 @@ class UltrasonicModule:
         self.amount_of_multiple_measurements = 5
 
     def get_distance(self):
+        logging.debug("ultrasonic module get distance")
         # set Trigger to HIGH
         GPIO.output(self.trigger_gpio, True)
 
@@ -44,7 +45,7 @@ class UltrasonicModule:
         return distance_in_cm
 
     def get_distance_multiple_in_cm(self):
-        logging.info("get distance multiple")
+        logging.debug("get distance multiple in cm")
         distances = []
         counter = 0
         sum_distances = 0
