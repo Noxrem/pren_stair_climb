@@ -15,12 +15,13 @@
 #define SOURCES_DRIVE_BRIDGE_ALIGN_H_
 
 #define SWITCH_RIGHT_PDIR GPIOD->PDIR
-#define SWITCH_RIGHT_PIN	1
+#define SWITCH_RIGHT_PIN	5
 #define SWITCH_LEFT_PDIR	GPIOD->PDIR
-#define SWITCH_LEFT_PIN		2
+#define SWITCH_LEFT_PIN		4
 
-#define ALIGN_SPEED 20	// Speed for the alignment
+#define DEFAULT_ALIGN_SPEED 20	// Speed for the alignment
 
+void ProcessBridgeAlign(void);
 tError bridgeAlignParseCommand(const char *cmd);
 void bridgeAlignInit(void);
 
