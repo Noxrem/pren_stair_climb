@@ -112,11 +112,11 @@ tError bridgeAlignParseCommand(const char *cmd)
 void bridgeAlignInit(void)
 {
 	// GPIO direction
-	GPIOD->PDDR &= ~(1<<4 | 1<<5);	// Configure PTD1 and PTD2 as input
+	GPIOB->PDDR &= ~(1<<1 | 1<<3);	// Configure PTB1 and PTB3 as input
 
 	// Set input with pull-up
-	PORTD->PCR[4] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA1 as GPIO with pull-up
-	PORTD->PCR[5] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA2 as GPIO with pull-up
+	PORTB->PCR[1] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA1 as GPIO with pull-up
+	PORTB->PCR[3] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA2 as GPIO with pull-up
 
 	// Set default alignment speed
 	algnSpeed = DEFAULT_ALIGN_SPEED;
