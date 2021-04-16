@@ -12,6 +12,7 @@ class TargetPlatform:
     list_pictograms = None
 
     def __init__(self):
+        # Info: pictogram with number 5 isn't on the target plattform
         logging.info("create new target plattform")
         self.pictogram_hammer = Pictogram.Pictogram("hammer", 0)
         self.pictogram_wrap = Pictogram.Pictogram("wrap", 1)
