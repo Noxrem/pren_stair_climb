@@ -11,7 +11,7 @@ class Speaker:
     def __init__(self):
         logging.info("create new speaker")
         self.texts = ["This is a hammer",
-                      "This is a sandwich",
+                      "This is a wrap",
                       "This is a ruler",
                       "This is a paint bucket",
                       "This is a pencil",
