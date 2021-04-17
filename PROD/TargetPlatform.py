@@ -17,7 +17,7 @@ class TargetPlatform:
         logging.info("create new target plattform")
         self.pictogram_hammer = Pictogram.Pictogram("hammer", 0)
         self.pictogram_wrap = Pictogram.Pictogram("wrap", 1)
-        self.pictogram_paint_bucket = Pictogram.Pictogram("paint_bucket", 2)
+        self.pictogram_paint_bucket = Pictogram.Pictogram("paintbucket", 2)
         self.pictogram_ruler = Pictogram.Pictogram("ruler", 3)
         self.pictogram_wrench = Pictogram.Pictogram("wrench", 4)
         self.pictogram_pencil = Pictogram.Pictogram("pencil", 5)
