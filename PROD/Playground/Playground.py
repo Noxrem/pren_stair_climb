@@ -1,10 +1,9 @@
-# TODO: is working with laptop. Test with raspberry as soon as camera is delivered. Maybe we have to adapt 55 - 57
-
 import cv2
 import numpy as np
+import logging
 
 
-class Playground:
+class StairDetector:
     font = None
     bottom_left_corner_of_text = None
     font_scale = None
@@ -50,7 +49,7 @@ class Playground:
         cv2.createTrackbar(trackbar6_name, window_name, 1, 200, self.nothing)  # best value: 1
         cv2.createTrackbar(trackbar7_name, window_name, 18, 255,
                            self.nothing)  # best value: 100  # TODO: define best value
-        cv2.createTrackbar(trackbar8_name, window_name, 170, 255,
+        cv2.createTrackbar(trackbar8_name, window_name, 43, 255,
                            self.nothing)  # best value: 120  # TODO: define best value
         cv2.createTrackbar(trackbar9_name, window_name, 60, 300,
                            self.nothing)  # best value: ?  # TODO: define best value. Depends on frame rate
@@ -68,16 +67,11 @@ class Playground:
             target_amount_detections = cv2.getTrackbarPos(trackbar9_name, window_name)
             video = video_capture
             ret, orig_frame = video.read()
-            orig_frame = cv2.flip(orig_frame, flipCode=-1)
             frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
             # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) # TODO: Remove Code
             # color1 = np.array([0, 0, 0])
             # color2 = np.array([255, 255, 255])
             # mask = cv2.inRange(hsv, color1, color2)
-            v = np.median(orig_frame)
-            sigma = 0.33
-            lower = int(max(0, (1.0-sigma)*v))
-            upper = int(min(255, (1.0 - sigma) * v))
             edges = cv2.Canny(frame, canny1, canny2)
             lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, maxLineGap=max_line_gap)
             if lines is not None:
@@ -88,11 +82,11 @@ class Playground:
                     if abs(x2 - x1) > line_h_length and abs(y2 - y1) < line_rotation:
                         cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
                         horizontal_lines.append(line)
-                        logging.info("h" + str(len(horizontal_lines)))
+                        logging.debug("h" + str(len(horizontal_lines)))
                     if abs(y2 - y1) > line_v_length and abs(x2 - x1) < 20:  # Rotation line_v
                         cv2.line(frame, (x1, y1), (x2, y2), (255, 0, 0), 5)
                         vertical_lines.append(line)
-                        logging.info("v" + str(len(vertical_lines)))
+                        logging.debug("v" + str(len(vertical_lines)))
                     if len(horizontal_lines) >= amount_h_lines and len(vertical_lines) >= amount_v_lines and len(
                             lines) >= amount_lines:
                         logging.info("stair detected")
@@ -106,7 +100,7 @@ class Playground:
             cv2.imshow("frame", frame)
             cv2.imshow("edges", edges)
             key = cv2.waitKey(1)
-            if key == 27:
+            if self.detection_counter >= target_amount_detections or key == 27:
                 break
         video_capture.release()
         cv2.destroyAllWindows()

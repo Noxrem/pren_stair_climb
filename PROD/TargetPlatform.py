@@ -13,6 +13,7 @@ class TargetPlatform:
 
     def __init__(self):
         # Info: pictogram with number 5 isn't on the target plattform
+        # Info about pictogram order: pictogram with number 0 is on the right side on the platform; 4 on the left;
         logging.info("create new target plattform")
         self.pictogram_hammer = Pictogram.Pictogram("hammer", 0)
         self.pictogram_wrap = Pictogram.Pictogram("wrap", 1)

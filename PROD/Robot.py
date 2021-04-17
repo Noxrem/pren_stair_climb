@@ -99,13 +99,13 @@ class Robot:
         logging.info("Robot: camera turn ahead")
         self.camera.cam_servo.turn_ahead()
 
-    def turn_cam_right(self):
-        logging.info("Robot: camera turn right")
-        self.camera.cam_servo.turn_right()
+    def turn_cam_up(self):
+        logging.info("Robot: camera turn up")
+        self.camera.cam_servo.turn_up()
 
     def turn_cam_left(self):
-        logging.info("Robot: camera turn left")
-        self.camera.cam_servo.turn_left()
+        logging.info("Robot: camera turn down")
+        self.camera.cam_servo.turn_down()
 
     def acknowledge_pictogram(self, found_pictogram_english_lowercase):
         logging.info("Robot: acknowledge pictogram")
@@ -159,7 +159,7 @@ class Robot:
             self.turn_left()
         else:
             self.turn_right()
-        self.stair_detector.find_stair(self.camera.capture)
+        self.stair_detector.find_stair(self.camera.capture, False)  # 2. parameter -> switch on/off display mode
         duration_eliminate_offset = 200  # TODO: Define duration
         time.sleep(duration_eliminate_offset / 1000)
         self.stop()
