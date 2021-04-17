@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 import logging
 
 
@@ -34,8 +35,10 @@ class StairDetector:
         self.trackbar7_name = 'canny1'
         self.trackbar8_name = 'canny2'
         self.trackbar9_name = 'NoDetect'
+        self.max_time_stair_detection = 30  # TODO: define max duration
+        self.is_stair_found = False
 
-    def nothing(self):
+    def nothing(self, nothing):
         pass
 
     def _create_trackbar_window(self):
@@ -53,9 +56,12 @@ class StairDetector:
 
     def find_stair(self, video_capture, is_running_on_a_display):
         logging.info("find stair")
+        start_time = time.time()
+        logging.debug("start time of stair detection: " + str(start_time))
+        if is_running_on_a_display:
+            self._create_trackbar_window()
         while True:
             if is_running_on_a_display:
-                self._create_trackbar_window()
                 self.amount_v_lines = cv2.getTrackbarPos(self.trackbar0_name, self.window_trackbar_name)
                 self.amount_h_lines = cv2.getTrackbarPos(self.trackbar1_name, self.window_trackbar_name)
                 self.amount_lines = cv2.getTrackbarPos(self.trackbar2_name, self.window_trackbar_name)
@@ -104,9 +110,17 @@ class StairDetector:
             if is_running_on_a_display:
                 cv2.imshow("frame", frame)
                 cv2.imshow("edges", edges)
+            diff_time = time.time() - start_time
+            logging.debug("used time: " + str(diff_time))
             key = cv2.waitKey(1)
             if self.detection_counter >= self.target_amount_detections or key == 27:
+                self.is_stair_found = True
+                break
+            if self.max_time_stair_detection <= diff_time:
+                logging.warning("stair could not be found")
+                self.is_stair_found = False
                 break
         video_capture.release()
         if is_running_on_a_display:
             cv2.destroyAllWindows()
+        return self.is_stair_found
