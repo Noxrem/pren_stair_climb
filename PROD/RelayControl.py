@@ -1,4 +1,5 @@
 # Imports
+import logging
 import sys
 import smbus
 
@@ -16,7 +17,7 @@ class RelayControl:
     # Functions
     def __init__(self):
         try:
-            print("RelayCard: Init all relays to OFF")
+            logging.info("RelayCard: Init all relays to OFF")
             self.ON = 0xFF
             self.OFF = 0x00
             self.DEVICE_BUS = 1
@@ -28,25 +29,25 @@ class RelayControl:
                 self.bus.write_byte_data(self.DEVICE_ADDR, relay_number, self.OFF)
                 self.save_relay_state(relay_number, self.OFF)
         except IOError:
-            print("RelayCard: Init all relays to OFF failed")
+            logging.error("RelayCard: Init all relays to OFF failed")
             sys.exit()
 
     def set_on_relay(self, relay_number):
         try:
-            print("RelayCard: Set on relay " + str(relay_number))
+            logging.info("RelayCard: Set on relay " + str(relay_number))
             self.bus.write_byte_data(self.DEVICE_ADDR, relay_number, self.ON)
             self.save_relay_state(relay_number, self.ON)
         except IOError:
-            print("RelayCard: Set on relay failed " + str(relay_number))
+            logging.error("RelayCard: Set on relay failed " + str(relay_number))
             sys.exit()
 
     def set_off_relay(self, relay_number):
         try:
-            print("RelayCard: Set off relay " + str(relay_number))
+            logging.info("RelayCard: Set off relay " + str(relay_number))
             self.bus.write_byte_data(self.DEVICE_ADDR, relay_number, self.OFF)
             self.save_relay_state(relay_number, self.OFF)
         except IOError:
-            print("RelayCard: Set off relay failed " + str(relay_number))
+            logging.error("RelayCard: Set off relay failed " + str(relay_number))
             sys.exit()
 
     def is_relay_on(self, relay_number):
