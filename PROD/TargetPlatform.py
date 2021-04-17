@@ -19,8 +19,8 @@ class TargetPlatform:
         self.pictogram_wrap = Pictogram.Pictogram("wrap", 1)
         self.pictogram_paint_bucket = Pictogram.Pictogram("paint_bucket", 2)
         self.pictogram_ruler = Pictogram.Pictogram("ruler", 3)
-        self.pictogram_pencil = Pictogram.Pictogram("pencil", 4)
-        self.pictogram_wrench = Pictogram.Pictogram("wrench", 5)
+        self.pictogram_wrench = Pictogram.Pictogram("wrench", 4)
+        self.pictogram_pencil = Pictogram.Pictogram("pencil", 5)
 
     def print_pictogram_order(self):
         logging.info("***************print pictogram order****************")
@@ -28,6 +28,6 @@ class TargetPlatform:
                                 self.pictogram_paint_bucket, self.pictogram_ruler,
                                 self.pictogram_pencil, self.pictogram_wrench]
         for i in range(len(self.list_pictograms)-1):
-            logging.info(str(self.list_pictograms.__getitem__(i).text) + "/" +
+            logging.info(str(self.list_pictograms.__getitem__(i).name) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_0_to_4) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_mm))

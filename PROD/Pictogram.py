@@ -2,13 +2,13 @@ import logging
 
 
 class Pictogram:
-    text = None
+    name = None
     position_0_to_4 = None
     position_mm = None
 
     def __init__(self, text, position_0_to_4):
         logging.debug("create new Pictogram " + str(text))
-        self.text = text
+        self.name = text
         self.position_0_to_4 = position_0_to_4
         self.position_mm = self._set_position_pictograms_in_mm(position_0_to_4)
 
