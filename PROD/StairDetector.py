@@ -35,7 +35,7 @@ class StairDetector:
         self.trackbar8_name = 'canny2'
         self.trackbar9_name = 'NoDetect'
 
-    def nothing(self):
+    def nothing(self, nothing):
         pass
 
     def _create_trackbar_window(self):
@@ -53,9 +53,10 @@ class StairDetector:
 
     def find_stair(self, video_capture, is_running_on_a_display):
         logging.info("find stair")
+        if is_running_on_a_display:
+            self._create_trackbar_window()
         while True:
             if is_running_on_a_display:
-                self._create_trackbar_window()
                 self.amount_v_lines = cv2.getTrackbarPos(self.trackbar0_name, self.window_trackbar_name)
                 self.amount_h_lines = cv2.getTrackbarPos(self.trackbar1_name, self.window_trackbar_name)
                 self.amount_lines = cv2.getTrackbarPos(self.trackbar2_name, self.window_trackbar_name)

@@ -8,4 +8,4 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(mes
 stair_detector = StairDetector.StairDetector()
 camera = Camera.Camera()
 
-stair_detector.find_stair(camera.capture, False)
+stair_detector.find_stair(camera.capture, True)
