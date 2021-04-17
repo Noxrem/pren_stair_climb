@@ -1,7 +1,5 @@
 import logging
 
-import time
-import board
 import busio
 import adafruit_mpu6050
 
@@ -16,8 +14,8 @@ class Accelerometer:
         self.GPIO_SDA = 2
         self.GPIO_SCL = 3
 
-        self.i2c = busio.I2C(GPIO_SCL, GPIO_SDA)
-        self.AcceleratorModule = adafruit_mpu6050.MPU6050(i2c)
+        self.i2c = busio.I2C(self.GPIO_SCL, self.GPIO_SDA)
+        self.AcceleratorModule = adafruit_mpu6050.MPU6050(self.i2c)
 
 
     def get_acceleration_x(self):
