@@ -1,10 +1,12 @@
-import Robot
+import StairDetector
+import Camera
+
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
-
-robot = Robot.Robot("DemoRobot")
+stair_detector = StairDetector.StairDetector()
+camera = Camera.Camera()
 
 while True:
-    robot.turn_and_find_stair(True)
+    stair_detector.find_stair(camera.capture, False)

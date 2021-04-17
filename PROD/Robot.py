@@ -159,7 +159,7 @@ class Robot:
             self.turn_left()
         else:
             self.turn_right()
-        self.stair_detector.find_stair(self.camera.capture)
+        self.stair_detector.find_stair(self.camera.capture, False)  # 2. parameter -> switch on/off display mode
         duration_eliminate_offset = 200  # TODO: Define duration
         time.sleep(duration_eliminate_offset / 1000)
         self.stop()
