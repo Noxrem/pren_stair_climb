@@ -26,8 +26,8 @@ class TargetPlatform:
         logging.info("***************print pictogram order****************")
         self.list_pictograms = [self.pictogram_hammer, self.pictogram_wrap,
                                 self.pictogram_paint_bucket, self.pictogram_ruler,
-                                self.pictogram_pencil, self.pictogram_wrench]
-        for i in range(len(self.list_pictograms)-1):
+                                self.pictogram_wrench, self.pictogram_pencil]
+        for i in range(len(self.list_pictograms)):
             logging.info(str(self.list_pictograms.__getitem__(i).name) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_0_to_4) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_mm))
