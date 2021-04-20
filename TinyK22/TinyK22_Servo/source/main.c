@@ -19,6 +19,7 @@
 //#include "sound.h"
 //#include "soundPlayer.h"
 #include "drive.h"
+#include "bridge_align.h"
 //#include "pwrSwitch.h"
 //#include "i2c.h"
 //#include "led.h"
@@ -93,6 +94,7 @@ void main(void)
   motorInit();
   quadInit();
   driveInit();
+  bridgeAlignInit();
 //  pwrSwitchInit();
 //  EnableDebugLeds();
 //  ledInit();
@@ -122,6 +124,7 @@ void main(void)
       FTM3->SC &= ~FTM_SC_TOF_MASK;    // clear TOF flag
       BlinkBlueLedEveryMS(1000);
       ProcessDrive();
+      ProcessBridgeAlign();
     }
   }
 }
