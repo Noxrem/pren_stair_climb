@@ -121,6 +121,7 @@ class Robot:
 
     def let_bridge_down(self):
         logging.info("Robot: let bridge down")
+        self.speaker.play("getready.mp3", True)
         self.magnet_manager.set_off_power_bridge()
 
     def celebrate(self, found_pictogram_english_lowercase):
@@ -172,9 +173,3 @@ class Robot:
         while distance > offset_to_slow_down_millimeter:
             distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         self.stop()
-
-
-
-
-
-
