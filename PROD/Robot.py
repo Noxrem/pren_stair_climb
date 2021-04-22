@@ -113,7 +113,7 @@ class Robot:
 
     def pull_up(self):
         logging.info("Robot: winch pull up")
-        self.winch.pull_up(80)  # TODO: define speed
+        self.winch.pull_up(70)  # TODO: define speed
 
     def let_socket_down(self):
         logging.info("Robot: let socket down")

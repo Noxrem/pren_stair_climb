@@ -13,7 +13,7 @@ class Winch:
         self.serial_access = UARTAccess.UARTAccess()
         self.accelerometer = Accelerometer.Accelerometer()
 
-    def pull_up(self, speed=70):
+    def pull_up(self, speed):
         message = "mot setW " + str(speed)
         self.serial_access.write(message)
         time.sleep(5)
