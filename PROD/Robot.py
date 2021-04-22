@@ -17,7 +17,6 @@ class Robot:
     motor_wheels = None
     ultrasonic_module_control = None
     pressure_sensor_right = None
-    accelerometer = None
     camera = None
     winch = None
     speaker = None
@@ -35,7 +34,6 @@ class Robot:
         # self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # TODO: Do we have to calibrate after each start?
         self.pressure_sensor_left = PressureSensor.PressureSensor()
         self.pressure_sensor_right = PressureSensor.PressureSensor()
-        self.accelerometer = Accelerometer.Accelerometer()
         self.camera = Camera.Camera()
         self.winch = Winch.Winch()
         self.speaker = Speaker.Speaker()
