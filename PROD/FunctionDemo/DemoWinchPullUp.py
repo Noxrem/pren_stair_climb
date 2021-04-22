@@ -8,5 +8,5 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(mess
 motor = Motor.Motor()
 motor.enable()
 winch = Winch.Winch()
-winch.pull_up_slow()
+winch.pull_up()
 motor.disable()
