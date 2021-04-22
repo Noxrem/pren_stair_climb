@@ -13,7 +13,8 @@ class UARTAccess:
 
     def write(self, message):
         logging.info("UART write")
-        self.access.write(str.encode(message))
+        formatted_message = message + str("\n")
+        self.access.write(str.encode(formatted_message))
 
     def write_and_read(self, message):
         logging.info("UART write and read")
