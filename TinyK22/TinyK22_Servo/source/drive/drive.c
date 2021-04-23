@@ -153,15 +153,11 @@ void driveToWork(void)
     valL += (kdL*(setValueL-devOldL));    // D-Part
     devOldL = setValueL;
     valL /= 100;                         // scaling (before it was 1000)
-//    		termWrite("valL:");
-//        termWriteNum32s(valL);	// debug
-//        termWriteLine("");
+
     // pre control
     // y=m*x+n => preControl: setValue*m + n
 //    valL += (M_LEFT * setValueL) / 100 + (setValueL > 0 ? N_LEFT : -N_LEFT);
-//    termWrite("valL after:");
-//            termWriteNum32s(valL);	// debug
-//            termWriteLine("");
+
     if (valL > MOTOR_MAX_VALUE) {
       valL = MOTOR_MAX_VALUE;
       integL -= devL;											// anti wind-up
