@@ -14,9 +14,9 @@
 #ifndef SOURCES_DRIVE_DRIVE_H_
 #define SOURCES_DRIVE_DRIVE_H_
 
-#define MAX_SPEED              400                        // [mm/s] before 1000
+#define MAX_SPEED              700                        // [mm/s] before 400
 #define ACCELERATION           500                        // [mm/s^2]
-#define DECELERATION          2000                        // [mm/s^2]
+#define DECELERATION          3000                        // [mm/s^2] before 2000
 #define PID_PERIOD              25                        // [ms]
 
 
