@@ -20,7 +20,7 @@ servo.turn_ahead()
 time.sleep(5)
 logging.info("********************servo turn 10 times 1 degree up**********************")
 for i in range(10):
-    servo.turn_one_degree_up()
+    servo.turn_to_degree()
 logging.info("********************servo turn 10 times 1 degree down**********************")
 for i in range(10):
     servo.turn_one_degree_down()

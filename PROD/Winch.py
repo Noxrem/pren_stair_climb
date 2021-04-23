@@ -16,11 +16,16 @@ class Winch:
     def pull_up(self, speed):
         message = "mot setW " + str(speed)
         self.serial_access.write(message)
-        time.sleep(5)
+        time.sleep(1)
         while self.accelerometer.get_acceleration_z() > 9.9:  # TODO: define value
             logging.debug("pull up")
         logging.info("pulled up")
         message = "mot setW 0"
         self.serial_access.write(message)
 
-
+    def pull_to_end(self, speed, duration):
+        message = "mot setW " + str(speed)
+        self.serial_access.write(message)
+        time.sleep(duration)
+        message = "mot setW 0"
+        self.serial_access.write(message)

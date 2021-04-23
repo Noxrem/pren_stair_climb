@@ -40,21 +40,11 @@ class CamServo:
         else:
             logging.warning("cam servo is already turned down")
 
-    def turn_one_degree_up(self):
+    def turn_to_degree(self, degrees):
         if self.degrees != 180:
-            self.degrees = self.degrees + 1
+            self.degrees = degrees
             logging.info("turn cam servo 1 degree up. Actual degrees: " + str(self.degrees))
             message = ("srv pta4 " + str(self.degrees))
             self.serial_access.write(message)
         else:
             logging.warning("cam servo is already turned up")
-
-    def turn_one_degree_down(self):
-        if self.degrees != 0:
-            self.degrees = self.degrees - 1
-            logging.info("turn cam servo 1 degree down. Actual degrees: " + str(self.degrees))
-            message = ("srv pta4 " + str(self.degrees))
-            self.serial_access.write(message)
-        else:
-            logging.warning("cam servo is already turned down")
-
