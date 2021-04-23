@@ -21,12 +21,12 @@ class TargetPlatform:
         self.pictogram_ruler = Pictogram.Pictogram("ruler", 3)
         self.pictogram_wrench = Pictogram.Pictogram("wrench", 4)
         self.pictogram_pencil = Pictogram.Pictogram("pencil", 5)
-
-    def print_pictogram_order(self):
-        logging.info("***************print pictogram order****************")
         self.list_pictograms = [self.pictogram_hammer, self.pictogram_wrap,
                                 self.pictogram_paint_bucket, self.pictogram_ruler,
                                 self.pictogram_wrench, self.pictogram_pencil]
+
+    def print_pictogram_order(self):
+        logging.info("***************print pictogram order****************")
         for i in range(len(self.list_pictograms)):
             logging.info(str(self.list_pictograms.__getitem__(i).name) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_0_to_4) + "/" +

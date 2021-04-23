@@ -2,7 +2,6 @@ import Camera
 import UltrasonicModuleControl
 import PressureSensor
 import MagnetManager
-import Accelerometer
 import Motor
 import ObjectDetector
 import Speaker
@@ -10,20 +9,16 @@ import StairDetector
 import Winch
 import time
 import logging
+import TargetPlatform
+import UARTAccess
+
+
+def _calculate_duration(speed, length_target_in_mm):
+    duration_in_sec = length_target_in_mm/speed
+    return duration_in_sec
 
 
 class Robot:
-    name = None
-    motor_wheels = None
-    ultrasonic_module_control = None
-    pressure_sensor_right = None
-    camera = None
-    winch = None
-    speaker = None
-    object_detector = None
-    magnet_manager = None
-    stair_detector = None
-    found_object = None
 
     def __init__(self, name):
         logging.info("create new Robot")
@@ -31,7 +26,7 @@ class Robot:
         self.motor_wheels = Motor.Motor()
         self.motor_wheels.enable()
         self.ultrasonic_module_control = UltrasonicModuleControl.UltrasonicModuleControl()
-        # self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # TODO: Do we have to calibrate after each start?
+        #self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # TODO: Do we have to calibrate after each start?
         self.pressure_sensor_left = PressureSensor.PressureSensor()
         self.pressure_sensor_right = PressureSensor.PressureSensor()
         self.camera = Camera.Camera()
@@ -42,10 +37,19 @@ class Robot:
         self.magnet_manager.set_on_power_bridge()
         self.magnet_manager.set_on_power_socket()
         self.stair_detector = StairDetector.StairDetector()
+        self.target_platform = TargetPlatform.TargetPlatform()
+        self.distance_front = None
+        self.distance_right = None
 
     def stop(self):
         logging.info("Robot: stop")
         self.motor_wheels.stop()
+
+    def go_forward_and_stop_after_duration(self, speed, duration):
+        logging.info("Robot: go forward with speed " + str(speed) + " mm during " + str(duration) + "seconds")
+        self.motor_wheels.rotate(speed, speed)
+        time.sleep(duration)
+        self.stop()
 
     def go_forward_slow(self):
         logging.info("Robot: go forward slow")
@@ -58,6 +62,12 @@ class Robot:
     def go_forward_fast(self):
         logging.info("Robot: go forward fast")
         self.motor_wheels.rotate(70, 70)
+
+    def go_backward_and_stop_after_duration(self, speed, duration):
+        logging.info("Robot: go backwards with speed " + str(speed) + " mm during " + str(duration) + " seconds")
+        self.motor_wheels.rotate(-speed, -speed)
+        time.sleep(duration)
+        self.stop()
 
     def go_backward_slow(self):
         logging.info("Robot: go backward slow")
@@ -83,14 +93,14 @@ class Robot:
         logging.info("Robot: turn right 90 degrees")
         self.turn_right()
         duration_milliseconds = 3000  # TODO: define the correct duration
-        time.sleep(duration_milliseconds / 1000)
+        time.sleep(duration_milliseconds / 1000 - UARTAccess.timeout_to_read)
         self.stop()
 
     def turn_left_90degrees(self):
-        logging.info("Robot: turn right 90 degrees")
+        logging.info("Robot: turn left 90 degrees")
         self.turn_left()
         duration_milliseconds = 3000  # TODO: define the correct duration
-        time.sleep(duration_milliseconds / 1000)
+        time.sleep(duration_milliseconds / 1000 - UARTAccess.timeout_to_read)
         self.stop()
 
     def turn_cam_ahead(self):
@@ -166,8 +176,49 @@ class Robot:
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
         self.go_forward_medium()
-        distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
+        self.distance_front = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         offset_to_slow_down_millimeter = 20000  # TODO: Define offset
-        while distance > offset_to_slow_down_millimeter:
-            distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
+        while self.distance_front > offset_to_slow_down_millimeter:
+            self.distance_front = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
         self.stop()
+
+    def get_distance_side(self):
+        self.distance_right = self.ultrasonic_module_control.sensor_side.get_distance_multiple_in_cm()
+
+    def go_to_drop_off_position(self):
+        logging.info("Robot: go forward to drop off position")
+        self.found_pictogram = "hammer"  # TODO: Remove this line
+        offset_inaccuracy_allowed_max = 20  # TODO: Define value
+        offset_sensor_right_and_center_robot = 114
+        position_found_pictogram = 650  # default value in the middle of the stair
+        for i in range(len(self.target_platform.list_pictograms)):
+            if self.target_platform.list_pictograms.__getitem__(i).name == self.found_pictogram:
+                position_found_pictogram = self.target_platform.list_pictograms.__getitem__(i).position_mm
+                logging.info("The pictogram is on position: " + str(position_found_pictogram))
+        #self.get_distance_side()  #  TODO: activate
+        self.distance_right = 167  #TODO: remove this line
+        logging.debug("Distance right: " + str(self.distance_right))
+        speed = 100  # TODO: define speed
+        target_distance_from_stair = 500  # TODO: define value -> Scharnier der Brücke sollte 600mm von Stufe entfernt sein
+        duration_in_sec = _calculate_duration(speed, target_distance_from_stair)
+        self.go_backward_and_stop_after_duration(speed, duration_in_sec)
+        robot_position = self.distance_right + offset_sensor_right_and_center_robot
+        logging.debug("Robot position before move sideways: " + str(robot_position))
+        distance_move_sideways = abs(robot_position - position_found_pictogram)
+        logging.debug("Distance move sideways: " + str(distance_move_sideways))
+        duration_in_sec = _calculate_duration(speed, distance_move_sideways)
+        if robot_position - offset_inaccuracy_allowed_max > position_found_pictogram:
+            self.turn_right_90degrees()
+            logging.debug("Go to the right: " + str(speed*duration_in_sec) + "mm")
+            self.go_forward_and_stop_after_duration(speed, duration_in_sec)
+            self.turn_left_90degrees()
+        elif robot_position + offset_inaccuracy_allowed_max < position_found_pictogram:
+            self.turn_left_90degrees()
+            logging.debug("Go to the left: " + str(speed*duration_in_sec) + "mm")
+            self.go_forward_and_stop_after_duration(speed, duration_in_sec)
+            self.turn_right_90degrees()
+        else:
+            logging.info("Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
+        logging.info("Robot is on drop off position")
+
+

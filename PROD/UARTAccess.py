@@ -2,6 +2,8 @@ import serial
 import time
 import logging
 
+timeout_to_read = 0.1  # TODO: define needed minimal duration
+
 
 class UARTAccess:
     access = None
@@ -19,7 +21,7 @@ class UARTAccess:
     def write_and_read(self, message):
         logging.info("UART write and read")
         self.write(message)
-        time.sleep(0.5)  # TODO: define needed minimal duration
+        time.sleep(timeout_to_read)
         data = None
         while self.access.inWaiting() > 0:
             line = self.access.readline()
