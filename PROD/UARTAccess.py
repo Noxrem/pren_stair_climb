@@ -20,6 +20,10 @@ class UARTAccess:
         logging.info("UART write and read")
         self.write(message)
         time.sleep(0.5)  # TODO: define needed minimal duration
+        data = None
         while self.access.inWaiting() > 0:
             line = self.access.readline()
-            logging.info(line)
+            if len(line > 0):
+                logging.info(line)
+                data += line
+        return data
