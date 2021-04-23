@@ -18,6 +18,7 @@ class AlignmentManager:
         try:
             response = self.serial_access.write_and_read(self.cmd_start)
             while response != self.cmd_response:
+                logging.debug(response)
                 logging.debug("pull, pull, pull, pull")
             logging.info("pulled up")
         except Exception:
