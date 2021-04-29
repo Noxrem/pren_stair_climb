@@ -23,9 +23,9 @@ class Speaker:
         self.play(mp3)
         logging.info("Play MP3 file with pictogram text")
 
-    def celebrate(self, found_pictogram_english_lowercase, duration):
+    def celebrate(self, found_pictogram_english_lowercase, duration=20):
         logging.info("!!!!celebrate!!!")
-        message = "We have found the target icon " + found_pictogram_english_lowercase + "and we need + " + duration + " to do so"
+        message = "We have found the target icon " + found_pictogram_english_lowercase + "and we need + " + str(duration) + " to do so"
         tts = gTTS(text=message, lang=self.language, slow=False)
         mp3 = "TTS_message_celebrate.mp3"
         tts.save(mp3)
