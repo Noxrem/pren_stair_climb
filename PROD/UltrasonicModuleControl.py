@@ -14,13 +14,13 @@ class UltrasonicModuleControl:
 
     # Define sensor module 1
     sensor_front = None
-    GPIO_TRIGGER_1 = 18
-    GPIO_ECHO_1 = 17
+    GPIO_TRIGGER_1 = 27
+    GPIO_ECHO_1 = 18
 
     # Define sensor module 2
     sensor_side = None
-    GPIO_TRIGGER_2 = 23
-    GPIO_ECHO_2 = 22
+    GPIO_TRIGGER_2 = 6
+    GPIO_ECHO_2 = 5
 
     # Define sensor list
     sensor_list = None
