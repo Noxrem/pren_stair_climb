@@ -40,8 +40,8 @@ class Robot:
         self.stair_detector = StairDetector.StairDetector()
         self.alignmentManager = AlignmentManager.AlignmentManager()
         self.target_platform = TargetPlatform.TargetPlatform()
-        #self.distance_front = None
-        #self.distance_right = None
+        self.distance_front = None
+        self.distance_right = None
         self.found_pictogram = None
 
     def stop(self):
