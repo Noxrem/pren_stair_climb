@@ -86,11 +86,11 @@ class Robot:
 
     def turn_right(self):
         logging.info("Robot: turn right")
-        self.motor_wheels.rotate(-30, 30)
+        self.motor_wheels.rotate(-50, 50)
 
     def turn_left(self):
         logging.info("Robot: turn left")
-        self.motor_wheels.rotate(30, -30)
+        self.motor_wheels.rotate(50, -50)
 
     def turn_right_90degrees(self):
         logging.info("Robot: turn right 90 degrees")
@@ -190,15 +190,16 @@ class Robot:
             self.stop()
             degree += 12
             self.camera.cam_servo.turn_to_degree(90 + degree)
-            self.turn_and_find_pictogram(is_turn_direction_left)
+            is_found = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
+            self.stop()
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
         self.go_forward_medium()
-        self.distance_front = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
+        self.distance_front = self.ultrasonic_module_control.get_distance_in_cm(0)
         offset_to_slow_down_cm = 20  # TODO: Define offset
         while self.distance_front > offset_to_slow_down_cm:
-            self.distance_front = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
+            self.distance_front = self.ultrasonic_module_control.get_distance_in_cm(0)
         self.stop()
 
     def get_distance_side(self):
