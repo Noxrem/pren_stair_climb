@@ -4,3 +4,4 @@
 .ipynb_checkpoints/
 **/pictograms/training/*negatives/*.jpg
 **/pictograms/training/**/*_*/*.jpg
+*.pyc
