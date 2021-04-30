@@ -14,6 +14,7 @@ class StairDetector:
         self.font_color = (0, 0, 255)
         self.line_type = 2
         self.detection_counter = 0
+        self.negativ_counter_current = 0
         self.amount_v_lines = 50  # TODO: define best values
         self.amount_h_lines = 50
         self.amount_lines = 100
@@ -35,7 +36,7 @@ class StairDetector:
         self.trackbar7_name = 'canny1'
         self.trackbar8_name = 'canny2'
         self.trackbar9_name = 'NoDetect'
-        self.max_time_stair_detection = 200  # TODO: define max duration
+        self.max_time_stair_detection = 30  # TODO: define max duration
         self.is_stair_found = False
 
     def nothing(self, nothing):
@@ -107,6 +108,13 @@ class StairDetector:
                                         self.font_color,
                                         self.line_type)
                         self.detection_counter = self.detection_counter + 1
+                    else:
+                        self.negativ_counter_current = self.negativ_counter_current + 1
+                        if self.negativ_counter_current > 30:
+                            self.detection_counter = 0
+                            self.negativ_counter_current = 0
+
+
             if is_running_on_a_display:
                 cv2.imshow("frame", frame)
                 cv2.imshow("edges", edges)
