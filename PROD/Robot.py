@@ -85,7 +85,8 @@ class Robot:
         self.motor_wheels.rotate(-70, -70)
 
     def turn_right(self):
-        logging.info("Robot: turn right")        self.motor_wheels.rotate(-30, 30)
+        logging.info("Robot: turn right")
+        self.motor_wheels.rotate(-30, 30)
 
     def turn_left(self):
         logging.info("Robot: turn left")
@@ -189,7 +190,7 @@ class Robot:
             self.stop()
             degree += 12
             self.camera.cam_servo.turn_to_degree(90 + degree)
-            is_found = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
+            self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
             self.stop()
 
     def go_forward_and_get_distance(self):
