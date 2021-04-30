@@ -41,7 +41,7 @@ class Robot:
         self.alignmentManager = AlignmentManager.AlignmentManager()
         self.target_platform = TargetPlatform.TargetPlatform()
         self.distance_front = None
-        self.distance_right = None
+        # self.distance_right = None
         self.found_pictogram = None
 
     def stop(self):
@@ -183,7 +183,7 @@ class Robot:
             self.turn_left()
         else:
             self.turn_right()
-        is_found = self.stair_detector.find_stair(self.camera.capture, False)  # 2. parameter -> switch on/off display mode
+        is_found = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
         if is_found:
             self.stop()
         else:

@@ -14,8 +14,8 @@ class StairDetector:
         self.font_color = (0, 0, 255)
         self.line_type = 2
         self.detection_counter = 0
-        self.amount_v_lines = 8  # TODO: define best values
-        self.amount_h_lines = 8
+        self.amount_v_lines = 50  # TODO: define best values
+        self.amount_h_lines = 50
         self.amount_lines = 100
         self.max_line_gap = 40
         self.line_h_length = 313
