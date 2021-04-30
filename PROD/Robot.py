@@ -201,7 +201,6 @@ class Robot:
         while self.distance_front > offset_to_slow_down_cm:
             self.distance_front = self.measure_distance_sensor_front()
             logging.info("\nMeasured Distance = %.2f cm" % self.distance_front)
-            time.sleep(0.1)
         self.stop()
 
     def go_to_drop_off_position(self):
