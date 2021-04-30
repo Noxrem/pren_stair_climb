@@ -22,6 +22,6 @@ robot.speaker.play_text(robot.found_pictogram)
 # robot.pull_up()
 # robot.pull_to_bridge_drop_off()
 # robot.go_forward_and_stop_after_duration(50, Robot.calculate_duration(50, 400))  # todo: measure distance
-robot.celebrate(robot.found_pictogram,20)
+robot.celebrate(robot.found_pictogram, time.time() - start_time)
 
 logging.info("************************End of program********************************")

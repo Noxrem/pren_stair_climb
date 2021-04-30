@@ -32,7 +32,7 @@ class Speaker:
         logging.info("Play MP3 file celebration")
         self.play(mp3)
         logging.info("Party on!!!")
-        self.play(self.celebration_sound, True, 20, "No drinks anymore.. so were gonna leave")
+        self.play(self.celebration_sound, True, duration, "No drinks anymore.. so were gonna leave")
 
     @staticmethod
     def play(path_to_file, play_background=False, duration=None, log_msg=None):
