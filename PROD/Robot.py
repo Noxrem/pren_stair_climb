@@ -178,20 +178,22 @@ class Robot:
 
     def turn_and_find_stair(self, is_turn_direction_left):
         logging.info("Robot: turn and find stair")
-        degree = 0
-        if is_turn_direction_left:
-            self.turn_left()
-        else:
-            self.turn_right()
-        is_found = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
-        if is_found:
+        is_found_with_sensor = False
+        is_found_with_camera = False
+        while not is_found_with_sensor and not is_found_with_camera:
+            degree = 0
+            if is_turn_direction_left:
+                self.turn_left()
+            else:
+                self.turn_right()
+            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
+            distance = self.measure_distance_sensor_front()
             self.stop()
-        else:
-            self.stop()
-            degree += 12
-            self.camera.cam_servo.turn_to_degree(90 + degree)
-            self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
-            self.stop()
+            if distance < 180:
+                is_found_with_sensor = True
+            if not is_found_with_camera and is_timer_down:
+                degree += 12
+                self.camera.cam_servo.turn_to_degree(90 + degree)
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")

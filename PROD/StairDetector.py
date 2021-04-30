@@ -38,6 +38,7 @@ class StairDetector:
         self.trackbar9_name = 'NoDetect'
         self.max_time_stair_detection = 30  # TODO: define max duration
         self.is_stair_found = False
+        self.is_timer_down = False
 
     def nothing(self, nothing):
         pass
@@ -127,8 +128,9 @@ class StairDetector:
             if self.max_time_stair_detection <= diff_time:
                 logging.warning("stair could not be found")
                 self.is_stair_found = False
+                self.is_timer_down = True
                 break
         video_capture.release()
         if is_running_on_a_display:
             cv2.destroyAllWindows()
-        return self.is_stair_found
+        return self.is_stair_found, self.is_timer_down
