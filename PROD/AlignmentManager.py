@@ -16,11 +16,14 @@ class AlignmentManager:
 
     def do_alignment(self):
         try:
+            logging.debug("try pulling")
             response = self.serial_access.write_and_read(self.cmd_start)
             while response != self.cmd_response:
                 logging.debug(response)
                 logging.debug("pull, pull, pull, pull")
             logging.info("pulled up")
         except Exception:
+            logging.error("an error occurred:")
+            logging.error(str(Exception))
             self.serial_access.write(self.cmd_abort)
         return
