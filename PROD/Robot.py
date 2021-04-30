@@ -15,7 +15,7 @@ import UARTAccess
 
 
 def calculate_duration(speed, length_target_in_mm):
-    duration_in_sec = length_target_in_mm/speed
+    duration_in_sec = length_target_in_mm / speed
     return duration_in_sec
 
 
@@ -186,7 +186,8 @@ class Robot:
                 self.turn_left()
             else:
                 self.turn_right()
-            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
+            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,
+                                                                                 True)  # 2. parameter -> switch on/off display mode
             distance = self.measure_distance_sensor_front()
             self.stop()
             if distance < 180:
@@ -194,6 +195,8 @@ class Robot:
             if not is_found_with_camera and is_timer_down:
                 degree += 12
                 self.camera.cam_servo.turn_to_degree(90 + degree)
+                is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,
+                                                                                     True)  # 2. parameter -> switch on/off display mode
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
@@ -230,14 +233,15 @@ class Robot:
         duration_in_sec = calculate_duration(speed, distance_move_sideways)
         if robot_position - offset_inaccuracy_allowed_max > position_found_pictogram:
             self.turn_right_90degrees()
-            logging.debug("Go to the right: " + str(speed*duration_in_sec) + "mm")
+            logging.debug("Go to the right: " + str(speed * duration_in_sec) + "mm")
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_left_90degrees()
         elif robot_position + offset_inaccuracy_allowed_max < position_found_pictogram:
             self.turn_left_90degrees()
-            logging.debug("Go to the left: " + str(speed*duration_in_sec) + "mm")
+            logging.debug("Go to the left: " + str(speed * duration_in_sec) + "mm")
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_right_90degrees()
         else:
-            logging.info("Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
+            logging.info(
+                "Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
         logging.info("Robot is on drop off position")
