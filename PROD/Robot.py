@@ -85,12 +85,11 @@ class Robot:
         self.motor_wheels.rotate(-70, -70)
 
     def turn_right(self):
-        logging.info("Robot: turn right")
-        self.motor_wheels.rotate(-50, 50)
+        logging.info("Robot: turn right")        self.motor_wheels.rotate(-30, 30)
 
     def turn_left(self):
         logging.info("Robot: turn left")
-        self.motor_wheels.rotate(50, -50)
+        self.motor_wheels.rotate(30, -30)
 
     def turn_right_90degrees(self):
         logging.info("Robot: turn right 90 degrees")
@@ -148,12 +147,12 @@ class Robot:
 
     def measure_distance_sensor_front(self):
         logging.info("Robot: measure distance sensor front")
-        distance = self.ultrasonic_module_control.sensor_front.get_distance_multiple_in_cm()
+        distance = self.ultrasonic_module_control.get_distance_in_cm(0)
         return distance
 
     def measure_distance_sensor_side(self):
         logging.info("Robot: measure distance sensor side")
-        distance = self.ultrasonic_module_control.sensor_side.get_distance_multiple_in_cm()
+        distance = self.ultrasonic_module_control.get_distance_in_cm(1)
         return distance
 
     def do_alignment(self):
@@ -196,14 +195,11 @@ class Robot:
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
         self.go_forward_medium()
-        self.distance_front = self.ultrasonic_module_control.get_distance_in_cm(0)
+        self.distance_front = self.measure_distance_sensor_front()
         offset_to_slow_down_cm = 20  # TODO: Define offset
         while self.distance_front > offset_to_slow_down_cm:
-            self.distance_front = self.ultrasonic_module_control.get_distance_in_cm(0)
+            self.distance_front = self.measure_distance_sensor_front()
         self.stop()
-
-    def get_distance_side(self):
-        self.distance_right = self.ultrasonic_module_control.sensor_side.get_distance_multiple_in_cm()
 
     def go_to_drop_off_position(self):
         logging.info("Robot: go forward to drop off position")
