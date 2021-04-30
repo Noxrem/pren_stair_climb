@@ -15,7 +15,7 @@ class StairDetector:
         self.line_type = 2
         self.detection_counter = 0
         self.negativ_counter_current = 0
-        self.amount_v_lines = 20  # TODO: define best values
+        self.amount_v_lines = 8  # TODO: define best values
         self.amount_h_lines = 20
         self.amount_lines = 100
         self.max_line_gap = 40
@@ -46,7 +46,7 @@ class StairDetector:
     def _create_trackbar_window(self):
         cv2.namedWindow(self.window_trackbar_name, cv2.WINDOW_GUI_NORMAL)
         cv2.createTrackbar(self.trackbar0_name, self.window_trackbar_name, self.amount_v_lines, 30, self.nothing)
-        cv2.createTrackbar(self.trackbar1_name, self.window_trackbar_name, self.amount_h_lines, 10, self.nothing)
+        cv2.createTrackbar(self.trackbar1_name, self.window_trackbar_name, self.amount_h_lines, 30, self.nothing)
         cv2.createTrackbar(self.trackbar2_name, self.window_trackbar_name, self.amount_lines, 200, self.nothing)
         cv2.createTrackbar(self.trackbar3_name, self.window_trackbar_name, self.max_line_gap, 100, self.nothing)
         cv2.createTrackbar(self.trackbar4_name, self.window_trackbar_name, self.line_h_length, 700, self.nothing)
