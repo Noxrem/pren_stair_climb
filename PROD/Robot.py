@@ -27,7 +27,7 @@ class Robot:
         self.motor_wheels = Motor.Motor()
         self.motor_wheels.enable()  # all motors incl. winch will set to ready state
         self.ultrasonic_module_control = UltrasonicModuleControl.UltrasonicModuleControl()
-        # self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # TODO: Do we have to calibrate after each start?
+        # self.ultrasonic_module_control.calibrate_sensors(distance_sensor_to_object=10) # We don't need to calibrate before the start
         self.pressure_sensor_left = PressureSensor.PressureSensor()
         self.pressure_sensor_right = PressureSensor.PressureSensor()
         self.camera = Camera.Camera()
