@@ -35,7 +35,7 @@ class StairDetector:
         self.trackbar7_name = 'canny1'
         self.trackbar8_name = 'canny2'
         self.trackbar9_name = 'NoDetect'
-        self.max_time_stair_detection = 30  # TODO: define max duration
+        self.max_time_stair_detection = 200  # TODO: define max duration
         self.is_stair_found = False
 
     def nothing(self, nothing):
