@@ -176,7 +176,7 @@ class Robot:
             logging.warning("pictogram couldn't be found")
             self.turn_and_find_pictogram(True)
 
-    def turn_and_find_stair(self, is_turn_direction_left):
+    def turn_and_find_stair(self, is_turn_direction_left, is_running_on_a_display):
         logging.info("Robot: turn and find stair")
         is_found_with_sensor = False
         is_found_with_camera = False
@@ -186,15 +186,19 @@ class Robot:
                 self.turn_left()
             else:
                 self.turn_right()
-            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
-            distance = self.measure_distance_sensor_front()
-            self.stop()
-            if distance < 180:
-                is_found_with_sensor = True
+            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, is_running_on_a_display)  # 2. parameter -> switch on/off display mode
+            if is_found_with_camera:
+                logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
+                self.stop()
+                distance = self.measure_distance_sensor_front()
+                if distance < 170:
+                    is_found_with_sensor = True
             if not is_found_with_camera and is_timer_down:
+                logging.info("stair could not be found. Turn up camera")
                 degree += 12
                 self.camera.cam_servo.turn_to_degree(90 + degree)
-                is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, True)  # 2. parameter -> switch on/off display mode
+                is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, is_running_on_a_display)  # 2. parameter -> switch on/off display mode
+        logging.info("stair is found for sure")
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
