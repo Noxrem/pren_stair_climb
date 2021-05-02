@@ -74,8 +74,7 @@ class StairDetector:
                 self.canny1 = cv2.getTrackbarPos(self.trackbar7_name, self.window_trackbar_name)
                 self.canny2 = cv2.getTrackbarPos(self.trackbar8_name, self.window_trackbar_name)
                 self.target_amount_detections = cv2.getTrackbarPos(self.trackbar9_name, self.window_trackbar_name)
-            video = video_capture
-            ret, orig_frame = video.read()
+            ret, orig_frame = video_capture.read()
             frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
             # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) # TODO: Remove Code
             # color1 = np.array([0, 0, 0])
@@ -114,8 +113,6 @@ class StairDetector:
                         if self.negativ_counter_current > 30:
                             self.detection_counter = 0
                             self.negativ_counter_current = 0
-
-
             if is_running_on_a_display:
                 cv2.imshow("frame", frame)
                 cv2.imshow("edges", edges)
