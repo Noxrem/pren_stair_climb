@@ -158,7 +158,7 @@ class Robot:
 
     def do_alignment(self):
         logging.info("Robot: aligning")
-        self.alignmentManager.do_alignment()
+        self.alignmentManager.do_alignment(30)
 
     # Below: combined methods
 
