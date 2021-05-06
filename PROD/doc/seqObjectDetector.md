@@ -15,7 +15,7 @@ ObjectDetector -> ObjectDetector ++: _do_haar_cascade
         + cv2.cvtColor
         + detectMultiScale
     endrnote 
-    opt threshold exceed 
+    alt threshold exceed 
     ObjectDetector -> ObjectDetector : is_found = True
     end 
     return
