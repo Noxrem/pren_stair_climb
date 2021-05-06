@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+loop not is_found_with_sensor or not is_found_with_camera
+    Robot -> StairDetector ++: find_stair
+    alt is_running_on_a_display
+        StairDetector -> StairDetector : create_trackbar_window
+    end
+        loop not is_stair_found and not is_timer_down
+            StairDetector -> Camera ++: video_capture.read()
+            return frame
+                    rnote over StairDetector
+Edge detection with OpenCV
+                    end note
+        end
+        return is_stair_found, is_timer_down
+    alt is_found_with_camera
+    Robot -> Robot ++ : measure_distance_sensor_front()
+    Robot -> Ultrasonic_module_control ++: get_distance_in_cm(front_sensor)
+    return distance
+    end
+    alt not is_found_with_camera and is_timer_down:
+    Robot -> CamServo ++: turn_to_degree(90 + degree)
+    end
+end
+rnote over Robot
+Stair is found
+end rnote
+
+@enduml
