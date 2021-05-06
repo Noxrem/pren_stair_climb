@@ -180,8 +180,8 @@ class Robot:
         logging.info("Robot: turn and find stair")
         is_found_with_sensor = False
         is_found_with_camera = False
+        degree = 0
         while not is_found_with_sensor or not is_found_with_camera:
-            degree = 0
             if is_turn_direction_left:
                 self.turn_left()
             else:
@@ -195,9 +195,10 @@ class Robot:
                     is_found_with_sensor = True
             if not is_found_with_camera and is_timer_down:
                 logging.info("stair could not be found. Turn up camera")
+                if degree > 24:
+                    degree = 0
                 degree += 12
                 self.camera.cam_servo.turn_to_degree(90 + degree)
-                is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, is_running_on_a_display)  # 2. parameter -> switch on/off display mode
         logging.info("stair is found for sure")
 
     def go_forward_and_get_distance(self):
