@@ -41,7 +41,7 @@ class Robot:
         self.alignmentManager = AlignmentManager.AlignmentManager()
         self.target_platform = TargetPlatform.TargetPlatform()
         self.distance_front = None
-        # self.distance_right = None
+        self.distance_right = None
         self.found_pictogram = None
 
     def stop(self):
@@ -49,7 +49,7 @@ class Robot:
         self.motor_wheels.stop()
 
     def go_forward_and_stop_after_duration(self, speed, duration):
-        logging.info("Robot: go forward with speed " + str(speed) + " mm during " + str(duration) + "seconds")
+        logging.info("Robot: go forward with speed " + str(speed) + " during " + str(duration) + "seconds")
         self.motor_wheels.rotate(speed, speed)
         time.sleep(duration)
         self.stop()
@@ -67,7 +67,7 @@ class Robot:
         self.motor_wheels.rotate(70, 70)
 
     def go_backward_and_stop_after_duration(self, speed, duration):
-        logging.info("Robot: go backwards with speed " + str(speed) + " mm during " + str(duration) + " seconds")
+        logging.info("Robot: go backwards with speed " + str(speed) + " during " + str(duration) + " seconds")
         self.motor_wheels.rotate(-speed, -speed)
         time.sleep(duration)
         self.stop()
@@ -213,20 +213,17 @@ class Robot:
 
     def go_to_drop_off_position(self):
         logging.info("Robot: go forward to drop off position")
-        # measures in mm
-        self.found_pictogram = "hammer"  # TODO: Remove this line
-        offset_inaccuracy_allowed_max = 20  # TODO: Define value
-        offset_sensor_right_and_center_robot = 114
-        position_found_pictogram = 650  # default value in the middle of the stair
+        offset_inaccuracy_allowed_max = 2  # TODO: Define value
+        offset_sensor_right_and_center_robot = 11.4
+        position_found_pictogram = 65  # default value in the middle of the stair
         for i in range(len(self.target_platform.list_pictograms)):
             if self.target_platform.list_pictograms.__getitem__(i).name == self.found_pictogram:
-                position_found_pictogram = self.target_platform.list_pictograms.__getitem__(i).position_mm
+                position_found_pictogram = self.target_platform.list_pictograms.__getitem__(i).position_cm
                 logging.info("The pictogram is on position: " + str(position_found_pictogram))
-        # self.get_distance_side()  #  TODO: activate
-        self.distance_right = 167  # TODO: remove this line
+        self.distance_right = self.measure_distance_sensor_side()
         logging.debug("Distance right: " + str(self.distance_right))
-        speed = 100  # TODO: define speed
-        target_distance_from_stair = 500  # TODO: define value -> Scharnier der Brücke sollte 600mm von Stufe entfernt sein
+        speed = 50  # TODO: define speed
+        target_distance_from_stair = 50  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
         duration_in_sec = calculate_duration(speed, target_distance_from_stair)
         self.go_backward_and_stop_after_duration(speed, duration_in_sec)
         robot_position = self.distance_right + offset_sensor_right_and_center_robot

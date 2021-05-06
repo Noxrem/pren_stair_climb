@@ -30,4 +30,4 @@ class TargetPlatform:
         for i in range(len(self.list_pictograms)):
             logging.info(str(self.list_pictograms.__getitem__(i).name) + "/" +
                          str(self.list_pictograms.__getitem__(i).position_0_to_4) + "/" +
-                         str(self.list_pictograms.__getitem__(i).position_mm))
+                         str(self.list_pictograms.__getitem__(i).position_cm))
