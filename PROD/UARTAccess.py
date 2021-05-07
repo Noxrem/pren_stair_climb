@@ -18,14 +18,19 @@ class UARTAccess:
         formatted_message = message + str("\n")
         self.access.write(str.encode(formatted_message))
 
+    def read(self):
+        logging.info("UART read line")
+        time.sleep(timeout_to_read)
+        data = b''                              # Create empty bytes type
+        while self.access.inWaiting() > 0:
+            line = self.access.readline()
+            if len(line) > 0:
+                logging.info(line)
+                data += line
+        return data
+
     def write_and_read(self, message):
         logging.info("UART write and read")
         self.write(message)
-        time.sleep(timeout_to_read)
-        data = None
-        while self.access.inWaiting() > 0:
-            line = self.access.readline()
-            if len(line > 0):
-                logging.info(line)
-                data += line
+        data = self.read()
         return data

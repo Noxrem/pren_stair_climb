@@ -3,4 +3,4 @@ import AlignmentManager
 
 alignmentManager = AlignmentManager.AlignmentManager()
 
-alignmentManager.do_alignment(20)
+alignmentManager.do_alignment(30)
