@@ -22,9 +22,10 @@ class AlignmentManager:
             self.serial_access.write(self.cmd_speed + str(speed))   # Set the speed of the alignment process
             logging.debug("get in dance mood and seek out the juicy stair, send start command")
             response = self.serial_access.write_and_read(self.cmd_start)
-            if response != self.cmd_start_response:                # Raise Exception if no start acknowledge received
+            if response != str.encode(self.cmd_start_response):                # Raise Exception if no start acknowledge received
                 raise ValueError("Alignment not started!")
-            while self.serial_access.read() != self.cmd_response:   # Wait for alignment to finish
+            # TODO next line runns endlessly
+            while self.serial_access.read() != str.encode(self.cmd_response):   # Wait for alignment to finish
                 logging.debug("aaaaaaaaa")
                 logging.debug("lllllllll")
                 logging.debug("iiiiiiiii")
