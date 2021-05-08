@@ -12,6 +12,7 @@ import time
 import logging
 import TargetPlatform
 import UARTAccess
+import StairDetectorWithUltrasonic
 
 
 def calculate_duration_length_in_mm(speed, length_target_in_mm):
@@ -43,6 +44,7 @@ class Robot:
         self.magnet_manager.set_on_power_bridge()
         self.magnet_manager.set_on_power_socket()
         self.stair_detector = StairDetector.StairDetector()
+        self.stair_detector_with_ultrasonic = StairDetectorWithUltrasonic.StairDetectorWithUltrasonic()
         self.alignmentManager = AlignmentManager.AlignmentManager()
         self.target_platform = TargetPlatform.TargetPlatform()
         self.distance_front = None
@@ -206,6 +208,13 @@ class Robot:
                 degree += 12
                 self.camera.cam_servo.turn_to_degree(90 + degree)
         logging.info("stair is found for sure")
+
+    def turn_and_find_stair_only_with_ultrasonic(self):
+        logging.info("Robot: turn and find stair only with ultrasonic")
+        self.turn_left()
+        self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic()
+        self.stop()
+        logging.info("stair found")
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
