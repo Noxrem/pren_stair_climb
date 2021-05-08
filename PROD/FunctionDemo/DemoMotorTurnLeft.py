@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s:%(levelname)s:%(mess
 
 motor = Motor.Motor()
 motor.enable()
-motor.rotate(30, -30)
-time.sleep(5)
+motor.rotate(50, -50)
+time.sleep(5.9)
 motor.stop()
 motor.disable()

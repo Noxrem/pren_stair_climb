@@ -99,16 +99,16 @@ class Robot:
 
     def turn_right_90degrees(self):
         logging.info("Robot: turn right 90 degrees")
-        self.turn_right()
-        duration_milliseconds = 3000  # TODO: define the correct duration
-        time.sleep(duration_milliseconds / 1000 - UARTAccess.timeout_to_read)
+        self.motor_wheels.rotate(-50, 50)
+        duration_milliseconds = 5900  # TODO: define the correct duration
+        time.sleep(duration_milliseconds / 1000)
         self.stop()
 
     def turn_left_90degrees(self):
         logging.info("Robot: turn left 90 degrees")
-        self.turn_left()
-        duration_milliseconds = 3000  # TODO: define the correct duration
-        time.sleep(duration_milliseconds / 1000 - UARTAccess.timeout_to_read)
+        self.motor_wheels.rotate(50, -50)
+        duration_milliseconds = 5900  # TODO: define the correct duration
+        time.sleep(duration_milliseconds / 1000)
         self.stop()
 
     def turn_cam_ahead(self):
