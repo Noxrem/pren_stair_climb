@@ -255,3 +255,9 @@ class Robot:
             logging.info(
                 "Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
         logging.info("Robot is on drop off position")
+
+    def dispose(self):
+        self.let_bridge_down()  # TODO: Only for test runs to save power
+        self.let_socket_down()
+        self.stop()
+        self.motor_wheels.disable()
