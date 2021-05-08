@@ -34,6 +34,6 @@ robot.go_forward_and_stop_after_duration(50, Robot.calculate_duration_length_in_
 robot.celebrate(robot.found_pictogram, time.time() - start_time)
 
 
-
+robot.dispose()
 
 logging.info("************************End of program********************************")
