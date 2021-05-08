@@ -33,6 +33,7 @@ class MagnetManager:
             logging.info("magnet manager: set on power socket")
             self.is_switched_on_magnet_socket = True
             self.relay_control.set_on_relay(2)
+            self.relay_control.set_on_relay(3)
         else:
             logging.info("magnet for the socket is already switched on")
 
@@ -41,5 +42,6 @@ class MagnetManager:
             logging.info("magnet manager: set off power socket")
             self.is_switched_on_magnet_socket = False
             self.relay_control.set_off_relay(2)
+            self.relay_control.set_off_relay(3)
         else:
             logging.info("magnet for the socket is already switched off")

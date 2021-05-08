@@ -10,22 +10,23 @@ logging.info("************************Start of program**************************
 start_time = time.time()
 logging.info("Main - Init Robot")
 robot = Robot.Robot("Gefyra")
+time.sleep(5)
 
-robot.let_bridge_down()  # TODO: Only for test runs to save power
-robot.let_socket_down()  # TODO: Only for test runs to save power
+# robot.let_bridge_down()  # TODO: Only for test runs to save power
+# robot.let_socket_down()  # TODO: Only for test runs to save power
 
-# robot.go_forward_and_stop_after_duration(70, Robot.calculate_duration(70, 300))
+# robot.go_forward_and_stop_after_duration(70, Robot.calculate_duration_length_in_mm(70, 300))
 # robot.turn_and_find_pictogram(True)
 # robot.speaker.play_text(robot.found_pictogram)
-robot.turn_and_find_stair(False, True)
+# robot.turn_and_find_stair(False, True)
 # robot.go_forward_and_get_distance()
 # robot.do_alignment()
-# robot.go_to_drop_off_position()
-# robot.let_socket_down()
-# robot.let_bridge_down()
-# robot.pull_up()
-# robot.pull_to_bridge_drop_off()
-# robot.go_forward_and_stop_after_duration(50, Robot.calculate_duration(50, 400))  # todo: measure distance
+robot.go_to_drop_off_position()
+robot.let_socket_down()
+robot.let_bridge_down()
+robot.pull_up()
+robot.pull_to_bridge_drop_off()
+robot.go_forward_and_stop_after_duration(50, Robot.calculate_duration_length_in_mm(50, 400))  # todo: measure distance
 robot.celebrate(robot.found_pictogram, time.time() - start_time)
 
 logging.info("************************End of program********************************")
