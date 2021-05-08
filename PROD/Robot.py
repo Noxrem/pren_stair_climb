@@ -14,8 +14,13 @@ import TargetPlatform
 import UARTAccess
 
 
-def calculate_duration(speed, length_target_in_mm):
-    duration_in_sec = length_target_in_mm/speed
+def calculate_duration_length_in_mm(speed, length_target_in_mm):
+    duration_in_sec = length_target_in_mm / speed
+    return duration_in_sec
+
+
+def calculate_duration_length_in_cm(speed, length_target_in_cm):
+    duration_in_sec = length_target_in_cm * 10 / speed
     return duration_in_sec
 
 
@@ -129,7 +134,7 @@ class Robot:
     def pull_to_bridge_drop_off(self):
         logging.info("Robot: can see light at the end of the tunnel")
         speed = 20
-        duration = calculate_duration(speed, 300)  # todo: define distance and speed
+        duration = calculate_duration_length_in_mm(speed, 300)  # todo: define distance and speed
         self.winch.pull_to_end(speed, duration)
         self.go_forward_and_stop_after_duration(speed, duration)
 
@@ -186,7 +191,8 @@ class Robot:
                 self.turn_left()
             else:
                 self.turn_right()
-            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, is_running_on_a_display)  # 2. parameter -> switch on/off display mode
+            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,
+                                                                                 is_running_on_a_display)  # 2. parameter -> switch on/off display mode
             if is_found_with_camera:
                 logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
                 self.stop()
@@ -212,35 +218,40 @@ class Robot:
         self.stop()
 
     def go_to_drop_off_position(self):
+        position_found_pictogram = None
         logging.info("Robot: go forward to drop off position")
         offset_inaccuracy_allowed_max = 2  # TODO: Define value
         offset_sensor_right_and_center_robot = 11.4
-        position_found_pictogram = 65  # default value in the middle of the stair
-        for i in range(len(self.target_platform.list_pictograms)):
-            if self.target_platform.list_pictograms.__getitem__(i).name == self.found_pictogram:
-                position_found_pictogram = self.target_platform.list_pictograms.__getitem__(i).position_cm
-                logging.info("The pictogram is on position: " + str(position_found_pictogram))
+        if self.found_pictogram is not None:
+            for i in range(len(self.target_platform.list_pictograms)):
+                if self.target_platform.list_pictograms.__getitem__(i).name == self.found_pictogram:
+                    position_found_pictogram = self.target_platform.list_pictograms.__getitem__(i).position_cm
+                    logging.info("The pictogram is on position: " + str(position_found_pictogram))
+        else:
+            position_found_pictogram = 65  # default value in the middle of the stair
+            logging.info("We will use the path in the middle of the stair because we could not find the pictogram")
         self.distance_right = self.measure_distance_sensor_side()
         logging.debug("Distance right: " + str(self.distance_right))
         speed = 50  # TODO: define speed
         target_distance_from_stair = 50  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
-        duration_in_sec = calculate_duration(speed, target_distance_from_stair)
+        duration_in_sec = calculate_duration_length_in_cm(speed, target_distance_from_stair)
         self.go_backward_and_stop_after_duration(speed, duration_in_sec)
         robot_position = self.distance_right + offset_sensor_right_and_center_robot
         logging.debug("Robot position before move sideways: " + str(robot_position))
         distance_move_sideways = abs(robot_position - position_found_pictogram)
         logging.debug("Distance move sideways: " + str(distance_move_sideways))
-        duration_in_sec = calculate_duration(speed, distance_move_sideways)
+        duration_in_sec = calculate_duration_length_in_cm(speed, distance_move_sideways)
         if robot_position - offset_inaccuracy_allowed_max > position_found_pictogram:
             self.turn_right_90degrees()
-            logging.debug("Go to the right: " + str(speed*duration_in_sec) + "mm")
+            logging.debug("Go to the right: " + str(speed * duration_in_sec) + "mm")
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_left_90degrees()
         elif robot_position + offset_inaccuracy_allowed_max < position_found_pictogram:
             self.turn_left_90degrees()
-            logging.debug("Go to the left: " + str(speed*duration_in_sec) + "mm")
+            logging.debug("Go to the left: " + str(speed * duration_in_sec) + "mm")
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_right_90degrees()
         else:
-            logging.info("Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
+            logging.info(
+                "Distance move sideways is smaller than defined offset_inaccuracy_allowed_max. No move sideways needed")
         logging.info("Robot is on drop off position")
