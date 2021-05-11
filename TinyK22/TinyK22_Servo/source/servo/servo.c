@@ -64,17 +64,17 @@ tError servoParseCommand(const char *cmd)
 	else if (strncmp(cmd, "status", sizeof("status") - 1) == 0)
 	{
 		uint16_t degPTA4 = mapRangeToAnother(FTM0->CONTROLS[1].CnV, SERVO_CnV_MIN,
-				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 1 value to degrees (0..180)
+				SERVO_CnV_MAX, 0, 180);    						// Convert ftm0 channel 1 value to degrees (0..180)
 		uint16_t degPTA5 = mapRangeToAnother(FTM0->CONTROLS[2].CnV, SERVO_CnV_MIN,
-				SERVO_CnV_MAX, 0, 180);    // Convert ftm0 channel 2 value to degrees (0..180)
+				SERVO_CnV_MAX, 0, 180);    						// Convert ftm0 channel 2 value to degrees (0..180)
 		termWriteLine("servo status:");
-		servoPrintValue("pta4", degPTA4);				// Print current degree of servo
+		servoPrintValue("pta4", degPTA4);					// Print current degree of servo
 		servoPrintValue("pta5", degPTA5);
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "pta45", sizeof("pta45") - 1) == 0)
 	{
-		cmd += sizeof("pta45");						// cuts off the "pta45" from the string, now the value afterwards is in cmd
+		cmd += sizeof("pta45");										// cuts off the "pta45" from the string, now the value afterwards is in cmd
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
@@ -82,16 +82,16 @@ tError servoParseCommand(const char *cmd)
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
 		uint16_t ch_value = mapRangeToAnother(v, 0, 180, SERVO_CnV_MIN,
-				SERVO_CnV_MAX);    						// Map the value from (0...180) to the range of the Servo pulse width
+				SERVO_CnV_MAX);    									// Map the value from (0...180) to the range of the Servo pulse width
 		FTM0->CONTROLS[1].CnV = ch_value;				// Set PWM pulse width of PTA4
 		FTM0->CONTROLS[2].CnV = ch_value;				// Set PWM Pulse width of PTA5
 
-		servoPrintValue("pta45", v);				// Print current degree of servo
+		servoPrintValue("pta45", v);						// Print current degree of servo
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "pta4", sizeof("pta4") - 1) == 0)
 	{
-		cmd += sizeof("pta4");						// cuts off the "pta4" from the string, now the value afterwards is in cmd
+		cmd += sizeof("pta4");										// cuts off the "pta4" from the string, now the value afterwards is in cmd
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
@@ -102,12 +102,12 @@ tError servoParseCommand(const char *cmd)
 				SERVO_CnV_MAX);    									// Map the value from (0...180) to the range of the Servo pulse width
 		FTM0->CONTROLS[1].CnV = ch_value;				// Set PWM pulse width
 
-		servoPrintValue("pta4", v);				// Print current degree of servo
+		servoPrintValue("pta4", v);							// Print current degree of servo
 		result = EC_SUCCESS;
 	}
 	else if (strncmp(cmd, "pta5", sizeof("pta5") - 1) == 0)
 	{
-		cmd += sizeof("pta5");						// cuts off the "pta5" from the string, now the value afterwards is in cmd
+		cmd += sizeof("pta5");										// cuts off the "pta5" from the string, now the value afterwards is in cmd
 		uint16_t v;
 		result = utilScanDecimal16u(&cmd, &v);		// test if it is a decimal
 		if (result != EC_SUCCESS) return result;
@@ -115,10 +115,10 @@ tError servoParseCommand(const char *cmd)
 		if (v < 0 || v > 180) return EC_INVALID_ARG;	// if the value is out of bound (0...180) throw error
 
 		uint16_t ch_value = mapRangeToAnother(v, 0, 180, SERVO_CnV_MIN,
-				SERVO_CnV_MAX);    						// Map the value from (0...180) to the range of the Servo pulse width
+				SERVO_CnV_MAX);    									// Map the value from (0...180) to the range of the Servo pulse width
 		FTM0->CONTROLS[2].CnV = ch_value;				// Set PWM pulse width
 
-		servoPrintValue("pta5", v);				// Print current degree of servo
+		servoPrintValue("pta5", v);							// Print current degree of servo
 		result = EC_SUCCESS;
 	}
   return result;
@@ -130,6 +130,8 @@ tError servoParseCommand(const char *cmd)
  */
 void servoInit(void)
 {
+	int16_t initDegValue;											// Degree value the servos are initialized with
+
 	#if SERVO_PTA4_ENABLE
 	// PTA4 Muxing for FTM0_CH1
 	PORTA->PCR[4] = PORT_PCR_MUX(3);
@@ -137,8 +139,11 @@ void servoInit(void)
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[1].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
 
-	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
-	FTM0->CONTROLS[1].CnV = SERVO_CnV_MIN;
+	// initialy set servo pta4 to a degree position given in the h-file
+	initDegValue = mapRangeToAnother(SERVO_PTA4_DEG_INIT, 0, 180, SERVO_CnV_MIN,
+					SERVO_CnV_MAX);    											// Map the value from (0...180) to the range of the Servo pulse width
+	FTM0->CONTROLS[1].CnV = initDegValue;						// Set PWM pulse width
+	//FTM0->CONTROLS[1].CnV = SERVO_CnV_MIN;
 	#endif
 
 	#if SERVO_PTA5_ENABLE
@@ -148,8 +153,11 @@ void servoInit(void)
 	// FTM0 channel configuration as edge-align pwm and high-true pulses
 	FTM0->CONTROLS[2].CnSC = FTM_CnSC_MSx(2) | FTM_CnSC_ELSx(2);
 
-	// initialy set servo to a 0 degree position (PWM to a ~1ms pulse)
-	FTM0->CONTROLS[2].CnV = SERVO_CnV_MIN;
+	// initialy set servo pta5 to a degree position given in the h-file
+	initDegValue = mapRangeToAnother(SERVO_PTA5_DEG_INIT, 0, 180, SERVO_CnV_MIN,
+					SERVO_CnV_MAX);    											// Map the value from (0...180) to the range of the Servo pulse width
+	FTM0->CONTROLS[2].CnV = initDegValue;						// Set PWM pulse width
+	//FTM0->CONTROLS[2].CnV = SERVO_CnV_MIN;
 	#endif
 
   // register terminal command line handler

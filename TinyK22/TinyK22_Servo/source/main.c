@@ -45,12 +45,8 @@ void BlinkBlueLedEveryMS(uint16_t timeMS)
 
   if (j++ == FTM3_TOFS_MS(timeMS)) 		// toogle blue led every timeMS milliseconds
   {
-	  j=0;
-      GPIOC->PTOR = (1<<2);
-//      if(FTM0->CONTROLS[1].CnV == 250)
-//    	  FTM0->CONTROLS[1].CnV = 500;
-//      else
-//    	  FTM0->CONTROLS[1].CnV = 250;
+  	j=0;
+  	GPIOC->PTOR = (1<<2);
   }
 }
 
@@ -67,8 +63,6 @@ void ProcessDrive(void)
     if (getMotorsEnabled()) // If the motors are enabled
     {
     	quadContinuousSpeedTransmission();	// Sends continuous speed data via UART, if getContSpd is enabled
-//    	speedL = speedR = 10;	// 30mm/s
-//      driveSetSpeed(speedL, speedR);
       driveToWork();
     }
     else
@@ -78,8 +72,6 @@ void ProcessDrive(void)
     }
   }
 }
-
-
 
 /**
  * The main function of the MC-Car app.
@@ -107,10 +99,6 @@ void main(void)
   // configure blue led on PTC2
   PORTC->PCR[2] = PORT_PCR_MUX(1);
   GPIOC->PDDR |= (1<<2);
-
-//  // Set the motor PWM to a test value
-//  motorSetPwmLeft(127);
-//  motorSetPwmRight(59);
 
   while(TRUE)
   {
