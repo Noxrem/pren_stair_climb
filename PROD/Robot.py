@@ -188,7 +188,7 @@ class Robot:
         is_found_with_sensor = False
         is_found_with_camera = False
         degree = 0
-        while not is_found_with_sensor or not is_found_with_camera:
+        while not is_found_with_sensor and not is_found_with_camera:
             if is_turn_direction_left:
                 self.turn_left()
             else:
