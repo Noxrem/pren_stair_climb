@@ -20,11 +20,11 @@
 #define SERVO_PTA5_ENABLE			1
 
 // Servo degree values to be initialized with on startup [degree]
-#define SERVO_PTA4_DEG_INIT			90
-#define SERVO_PTA5_DEG_INIT			90
+#define SERVO_PTA4_DEG_INIT			10		// ARM of the Gefyra (ARM in resting position, pointing to the back)
+#define SERVO_PTA5_DEG_INIT			90		// Raspberry Pi CAM (centered setting)
 
-											// Values for TGY-50090M
-#define SERVO_CnV_MAX				570		// Max. value of the FTM0 Channel equivalent to a PWM pulse width of 2ms (2ms / (1/fclk))
+											// Values for SG92R
+#define SERVO_CnV_MAX				640		// Max. value of the FTM0 Channel equivalent to a PWM pulse width of 2ms (2ms / (1/fclk))
 #define SERVO_CnV_MIN				140		// Min. value of the FTM0 Channel equivalent to a PWM pulse width of 1ms (1ms / (1/fclk))
 
 void servoOutDegree(const char *servo, uint16_t value);
