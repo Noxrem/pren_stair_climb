@@ -40,12 +40,12 @@ void ProcessBridgeAlign(void)
 		if(!(SWITCH_LEFT_PDIR & (uint32_t)(1 << SWITCH_LEFT_PIN)))	// if the left switch is activated (touching the stairs)
 		{
 			algnSpeedL = 0;
-			driveSetSpeed(algnSpeedR, algnSpeedL);	// stop the left wheel and continue with the right wheel
+			driveSetSpeed(algnSpeedL, algnSpeedR);	// stop the left wheel and continue with the right wheel
 		}
 		if(!(SWITCH_RIGHT_PDIR & (uint32_t)(1 << SWITCH_RIGHT_PIN)))	// if the left switch is activated (touching the stairs)
 		{
 			algnSpeedR = 0;
-			driveSetSpeed(algnSpeedR, algnSpeedL);	// stop the right wheel and continue with the left wheel
+			driveSetSpeed(algnSpeedL, algnSpeedR);	// stop the right wheel and continue with the left wheel
 		}
 		if(!algnSpeedL && !algnSpeedR)	// when both switches have been touched (the device is aligned)
 		{
@@ -78,7 +78,7 @@ tError bridgeAlignParseCommand(const char *cmd)
 	{
 		algnSpeedR = algnSpeed;									// Set the alignment speed
 		algnSpeedL = algnSpeed;
-		driveSetSpeed(algnSpeedR, algnSpeedL);	// Start the motors
+		driveSetSpeed(algnSpeedL, algnSpeedR);	// Start the motors
 		bridgeAlignEnabled = true;							// Start bridge alignment
 		termWriteLine("Alignment started");
 		result = EC_SUCCESS;
@@ -115,8 +115,8 @@ void bridgeAlignInit(void)
 	GPIOB->PDDR &= ~(1<<1 | 1<<3);	// Configure PTB1 and PTB3 as input
 
 	// Set input with pull-up
-	PORTB->PCR[1] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA1 as GPIO with pull-up
-	PORTB->PCR[3] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTA2 as GPIO with pull-up
+	PORTB->PCR[1] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB1 as GPIO with pull-up
+	PORTB->PCR[3] = PORT_PCR_MUX(1) | PORT_PCR_PE(1) | PORT_PCR_PS(1);	// PTB3 as GPIO with pull-up
 
 	// Set default alignment speed
 	algnSpeed = DEFAULT_ALIGN_SPEED;
