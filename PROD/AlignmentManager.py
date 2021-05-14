@@ -1,5 +1,5 @@
 import logging
-
+import Motor
 import UARTAccess
 
 
@@ -15,15 +15,17 @@ class AlignmentManager:
     def __init__(self):
         logging.info("init alignmentManager")
         self.serial_access = UARTAccess.UARTAccess()
+        self.motor = Motor.Motor()   # intitialize motor
 
     def do_alignment(self, speed=30):
+        self.motor.enable()
         try:
             logging.debug("set alignment speed to " + str(speed) + "mm/s")
             self.serial_access.write(self.cmd_speed + str(speed))   # Set the speed of the alignment process
             logging.debug("get in dance mood and seek out the juicy stair, send start command")
             response = self.serial_access.write_and_read(self.cmd_start)
-            if response != str.encode(self.cmd_start_response):                # Raise Exception if no start acknowledge received
-                raise ValueError("Alignment not started!")
+            #if response != str.encode(self.cmd_start_response):                # Raise Exception if no start acknowledge received
+            #   raise ValueError("Alignment not started!")
             # TODO next line runns endlessly
             while self.serial_access.read() != str.encode(self.cmd_response):   # Wait for alignment to finish
                 logging.debug("aaaaaaaaa")
