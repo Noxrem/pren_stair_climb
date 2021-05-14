@@ -14,13 +14,13 @@
 #ifndef SERVO_SERVO_H_
 #define SERVO_SERVO_H_
 
-#define SERVO_PTA4_ENABLE			1
+#define SERVO_PTD4_ENABLE			1
 #define SERVO_PTA1_ENABLE			0	// not implemented
 #define SERVO_PTA2_ENABLE			0	// not implemented
 #define SERVO_PTA5_ENABLE			1
 
 // Servo degree values to be initialized with on startup [degree]
-#define SERVO_PTA4_DEG_INIT			10		// ARM of the Gefyra (ARM in resting position, pointing to the back)
+#define SERVO_PTD4_DEG_INIT			10		// ARM of the Gefyra (ARM in resting position, pointing to the back)
 #define SERVO_PTA5_DEG_INIT			90		// Raspberry Pi CAM (centered setting)
 
 											// Values for SG92R
