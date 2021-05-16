@@ -29,9 +29,9 @@ robot.let_socket_down()
 robot.go_forward_fast()
 robot.pull_up()
 robot.pull_to_bridge_drop_off()
+robot.turn_arm_down()
 robot.go_forward_and_stop_after_duration(50, Robot.calculate_duration_length_in_mm(50, 400))  # todo: measure distance
 robot.celebrate(robot.found_pictogram, time.time() - start_time)
-
 
 robot.dispose()
 

@@ -2,7 +2,7 @@ import UARTAccess
 import logging
 
 
-class CamServo:
+class ArmServo:
     degrees = None
     serial_access = None
 

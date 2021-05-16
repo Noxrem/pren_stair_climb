@@ -13,6 +13,7 @@ import logging
 import TargetPlatform
 import UARTAccess
 import StairDetectorWithUltrasonic
+import ArmServo
 
 
 def calculate_duration_length_in_mm(speed, length_target_in_mm):
@@ -46,6 +47,7 @@ class Robot:
         self.stair_detector = StairDetector.StairDetector()
         self.stair_detector_with_ultrasonic = StairDetectorWithUltrasonic.StairDetectorWithUltrasonic()
         self.alignmentManager = AlignmentManager.AlignmentManager()
+        self.arm_servo = ArmServo.ArmServo()
         self.target_platform = TargetPlatform.TargetPlatform()
         self.distance_front = None
         self.distance_right = None
@@ -121,9 +123,17 @@ class Robot:
         logging.info("Robot: camera turn up")
         self.camera.cam_servo.turn_up()
 
-    def turn_cam_left(self):
+    def turn_cam_down(self):
         logging.info("Robot: camera turn down")
         self.camera.cam_servo.turn_down()
+
+    def turn_arm_down(self):
+        logging.info("Robot: turn arm down")
+        self.arm_servo.turn_down()
+
+    def turn_arm_up(self):
+        logging.info("Robot: turn arm up")
+        self.arm_servo.turn_up()
 
     def acknowledge_pictogram(self, found_pictogram_english_lowercase):
         logging.info("Robot: acknowledge pictogram")
