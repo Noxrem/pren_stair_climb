@@ -18,10 +18,10 @@ class Winch:
         message = "mot setW -" + str(speed)
         self.serial_access.write(message)
         time.sleep(10)
-        positiv_counter = 0
-        while positiv_counter < 5:
+        positive_counter = 0
+        while positive_counter < 5:
             if self.accelerometer.get_acceleration_x() >= 9.81:  # TODO: define value
-                positiv_counter += 1
+                positive_counter += 1
             message = self.accelerometer.get_acceleration_x()
             logging.info("pull up")
             logging.info(str(message))
@@ -31,7 +31,7 @@ class Winch:
         self.serial_access.write(message)
 
     def pull_to_end(self, speed, duration):
-        message = "mot setW " + str(speed)
+        message = "mot setW -" + str(speed)
         self.serial_access.write(message)
         time.sleep(duration)
         message = "mot setW 0"
