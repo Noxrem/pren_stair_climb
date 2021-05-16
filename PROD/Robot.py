@@ -93,13 +93,13 @@ class Robot:
         logging.info("Robot: go backward fast")
         self.motor_wheels.rotate(-70, -70)
 
-    def turn_right(self):
+    def turn_right(self, speed=30):
         logging.info("Robot: turn right")
-        self.motor_wheels.rotate(-30, 30)
+        self.motor_wheels.rotate(-speed, speed)
 
-    def turn_left(self):
+    def turn_left(self, speed=30):
         logging.info("Robot: turn left")
-        self.motor_wheels.rotate(30, -30)
+        self.motor_wheels.rotate(speed, -speed)
 
     def turn_right_90degrees(self):
         logging.info("Robot: turn right 90 degrees")
