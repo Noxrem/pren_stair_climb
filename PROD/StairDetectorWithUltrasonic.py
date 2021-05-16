@@ -15,6 +15,7 @@ class StairDetectorWithUltrasonic:
         bigger_than_previous_counter = 0
         while bigger_than_previous_counter < 10:  # TODO: define best value
             distance = self.ultrasonic_module_control.get_distance_in_cm(0)
+            logging.info(str(distance) + " cm")
             if distance < 190:
                 logging.info(str(distance) + " cm")
                 distances.append(distance)
