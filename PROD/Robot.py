@@ -279,3 +279,4 @@ class Robot:
         self.let_socket_down()
         self.stop()
         self.motor_wheels.disable()
+        self.turn_arm_up()
