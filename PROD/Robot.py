@@ -227,7 +227,7 @@ class Robot:
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")
-        self.go_forward_medium()
+        self.go_forward_fast()
         self.distance_front = self.measure_distance_sensor_front()
         offset_to_slow_down_cm = 20  # TODO: Define offset
         while self.distance_front > offset_to_slow_down_cm:
