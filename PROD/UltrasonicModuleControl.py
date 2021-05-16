@@ -10,7 +10,7 @@ import logging
 
 class UltrasonicModuleControl:
 
-    NUMBER_MEASUREMENTS = 20
+    NUMBER_MEASUREMENTS = 5
 
     # Define sensor module 1
     sensor_front = None

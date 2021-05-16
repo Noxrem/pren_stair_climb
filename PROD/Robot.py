@@ -195,6 +195,7 @@ class Robot:
 
     def turn_and_find_stair(self, is_turn_direction_left, is_running_on_a_display):
         logging.info("Robot: turn and find stair")
+        self.camera.cam_servo.turn_to_degree(90)
         is_found_with_sensor = False
         is_found_with_camera = False
         degree = 0
@@ -225,6 +226,9 @@ class Robot:
         self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic()
         self.stop()
         logging.info("stair found")
+        self.turn_right()
+        time.sleep(0.5)
+        self.stop()
 
     def go_forward_and_get_distance(self):
         logging.info("Robot: go forward and get distance")

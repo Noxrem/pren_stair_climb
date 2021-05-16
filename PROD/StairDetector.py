@@ -24,7 +24,7 @@ class StairDetector:
         self.line_rotation = 1
         self.canny1 = 18
         self.canny2 = 43
-        self.target_amount_detections = 60
+        self.target_amount_detections = 30
         self.window_trackbar_name = "Trackbar Board"
         self.trackbar0_name = 'NoVLines'
         self.trackbar1_name = 'NoHLines'
