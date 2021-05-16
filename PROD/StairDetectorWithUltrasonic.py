@@ -24,6 +24,4 @@ class StairDetectorWithUltrasonic:
                 i += 1
             else:
                 bigger_than_previous_counter = 0
-
-
         logging.info("stair detected")

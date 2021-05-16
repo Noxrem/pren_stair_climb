@@ -8,25 +8,21 @@ class ArmServo:
 
     def __init__(self):
         logging.info("create new ArmServo")
-        self.degrees = 180
         self.serial_access = UARTAccess.UARTAccess()
+        self.turn_up()
+        self.degrees = 30
+
 
 #  TODO: define degrees
 
     def turn_down(self):
-        if self.degrees != 90:
             logging.info("turn arm servo down")
-            message = "srv arm 90"
+            message = "srv arm 150"
             self.serial_access.write(message)
-            self.degrees = 90
-        else:
-            logging.warning("arm servo is already turned down")
+            self.degrees = 150
 
     def turn_up(self):
-        if self.degrees != 180:
             logging.info("turn arm servo up")
-            message = "srv arm 180"
+            message = "srv arm 30"
             self.serial_access.write(message)
-            self.degrees = 180
-        else:
-            logging.warning("arm servo is already turned up")
+            self.degrees = 30
