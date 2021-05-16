@@ -10,15 +10,16 @@ class CamServo:
         logging.info("create new CamServo")
         self.degrees = 90
         self.serial_access = UARTAccess.UARTAccess()
+        self.turn_ahead()
 
 #  TODO: define degrees
 
     def turn_ahead(self):
-        if self.degrees != 90:
+        if self.degrees != 80:
             logging.info("turn cam servo ahead")
-            message = "srv cam 90"
+            message = "srv cam 80"
             self.serial_access.write(message)
-            self.degrees = 90
+            self.degrees = 80
         else:
             logging.warning("cam servo is already turned ahead")
 

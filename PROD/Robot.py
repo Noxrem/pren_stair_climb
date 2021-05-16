@@ -182,9 +182,9 @@ class Robot:
     def turn_and_find_pictogram(self, is_turn_direction_left):
         logging.info("Robot: turn and find pictogram")
         if is_turn_direction_left:
-            self.turn_left(40)
+            self.turn_left()
         else:
-            self.turn_right(40)
+            self.turn_right()
         is_found, self.found_pictogram = self.object_detector.find_pictogram_start_platform(self.camera.capture)
         self.stop()
         if is_found and self.found_pictogram is not None:
