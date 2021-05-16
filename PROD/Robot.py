@@ -104,14 +104,14 @@ class Robot:
     def turn_right_90degrees(self):
         logging.info("Robot: turn right 90 degrees")
         self.motor_wheels.rotate(-50, 50)
-        duration_milliseconds = 5900  # TODO: define the correct duration
+        duration_milliseconds = 5500  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
         self.stop()
 
     def turn_left_90degrees(self):
         logging.info("Robot: turn left 90 degrees")
         self.motor_wheels.rotate(50, -50)
-        duration_milliseconds = 5900  # TODO: define the correct duration
+        duration_milliseconds = 5500  # TODO: define the correct duration
         time.sleep(duration_milliseconds / 1000)
         self.stop()
 
