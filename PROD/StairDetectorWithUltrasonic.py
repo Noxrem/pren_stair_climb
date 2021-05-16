@@ -21,4 +21,4 @@ class StairDetectorWithUltrasonic:
                 if distances.__getitem__(i) > distances.__getitem__(i - 1):
                     bigger_than_previous_counter += 1
                 i += 1
-            time.sleep(0.1)
+            time.sleep(0.2)
