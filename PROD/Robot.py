@@ -193,19 +193,14 @@ class Robot:
             logging.warning("pictogram couldn't be found")
             self.turn_and_find_pictogram(True)
 
-    def turn_and_find_stair(self, is_turn_direction_left, is_running_on_a_display):
+    def find_stair(self, is_running_on_a_display):
         logging.info("Robot: turn and find stair")
         self.camera.cam_servo.turn_to_degree(90)
         is_found_with_sensor = False
         is_found_with_camera = False
         degree = 0
         while not is_found_with_sensor or not is_found_with_camera:
-            if is_turn_direction_left:
-                self.turn_left()
-            else:
-                self.turn_right()
-            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,
-                                                                                 is_running_on_a_display)  # 2. parameter -> switch on/off display mode
+            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,                                                                 is_running_on_a_display)  # 2. parameter -> switch on/off display mode
             if is_found_with_camera:
                 logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
                 self.stop()

@@ -16,12 +16,12 @@ class StairDetector:
         self.detection_counter = 0
         self.negativ_counter_current = 0
         self.amount_v_lines = 8  # TODO: define best values
-        self.amount_h_lines = 20
+        self.amount_h_lines = 10
         self.amount_lines = 100
         self.max_line_gap = 40
         self.line_h_length = 313
         self.line_v_length = 50
-        self.line_rotation = 1
+        self.line_rotation = 5
         self.canny1 = 18
         self.canny2 = 43
         self.target_amount_detections = 30
