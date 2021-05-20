@@ -159,9 +159,9 @@ class Robot:
         # self.speaker.play("getready.mp3", True)  # todo: enable on the competition
         self.magnet_manager.set_off_power_bridge()
 
-    def celebrate(self, found_pictogram_english_lowercase, duration):
+    def celebrate(self, found_pictogram_english_lowercase, lap_duration):
         logging.info("Robot: celebrate")
-        self.speaker.celebrate(found_pictogram_english_lowercase, duration)
+        self.speaker.celebrate(found_pictogram_english_lowercase, lap_duration)
 
     def measure_distance_sensor_front(self):
         logging.info("Robot: measure distance sensor front")
