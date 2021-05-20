@@ -21,7 +21,7 @@ class StairDetector:
         self.max_line_gap = 40
         self.line_h_length = 313
         self.line_v_length = 50
-        self.line_rotation = 5
+        self.line_rotation = 2
         self.canny1 = 18
         self.canny2 = 43
         self.target_amount_detections = 30
@@ -36,7 +36,7 @@ class StairDetector:
         self.trackbar7_name = 'canny1'
         self.trackbar8_name = 'canny2'
         self.trackbar9_name = 'NoDetect'
-        self.max_time_stair_detection = 10  # TODO: define max duration
+        self.max_time_stair_detection = 30  # TODO: define max duration
         self.is_stair_found = False
         self.is_timer_down = False
 
@@ -127,7 +127,6 @@ class StairDetector:
                 self.is_stair_found = False
                 self.is_timer_down = True
                 break
-        video_capture.release()
         if is_running_on_a_display:
             cv2.destroyAllWindows()
         return self.is_stair_found, self.is_timer_down

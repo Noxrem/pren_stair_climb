@@ -208,6 +208,7 @@ class Robot:
             logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
             distance = self.measure_distance_sensor_front()
             if distance < 170:
+                logging.info("distance: " + str(distance))
                 logging.info("stair is found for sure")
                 is_stair_found = True
             else:
@@ -219,11 +220,19 @@ class Robot:
     def turn_and_find_stair_only_with_ultrasonic(self):
         logging.info("Robot: turn and find stair only with ultrasonic")
         self.turn_left()
-        self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic()  # TODO: decide which method should be used
+        min_target_amount = self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic_v2()  # TODO: decide which method should be used
         self.stop()
         logging.info("stair found with ultrasonic")
         self.turn_right()
-        time.sleep(0.5)
+        time.sleep(min_target_amount*0.28/3)
+        self.stop()
+
+    def turn_and_find_stair_with_camera(self):
+        logging.info("Robot: turn and find stair only with ultrasonic")
+        is_stair_found = False
+        self.turn_left()
+        while not is_stair_found:
+            is_stair_found = self.find_stair_with_camera_and_ultrasonic_control(True)
         self.stop()
 
     def go_forward_and_get_distance(self):
