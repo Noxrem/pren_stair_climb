@@ -56,12 +56,15 @@ class StairDetector:
         cv2.createTrackbar(self.trackbar8_name, self.window_trackbar_name, self.canny2, 255, self.nothing)
         cv2.createTrackbar(self.trackbar9_name, self.window_trackbar_name, self.target_amount_detections, 300, self.nothing)
 
-    def find_stair(self, video_capture, is_running_on_a_display):
+    def find_stair(self, video_capture, is_running_on_a_display, is_running_in_control_mode):
         logging.info("find stair")
-        start_time = time.time()
-        logging.debug("start time of stair detection: " + str(start_time))
+        if is_running_in_control_mode:
+            self.max_time_stair_detection = 10
+            self.line_rotation = 30
         if is_running_on_a_display:
             self._create_trackbar_window()
+        start_time = time.time()
+        logging.debug("start time of stair detection: " + str(start_time))
         while True:
             if is_running_on_a_display:
                 self.amount_v_lines = cv2.getTrackbarPos(self.trackbar0_name, self.window_trackbar_name)
@@ -76,10 +79,6 @@ class StairDetector:
                 self.target_amount_detections = cv2.getTrackbarPos(self.trackbar9_name, self.window_trackbar_name)
             ret, orig_frame = video_capture.read()
             frame = cv2.GaussianBlur(orig_frame, (5, 5), 0)
-            # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) # TODO: Remove Code
-            # color1 = np.array([0, 0, 0])
-            # color2 = np.array([255, 255, 255])
-            # mask = cv2.inRange(hsv, color1, color2)
             edges = cv2.Canny(frame, self.canny1, self.canny2)
             lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 50, maxLineGap=self.max_line_gap)
             if lines is not None:

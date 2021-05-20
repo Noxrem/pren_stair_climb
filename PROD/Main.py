@@ -32,7 +32,7 @@ try:
     # robot.go_forward_and_stop_after_duration(70, Robot.calculate_duration_length_in_mm(70, 300))
     # robot.turn_and_find_pictogram(True)
     # robot.speaker.play_text(robot.found_pictogram)
-    robot.find_stair_mixed()
+    robot.turn_and_find_stair_with_ultrasonic_and_camera_control(True)
     # robot.go_forward_and_get_distance()
     # robot.do_alignment()
     # robot.go_to_drop_off_position()
