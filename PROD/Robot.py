@@ -65,15 +65,15 @@ class Robot:
 
     def go_forward_slow(self):
         logging.info("Robot: go forward slow")
-        self.motor_wheels.rotate(20, 20)
+        self.motor_wheels.rotate(30, 30)
 
     def go_forward_medium(self):
         logging.info("Robot: go forward medium")
-        self.motor_wheels.rotate(50, 50)
+        self.motor_wheels.rotate(80, 80)
 
     def go_forward_fast(self):
         logging.info("Robot: go forward fast")
-        self.motor_wheels.rotate(70, 70)
+        self.motor_wheels.rotate(200, 200)
 
     def go_backward_and_stop_after_duration(self, speed, duration):
         logging.info("Robot: go backwards with speed " + str(speed) + " during " + str(duration) + " seconds")
@@ -83,15 +83,15 @@ class Robot:
 
     def go_backward_slow(self):
         logging.info("Robot: go backward slow")
-        self.motor_wheels.rotate(-20, -20)
+        self.motor_wheels.rotate(-30, -30)
 
     def go_backward_medium(self):
         logging.info("Robot: go backward medium")
-        self.motor_wheels.rotate(-50, -50)
+        self.motor_wheels.rotate(-80, -80)
 
     def go_backward_fast(self):
         logging.info("Robot: go backward fast")
-        self.motor_wheels.rotate(-70, -70)
+        self.motor_wheels.rotate(-200, -200)
 
     def turn_right(self, speed=30):
         logging.info("Robot: turn right")
@@ -203,7 +203,6 @@ class Robot:
             is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,                                                                 is_running_on_a_display)  # 2. parameter -> switch on/off display mode
             if is_found_with_camera:
                 logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
-                self.stop()
                 distance = self.measure_distance_sensor_front()
                 if distance < 170:
                     is_found_with_sensor = True
