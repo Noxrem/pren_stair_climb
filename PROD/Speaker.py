@@ -15,7 +15,7 @@ class Speaker:
         self.language = 'en'
 
     def play_text(self, found_pictogram_english_lowercase):
-        message = "We can see a " + found_pictogram_english_lowercase + ", will immediately searching it!"
+        message = "We can see the target icon " + found_pictogram_english_lowercase + ", will immediately get it for you, darling!"
         logging.info("Create MP3 file for pictogram %s", message)
         tts = gTTS(text=message, lang=self.language, slow=False)
         mp3 = 'TTS_message_pictogram.mp3'
@@ -25,15 +25,23 @@ class Speaker:
 
     def celebrate(self, found_pictogram_english_lowercase, lap_duration=20):
         logging.info("!!!!celebrate!!!")
-        lap_duration = round(lap_duration, 2)
-        message = "We have found the target icon " + found_pictogram_english_lowercase + "and we need + " + str(lap_duration) + " to do so"
+        hour, minutes, seconds = self.convert(round(lap_duration, 2))
+        duration_string = str(minutes) + "minutes and " + str(seconds) + "seconds"
+        message = "We have found the target icon " + found_pictogram_english_lowercase + "and we need + " + duration_string + " to do so"
         tts = gTTS(text=message, lang=self.language, slow=False)
         mp3 = "TTS_message_celebrate.mp3"
         tts.save(mp3)
         logging.info("Play MP3 file celebration")
         self.play(mp3)
         logging.info("Party on!!!")
-        self.play(self.celebration_sound, True, 20, "No drinks anymore.. so were gonna leave")
+        self.play(self.celebration_sound, True, 20, "No drinks anymore.. so were going home then")
+
+    # Convert seconds
+    # into hours, minutes and seconds
+    def convert(self, seconds):
+        minute, sec = divmod(seconds, 60)
+        hour, minute = divmod(minute, 60)
+        return hour, minute, sec
 
     @staticmethod
     def play(path_to_file, play_background=False, duration=None, log_msg=None):
