@@ -55,8 +55,10 @@ class ObjectDetector:
             ret, frame = video_capture.read()
             # converting the color image to a gray scale image
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # detecting in the gray scale
+            # if detection is still unstable, add scale parameter (2nd position)
+            # hammers = hammer_clsfr.detectMultiScale(gray, 1.15)
             hammers = hammer_clsfr.detectMultiScale(gray)
             rulers = ruler_clsfr.detectMultiScale(gray)
             paintbuckets = paintbucket_clsfr.detectMultiScale(gray)
