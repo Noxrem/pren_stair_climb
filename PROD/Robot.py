@@ -193,33 +193,35 @@ class Robot:
             logging.warning("pictogram couldn't be found")
             self.turn_and_find_pictogram(True)
 
-    def find_stair(self, is_running_on_a_display):
-        logging.info("Robot: turn and find stair")
+    def find_stair_mixed(self, is_running_on_a_display):
+        self.turn_and_find_stair_only_with_ultrasonic()
+        is_stair_found_with_camera = self.find_stair_with_camera_and_ultrasonic_control(is_running_on_a_display)
+        if not is_stair_found_with_camera:
+            self.turn_and_find_stair_only_with_ultrasonic()
+
+    def find_stair_with_camera_and_ultrasonic_control(self, is_running_on_a_display):
+        is_stair_found = False
+        logging.info("Robot: find stair with camera")
         self.camera.cam_servo.turn_to_degree(90)
-        is_found_with_sensor = False
-        is_found_with_camera = False
-        degree = 0
-        while not is_found_with_sensor or not is_found_with_camera:
-            is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture,                                                                 is_running_on_a_display)  # 2. parameter -> switch on/off display mode
-            if is_found_with_camera:
-                logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
-                distance = self.measure_distance_sensor_front()
-                if distance < 170:
-                    is_found_with_sensor = True
-            if not is_found_with_camera and is_timer_down:
-                logging.info("stair could not be found. Turn up camera")
-                if degree > 24:
-                    degree = 0
-                degree += 12
-                self.camera.cam_servo.turn_to_degree(90 + degree)
-        logging.info("stair is found for sure")
+        is_found_with_camera, is_timer_down = self.stair_detector.find_stair(self.camera.capture, is_running_on_a_display)  # 2. parameter -> switch on/off display mode
+        if is_found_with_camera:
+            logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
+            distance = self.measure_distance_sensor_front()
+            if distance < 170:
+                logging.info("stair is found for sure")
+                is_stair_found = True
+            else:
+                logging.info("it was not the stair")
+        else:
+            logging.info("stair could not be found.")
+        return is_stair_found
 
     def turn_and_find_stair_only_with_ultrasonic(self):
         logging.info("Robot: turn and find stair only with ultrasonic")
         self.turn_left()
-        self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic()
+        self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic()  # TODO: decide which method should be used
         self.stop()
-        logging.info("stair found")
+        logging.info("stair found with ultrasonic")
         self.turn_right()
         time.sleep(0.5)
         self.stop()
