@@ -47,11 +47,11 @@ class StairDetectorWithUltrasonic:
             if distance < 190:
                 distances.append(distance)
                 positive_counter += 1
-                logging.info("Add distance to list. positiv_counter is: " + str(positive_counter) + " \ " + str(min_target_amount))
+                logging.info("Add distance to list. positive_counter is: " + str(positive_counter) + " \ " + str(min_target_amount))
             else:
                 negative_counter += 1
-                if negative_counter >= 2:
-                    logging.info("negativ counter: " + str(negative_counter))
+                if negative_counter >= 5:
+                    logging.info("negative counter: " + str(negative_counter))
                     distances.clear()
                     positive_counter = 0
                     negative_counter = 0
