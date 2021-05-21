@@ -15,8 +15,9 @@ class ObjectDetector:
     wrap = "wrap"
     wrench = "wrench"
     scale_factor = 1.15
+    cascade_producer = "mau"  # stofi
     threshold = 5
-    timeout = 30 # in seconds
+    timeout = 30  # in seconds
 
     def __init__(self):
         logging.info("create new object detector")
@@ -42,12 +43,12 @@ class ObjectDetector:
         timeout_start = time.time()
 
         logging.info("init classifier")
-        hammer_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.hammer + ".xml")
-        ruler_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.ruler + ".xml")
-        paintbucket_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.paintbucket + ".xml")
-        wrap_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.wrap + ".xml")
-        wrench_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.wrench + ".xml")
-        # pencil_clsfr = cv2.CascadeClassifier(self.base_path + self.pencil + ".xml")
+        hammer_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.hammer + ".xml")
+        ruler_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.ruler + ".xml")
+        paintbucket_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.paintbucket + ".xml")
+        wrap_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.wrap + ".xml")
+        wrench_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.wrench + ".xml")
+        # pencil_clsfr = cv2.CascadeClassifier(self.base_path + self.cascade_producer + self.pencil + ".xml")
 
         threshold_hammer = threshold_ruler = threshold_paintbucket = threshold_wrap = threshold_wrench = threshold_pencil = 0
 
@@ -56,10 +57,8 @@ class ObjectDetector:
             ret, frame = video_capture.read()
             # converting the color image to a gray scale image
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # detecting in the gray scale
             # if detection is still unstable, add scale parameter (2nd position)
-            # hammers = hammer_clsfr.detectMultiScale(gray, 1.15)
             hammers = hammer_clsfr.detectMultiScale(gray, self.scale_factor)
             rulers = ruler_clsfr.detectMultiScale(gray, self.scale_factor)
             paintbuckets = paintbucket_clsfr.detectMultiScale(gray, self.scale_factor)
