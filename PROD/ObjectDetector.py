@@ -14,6 +14,7 @@ class ObjectDetector:
     pencil = "pencil"
     wrap = "wrap"
     wrench = "wrench"
+    scale_factor = 1.15
     threshold = 5
     timeout = 30 # in seconds
 
@@ -41,11 +42,11 @@ class ObjectDetector:
         timeout_start = time.time()
 
         logging.info("init classifier")
-        hammer_clsfr = cv2.CascadeClassifier(self.base_path + self.hammer + ".xml")
-        ruler_clsfr = cv2.CascadeClassifier(self.base_path + self.ruler + ".xml")
-        paintbucket_clsfr = cv2.CascadeClassifier(self.base_path + self.paintbucket + ".xml")
-        wrap_clsfr = cv2.CascadeClassifier(self.base_path + self.wrap + ".xml")
-        wrench_clsfr = cv2.CascadeClassifier(self.base_path + self.wrench + ".xml")
+        hammer_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.hammer + ".xml")
+        ruler_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.ruler + ".xml")
+        paintbucket_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.paintbucket + ".xml")
+        wrap_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.wrap + ".xml")
+        wrench_clsfr = cv2.CascadeClassifier(self.base_path + "alt/" + self.wrench + ".xml")
         # pencil_clsfr = cv2.CascadeClassifier(self.base_path + self.pencil + ".xml")
 
         threshold_hammer = threshold_ruler = threshold_paintbucket = threshold_wrap = threshold_wrench = threshold_pencil = 0
@@ -59,12 +60,12 @@ class ObjectDetector:
             # detecting in the gray scale
             # if detection is still unstable, add scale parameter (2nd position)
             # hammers = hammer_clsfr.detectMultiScale(gray, 1.15)
-            hammers = hammer_clsfr.detectMultiScale(gray)
-            rulers = ruler_clsfr.detectMultiScale(gray)
-            paintbuckets = paintbucket_clsfr.detectMultiScale(gray)
-            wraps = wrap_clsfr.detectMultiScale(gray)
-            wrenches = wrench_clsfr.detectMultiScale(gray)
-            # pencils = pencil_clsfr.detectMultiScale(gray)
+            hammers = hammer_clsfr.detectMultiScale(gray, self.scale_factor)
+            rulers = ruler_clsfr.detectMultiScale(gray, self.scale_factor)
+            paintbuckets = paintbucket_clsfr.detectMultiScale(gray, self.scale_factor)
+            wraps = wrap_clsfr.detectMultiScale(gray, self.scale_factor)
+            wrenches = wrench_clsfr.detectMultiScale(gray, self.scale_factor)
+            # pencils = pencil_clsfr.detectMultiScale(gray, self.scale_factor)
 
             if len(hammers) >= 1:
                 threshold_hammer += len(hammers)
