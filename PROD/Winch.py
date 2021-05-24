@@ -15,7 +15,7 @@ class Winch:
 
     def pull_up(self, speed):
         logging.info(str(self.accelerometer.get_acceleration_x()))
-        message = "mot setW -" + str(speed)
+        message = "mot setW " + str(speed)
         self.serial_access.write(message)
         time.sleep(10)
         positive_counter = 0
@@ -31,7 +31,7 @@ class Winch:
         self.serial_access.write(message)
 
     def pull_to_end(self, speed, duration):
-        message = "mot setW -" + str(speed)
+        message = "mot setW " + str(speed)
         self.serial_access.write(message)
         time.sleep(duration)
         message = "mot setW 0"

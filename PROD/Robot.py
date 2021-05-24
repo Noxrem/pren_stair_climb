@@ -146,7 +146,8 @@ class Robot:
     def pull_to_bridge_drop_off(self):
         logging.info("Robot: can see light at the end of the tunnel")
         speed = 20
-        duration = calculate_duration_length_in_mm(speed, 300)  # todo: define distance and speed
+        distance_in_mm = 200
+        duration = calculate_duration_length_in_mm(speed, distance_in_mm)  # todo: define distance and speed
         self.winch.pull_to_end(speed, duration)
         self.go_forward_and_stop_after_duration(speed, duration)
 
