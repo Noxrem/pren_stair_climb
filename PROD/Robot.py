@@ -218,7 +218,7 @@ class Robot:
         if is_found_with_camera:
             logging.info("camera has seen something which seems to be a stair. Make a control with distance sensor")
             distance = self.measure_distance_sensor_front()
-            if distance < 170:
+            if distance < 190:
                 logging.info("distance: " + str(distance))
                 logging.info("stair is found for sure")
                 is_stair_found = True
