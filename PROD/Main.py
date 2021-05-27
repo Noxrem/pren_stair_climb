@@ -41,6 +41,7 @@ try:
      robot.go_forward_and_stop_after_duration(400, 1)
      robot.go_backward_and_stop_after_duration(400, 1)
      robot.go_backward_and_stop_after_duration(50, 1)
+     time.sleep(2)
      robot.let_socket_down()
      time.sleep(2)
      robot.go_forward_fast()

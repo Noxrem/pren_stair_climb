@@ -11,7 +11,6 @@ import Winch
 import time
 import logging
 import TargetPlatform
-import UARTAccess
 import StairDetectorWithUltrasonic
 import ArmServo
 
@@ -145,11 +144,14 @@ class Robot:
 
     def pull_to_bridge_drop_off(self):
         logging.info("Robot: can see light at the end of the tunnel")
-        speed = 20
-        distance_in_mm = 200
-        duration = calculate_duration_length_in_mm(speed, distance_in_mm)  # todo: define distance and speed
-        self.winch.pull_to_end(speed, duration)
-        self.go_forward_and_stop_after_duration(speed, duration)
+        speed_wheels = 100
+        speed_winch = 20
+        distance_in_mm_wheels = 300
+        distance_in_mm_winch = 200
+        duration_wheels = calculate_duration_length_in_mm(speed_wheels, distance_in_mm_wheels)  # todo: define distance and speed
+        duration_winch = calculate_duration_length_in_mm(speed_winch, distance_in_mm_winch)  # todo: define distance and speed
+        self.winch.pull_to_end(speed_winch, duration_winch)
+        self.go_forward_and_stop_after_duration(speed_wheels, duration_wheels)
 
     def let_socket_down(self):
         logging.info("Robot: let socket down")
@@ -265,7 +267,7 @@ class Robot:
         self.distance_right = self.measure_distance_sensor_side()
         logging.debug("Distance right: " + str(self.distance_right))
         speed = 50  # TODO: define speed
-        target_distance_from_stair = 50  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
+        target_distance_from_stair = 51  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
         duration_in_sec = calculate_duration_length_in_cm(speed, target_distance_from_stair)
         self.go_backward_and_stop_after_duration(speed, duration_in_sec)
         robot_position = self.distance_right + offset_sensor_right_and_center_robot
