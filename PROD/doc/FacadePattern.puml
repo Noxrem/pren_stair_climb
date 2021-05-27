@@ -1,0 +1,13 @@
+@startuml
+object Client
+package "Subsystem"{
+object Facade
+object TechnicalObject_1
+object TechnicalObject_2
+object TechnicalObject_n
+Client o-- Facade
+Facade o-- TechnicalObject_1
+Facade o-- TechnicalObject_2
+Facade o-- TechnicalObject_n
+}
+@enduml
