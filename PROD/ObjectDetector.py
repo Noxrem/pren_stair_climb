@@ -15,7 +15,7 @@ class ObjectDetector:
     wrap = "wrap"
     wrench = "wrench"
     scale_factor = 1.15
-    cascade_producer = "mau"  # stofi
+    cascade_producer = "mau/"  # stofi/
     threshold = 5
     timeout = 30  # in seconds
 
