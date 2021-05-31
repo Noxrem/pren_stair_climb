@@ -28,7 +28,7 @@ class UltrasonicModuleControl:
     def __init__(self):
         logging.info("create new ultrasonic module control")
         self.sensor_front = UltrasonicModule("sensor_front", self.GPIO_ECHO_1, self.GPIO_TRIGGER_1)
-        self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2) #TODO: sobald nicht auskommentiert, läuft Messung in UltrasonicModule nicht mehr, da
+        self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2)
         self.sensor_list = [self.sensor_front, self.sensor_side]
 
     def get_distance_in_cm(self, number_sensor):
