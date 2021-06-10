@@ -159,7 +159,7 @@ class Robot:
 
     def let_bridge_down(self):
         logging.info("Robot: let bridge down")
-        # self.speaker.play("getready.mp3", True)  # todo: enable on the competition
+        self.speaker.play("getready.mp3", True)
         self.magnet_manager.set_off_power_bridge()
 
     def celebrate(self, found_pictogram_english_lowercase, lap_duration):
