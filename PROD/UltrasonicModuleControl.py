@@ -6,7 +6,6 @@ import time
 from UltrasonicModule import UltrasonicModule
 import numpy
 import logging
-import statistics
 
 class UltrasonicModuleControl:
 
@@ -42,7 +41,7 @@ class UltrasonicModuleControl:
             values[count-1] = sensor.get_distance()
             # Sleep as influence on accuracy
             time.sleep(0.05)
-        return statistics.median(values) - sensor.offset
+        return numpy.median(values) - sensor.offset
 
     def calibrate_sensor(self, sensor, distance_sensor_to_object):
         logging.debug("ultrasonic module control calibrate sensor")
