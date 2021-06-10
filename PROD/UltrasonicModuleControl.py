@@ -6,7 +6,7 @@ import time
 from UltrasonicModule import UltrasonicModule
 import numpy
 import logging
-
+import statistics
 
 class UltrasonicModuleControl:
 
@@ -33,22 +33,22 @@ class UltrasonicModuleControl:
 
     def get_distance_in_cm(self, number_sensor):
         logging.debug("ultrasonic module control get distance in cm")
-        return self.get_distance_mean(self.sensor_list.__getitem__(number_sensor), self.NUMBER_MEASUREMENTS)
+        return self.get_distance_median(self.sensor_list.__getitem__(number_sensor), self.NUMBER_MEASUREMENTS)
 
-    def get_distance_mean(self, sensor, numbers_measurements):
+    def get_distance_median(self, sensor, numbers_measurements):
         logging.debug("ultrasonic moduule control get distance mean")
         values = numpy.empty([numbers_measurements])
         for count in range(numbers_measurements):
             values[count-1] = sensor.get_distance()
             # Sleep as influence on accuracy
             time.sleep(0.05)
-        return values.mean() - sensor.offset
+        return statistics.median(values) - sensor.offset
 
     def calibrate_sensor(self, sensor, distance_sensor_to_object):
         logging.debug("ultrasonic module control calibrate sensor")
         calibration_ongoing = True
         while calibration_ongoing:
-            distance = self.get_distance_mean(sensor, self.NUMBER_MEASUREMENTS)
+            distance = self.get_distance_median(sensor, self.NUMBER_MEASUREMENTS)
             sensor.offset = distance - distance_sensor_to_object
             if 0.3 > (distance - distance_sensor_to_object) > -0.3:
                 calibration_ongoing = False
