@@ -36,7 +36,7 @@ class UltrasonicModuleControl:
         return self.get_distance_median(self.sensor_list.__getitem__(number_sensor), self.NUMBER_MEASUREMENTS)
 
     def get_distance_median(self, sensor, numbers_measurements):
-        logging.debug("ultrasonic moduule control get distance mean")
+        logging.debug("ultrasonic module control get distance median")
         values = numpy.empty([numbers_measurements])
         for count in range(numbers_measurements):
             values[count-1] = sensor.get_distance()
