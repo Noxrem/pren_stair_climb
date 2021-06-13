@@ -37,10 +37,10 @@ try:
     robot.do_alignment()
     robot.go_to_drop_off_position()
     robot.let_bridge_down()
-    robot.go_forward_and_stop_after_duration(50, 1)
-    robot.go_forward_and_stop_after_duration(400, 1)
-    robot.go_backward_and_stop_after_duration(400, 1)
-    robot.go_backward_and_stop_after_duration(50, 1)
+    # robot.go_forward_and_stop_after_duration(50, 1)
+    # robot.go_forward_and_stop_after_duration(400, 1)
+    # robot.go_backward_and_stop_after_duration(400, 1)
+    # robot.go_backward_and_stop_after_duration(50, 1)
     time.sleep(2)
     robot.let_socket_down()
     time.sleep(2)
@@ -50,7 +50,7 @@ try:
     robot.turn_arm_down()
     robot.go_forward_and_stop_after_duration(50,
                                              Robot.calculate_duration_length_in_mm(50, 400))  # todo: measure distance
-    robot.celebrate(robot.found_pictogram, time.time() - start_time)
+    robot.celebrate(robot.found_pictogram, round(time.time() - start_time))
     robot.dispose()
 
 except Exception as ex:
