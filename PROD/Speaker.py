@@ -51,10 +51,10 @@ class Speaker:
             os.system("omxplayer " + path_to_file + " &")
         else:
             os.system("omxplayer " + path_to_file)
-        if duration is not None:
-            time.sleep(duration)
-            logging.info(log_msg)
-            Speaker.stop_play()
+        # if duration is not None:
+        #     time.sleep(duration) # wati until the audio is played
+        #     logging.info(log_msg)
+        #     Speaker.stop_play()
 
     @staticmethod
     def stop_play():

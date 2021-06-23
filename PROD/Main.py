@@ -16,7 +16,7 @@ button_not_pressed = True
 
 logging.info("Main - Init Robot")
 robot = Robot.Robot("Gefyra")
-
+robot.stop()
 logging.info("**************waiting for start button************")
 while button_not_pressed:  # this will carry on until you hit CTRL+C
     button_not_pressed = GPIO.input(GPIO_PIN_START_BUTTON)
@@ -36,11 +36,9 @@ try:
     robot.go_forward_and_get_distance()
     robot.do_alignment()
     robot.go_to_drop_off_position()
+    time.sleep(2)   # time delay before the bridge is let down
     robot.let_bridge_down()
-    # robot.go_forward_and_stop_after_duration(50, 1)
-    # robot.go_forward_and_stop_after_duration(400, 1)
-    # robot.go_backward_and_stop_after_duration(400, 1)
-    # robot.go_backward_and_stop_after_duration(50, 1)
+
     time.sleep(2)
     robot.let_socket_down()
     time.sleep(2)

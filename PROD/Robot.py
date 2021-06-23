@@ -146,9 +146,9 @@ class Robot:
     def pull_to_bridge_drop_off(self):
         logging.info("Robot: can see light at the end of the tunnel")
         speed_wheels = 100
-        speed_winch = 20
+        speed_winch = 70
         distance_in_mm_wheels = 100
-        distance_in_mm_winch = 140
+        distance_in_mm_winch = 175
         duration_wheels = calculate_duration_length_in_mm(speed_wheels, distance_in_mm_wheels)  # todo: define distance and speed
         duration_winch = calculate_duration_length_in_mm(speed_winch, distance_in_mm_winch)  # todo: define distance and speed
         self.winch.pull_to_end(speed_winch, duration_winch)
@@ -165,6 +165,7 @@ class Robot:
 
     def celebrate(self, found_pictogram_english_lowercase, lap_duration):
         logging.info("Robot: celebrate")
+        self.speaker.stop_play()    # stop the previously running music
         self.speaker.celebrate(found_pictogram_english_lowercase, lap_duration)
 
     def measure_distance_sensor_front(self):
@@ -279,11 +280,13 @@ class Robot:
         if robot_position - offset_inaccuracy_allowed_max > position_found_pictogram:
             self.turn_right_90degrees()
             logging.debug("Go to the right: " + str(speed * duration_in_sec) + "mm")
+            self.speaker.play("getready.mp3", True)
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_left_90degrees()
         elif robot_position + offset_inaccuracy_allowed_max < position_found_pictogram:
             self.turn_left_90degrees()
             logging.debug("Go to the left: " + str(speed * duration_in_sec) + "mm")
+            self.speaker.play("getready.mp3", True)
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_right_90degrees()
         else:

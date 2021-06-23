@@ -15,12 +15,12 @@ class TargetPlatform:
         # Info: pictogram with number 5 isn't on the target plattform
         # Info about pictogram order: pictogram with number 0 is on the right side on the platform; 4 on the left;
         logging.info("create new target plattform")
-        self.pictogram_hammer = Pictogram.Pictogram("hammer", 1)
+        self.pictogram_hammer = Pictogram.Pictogram("hammer", 4)
         self.pictogram_wrap = Pictogram.Pictogram("wrap", 3)
-        self.pictogram_paint_bucket = Pictogram.Pictogram("paintbucket", 2)
-        self.pictogram_ruler = Pictogram.Pictogram("ruler", 0)
+        self.pictogram_paint_bucket = Pictogram.Pictogram("paintbucket", 1)
+        self.pictogram_ruler = Pictogram.Pictogram("ruler", 2)
         self.pictogram_wrench = Pictogram.Pictogram("wrench", 5)
-        self.pictogram_pencil = Pictogram.Pictogram("pencil", 4)
+        self.pictogram_pencil = Pictogram.Pictogram("pencil", 0)
         self.list_pictograms = [self.pictogram_hammer, self.pictogram_wrap,
                                 self.pictogram_paint_bucket, self.pictogram_ruler,
                                 self.pictogram_wrench, self.pictogram_pencil]
