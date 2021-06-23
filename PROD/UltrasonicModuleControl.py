@@ -7,7 +7,6 @@ from UltrasonicModule import UltrasonicModule
 import numpy
 import logging
 
-
 class UltrasonicModuleControl:
 
     NUMBER_MEASUREMENTS = 5
@@ -28,27 +27,27 @@ class UltrasonicModuleControl:
     def __init__(self):
         logging.info("create new ultrasonic module control")
         self.sensor_front = UltrasonicModule("sensor_front", self.GPIO_ECHO_1, self.GPIO_TRIGGER_1)
-        self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2) #TODO: sobald nicht auskommentiert, läuft Messung in UltrasonicModule nicht mehr, da
+        self.sensor_side = UltrasonicModule("sensor_side", self.GPIO_ECHO_2, self.GPIO_TRIGGER_2)
         self.sensor_list = [self.sensor_front, self.sensor_side]
 
     def get_distance_in_cm(self, number_sensor):
         logging.debug("ultrasonic module control get distance in cm")
-        return self.get_distance_mean(self.sensor_list.__getitem__(number_sensor), self.NUMBER_MEASUREMENTS)
+        return self.get_distance_median(self.sensor_list.__getitem__(number_sensor), self.NUMBER_MEASUREMENTS)
 
-    def get_distance_mean(self, sensor, numbers_measurements):
-        logging.debug("ultrasonic moduule control get distance mean")
+    def get_distance_median(self, sensor, numbers_measurements):
+        logging.debug("ultrasonic module control get distance median")
         values = numpy.empty([numbers_measurements])
         for count in range(numbers_measurements):
             values[count-1] = sensor.get_distance()
             # Sleep as influence on accuracy
             time.sleep(0.05)
-        return values.mean() - sensor.offset
+        return numpy.median(values) - sensor.offset
 
     def calibrate_sensor(self, sensor, distance_sensor_to_object):
         logging.debug("ultrasonic module control calibrate sensor")
         calibration_ongoing = True
         while calibration_ongoing:
-            distance = self.get_distance_mean(sensor, self.NUMBER_MEASUREMENTS)
+            distance = self.get_distance_median(sensor, self.NUMBER_MEASUREMENTS)
             sensor.offset = distance - distance_sensor_to_object
             if 0.3 > (distance - distance_sensor_to_object) > -0.3:
                 calibration_ongoing = False

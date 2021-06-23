@@ -5,15 +5,14 @@ import PressureSensor
 import MagnetManager
 import Motor
 import ObjectDetector
-import Speaker
 import StairDetector
 import Winch
 import time
 import logging
 import TargetPlatform
-import UARTAccess
 import StairDetectorWithUltrasonic
 import ArmServo
+import Speaker
 
 
 def calculate_duration_length_in_mm(speed, length_target_in_mm):
@@ -130,6 +129,7 @@ class Robot:
     def turn_arm_down(self):
         logging.info("Robot: turn arm down")
         self.arm_servo.turn_down()
+        self.speaker.stop_play()
 
     def turn_arm_up(self):
         logging.info("Robot: turn arm up")
@@ -145,11 +145,14 @@ class Robot:
 
     def pull_to_bridge_drop_off(self):
         logging.info("Robot: can see light at the end of the tunnel")
-        speed = 20
-        distance_in_mm = 200
-        duration = calculate_duration_length_in_mm(speed, distance_in_mm)  # todo: define distance and speed
-        self.winch.pull_to_end(speed, duration)
-        self.go_forward_and_stop_after_duration(speed, duration)
+        speed_wheels = 100
+        speed_winch = 20
+        distance_in_mm_wheels = 100
+        distance_in_mm_winch = 140
+        duration_wheels = calculate_duration_length_in_mm(speed_wheels, distance_in_mm_wheels)  # todo: define distance and speed
+        duration_winch = calculate_duration_length_in_mm(speed_winch, distance_in_mm_winch)  # todo: define distance and speed
+        self.winch.pull_to_end(speed_winch, duration_winch)
+        self.go_forward_and_stop_after_duration(speed_wheels, duration_wheels)
 
     def let_socket_down(self):
         logging.info("Robot: let socket down")
@@ -157,7 +160,6 @@ class Robot:
 
     def let_bridge_down(self):
         logging.info("Robot: let bridge down")
-        # self.speaker.play("getready.mp3", True)  # todo: enable on the competition
         self.magnet_manager.set_off_power_bridge()
 
     def celebrate(self, found_pictogram_english_lowercase, lap_duration):
@@ -235,7 +237,7 @@ class Robot:
         min_target_amount = self.stair_detector_with_ultrasonic.find_stair_with_ultrasonic_v2()  # TODO: decide which method should be used
         self.stop()
         logging.info("stair found with ultrasonic")
-        self.turn_right()
+        # self.turn_right()
         time.sleep(min_target_amount * 0.28 / 3)
         self.stop()
 
@@ -265,7 +267,7 @@ class Robot:
         self.distance_right = self.measure_distance_sensor_side()
         logging.debug("Distance right: " + str(self.distance_right))
         speed = 50  # TODO: define speed
-        target_distance_from_stair = 50  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
+        target_distance_from_stair = 47  # TODO: define value -> Scharnier der Brücke sollte 60cm von Stufe entfernt sein
         duration_in_sec = calculate_duration_length_in_cm(speed, target_distance_from_stair)
         self.go_backward_and_stop_after_duration(speed, duration_in_sec)
         robot_position = self.distance_right + offset_sensor_right_and_center_robot
@@ -276,11 +278,13 @@ class Robot:
         if robot_position - offset_inaccuracy_allowed_max > position_found_pictogram:
             self.turn_right_90degrees()
             logging.debug("Go to the right: " + str(speed * duration_in_sec) + "mm")
+            self.speaker.play("getready.mp3", True)
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_left_90degrees()
         elif robot_position + offset_inaccuracy_allowed_max < position_found_pictogram:
             self.turn_left_90degrees()
             logging.debug("Go to the left: " + str(speed * duration_in_sec) + "mm")
+            self.speaker.play("getready.mp3", True)
             self.go_forward_and_stop_after_duration(speed, duration_in_sec)
             self.turn_right_90degrees()
         else:

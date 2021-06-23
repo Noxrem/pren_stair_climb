@@ -54,4 +54,8 @@ class Speaker:
         if duration is not None:
             time.sleep(duration)
             logging.info(log_msg)
-            os.system("pkill omxplayer")
+            Speaker.stop_play()
+
+    @staticmethod
+    def stop_play():
+        os.system("pkill omxplayer")
