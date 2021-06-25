@@ -57,11 +57,21 @@ class Robot:
         logging.info("Robot: stop")
         self.motor_wheels.stop()
 
+    def stop_soft(self, speed):
+        logging.info("Robot: stop soft")
+        actual_speed = speed
+        percent_10_speed = int(speed/10)
+        for i in range(9):
+            actual_speed = actual_speed - percent_10_speed
+            self.motor_wheels.rotate(actual_speed, actual_speed)
+            time.sleep(0.1)
+        self.stop()
+
     def go_forward_and_stop_after_duration(self, speed, duration):
         logging.info("Robot: go forward with speed " + str(speed) + " during " + str(duration) + "seconds")
         self.motor_wheels.rotate(speed, speed)
         time.sleep(duration)
-        self.stop()
+        self.stop_soft(speed)
 
     def go_forward_slow(self):
         logging.info("Robot: go forward slow")
@@ -247,11 +257,11 @@ class Robot:
         logging.info("Robot: go forward and get distance")
         self.go_forward_fast()
         self.distance_front = self.measure_distance_sensor_front()
-        offset_to_slow_down_cm = 20  # TODO: Define offset
+        offset_to_slow_down_cm = 35  # TODO: Define offset
         while self.distance_front > offset_to_slow_down_cm:
             self.distance_front = self.measure_distance_sensor_front()
             logging.info("\nMeasured Distance = %.2f cm" % self.distance_front)
-        self.stop()
+        self.stop_soft()
 
     def go_to_drop_off_position(self):
         position_found_pictogram = None

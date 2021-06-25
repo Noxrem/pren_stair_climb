@@ -21,7 +21,7 @@ class StairDetector:
         self.max_line_gap = 40
         self.line_h_length = 313
         self.line_v_length = 50
-        self.line_rotation = 2
+        self.line_rotation = 15
         self.canny1 = 18
         self.canny2 = 43
         self.target_amount_detections = 30

@@ -15,7 +15,7 @@ class Speaker:
         self.language = 'en'
 
     def play_text(self, found_pictogram_english_lowercase):
-        message = "We can see the target icon " + found_pictogram_english_lowercase + ", will immediately get it for you, darling!"
+        message = "We can see the target icon " + found_pictogram_english_lowercase
         logging.info("Create MP3 file for pictogram %s", message)
         tts = gTTS(text=message, lang=self.language, slow=False)
         mp3 = 'TTS_message_pictogram.mp3'
