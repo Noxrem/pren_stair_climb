@@ -35,20 +35,20 @@ try:
     robot.speaker.play_text(robot.found_pictogram)
     robot.turn_and_find_stair_with_ultrasonic_and_camera_control(False)
     robot.go_forward_and_get_distance()
-    # robot.do_alignment()
-    # robot.go_to_drop_off_position()
-    # time.sleep(2)   # time delay before the bridge is let down
-    # robot.let_bridge_down()
-    # time.sleep(2)
-    # robot.let_socket_down()
-    # time.sleep(2)
-    # robot.go_forward_fast()
-    # robot.pull_up()
-    # robot.pull_to_bridge_drop_off()
-    # robot.turn_arm_down()
-    # robot.go_forward_and_stop_after_duration(50,
-    #                                          Robot.calculate_duration_length_in_mm(50, 400))  # todo: measure distance
-    # robot.celebrate(robot.found_pictogram, round(time.time() - start_time))
+    robot.do_alignment()
+    robot.go_to_drop_off_position()
+    time.sleep(2)   # time delay before the bridge is let down
+    robot.let_bridge_down()
+    time.sleep(2)
+    robot.let_socket_down()
+    time.sleep(2)
+    robot.go_forward_fast()
+    robot.pull_up()
+    robot.pull_to_bridge_drop_off()
+    robot.turn_arm_down()
+    robot.go_forward_and_stop_after_duration(50,
+                                             Robot.calculate_duration_length_in_mm(50, 400))  # todo: measure distance
+    robot.celebrate(robot.found_pictogram, round(time.time() - start_time))
     robot.dispose()
 
 except Exception as ex:
