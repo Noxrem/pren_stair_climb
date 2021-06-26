@@ -8,6 +8,8 @@ class Motor:
 
     def __init__(self):
         logging.info("create new motor")
+        self.is_enabled = True
+        self.disable()      # disable the motors on initialization (in case they are already running)
         self.is_enabled = False
         self.serial_access = UARTAccess.UARTAccess()
 
