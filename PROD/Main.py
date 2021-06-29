@@ -16,7 +16,6 @@ button_not_pressed = True
 
 logging.info("Main - Init Robot")
 robot = Robot.Robot("Gefyra")
-robot.stop()
 logging.info("**************waiting for start button************")
 while button_not_pressed:  # this will carry on until you hit CTRL+C
     button_not_pressed = GPIO.input(GPIO_PIN_START_BUTTON)

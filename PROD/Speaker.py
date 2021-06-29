@@ -20,7 +20,7 @@ class Speaker:
         tts = gTTS(text=message, lang=self.language, slow=False)
         mp3 = 'TTS_message_pictogram.mp3'
         tts.save(mp3)
-        self.play(mp3)
+        self.play(mp3, True)    # play in the background
         logging.info("Play MP3 file with pictogram text")
 
     def celebrate(self, found_pictogram_english_lowercase, lap_duration=20):
@@ -51,10 +51,10 @@ class Speaker:
             os.system("omxplayer " + path_to_file + " &")
         else:
             os.system("omxplayer " + path_to_file)
-        # if duration is not None:
-        #     time.sleep(duration) # wati until the audio is played
-        #     logging.info(log_msg)
-        #     Speaker.stop_play()
+        if duration is not None:
+            time.sleep(duration) # wati until the audio is played
+            logging.info(log_msg)
+            Speaker.stop_play()
 
     @staticmethod
     def stop_play():
